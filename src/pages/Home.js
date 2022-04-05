@@ -1,10 +1,14 @@
 import React from "react";
+import {Helmet} from "react-helmet";
 import UserHome from "../comps/home/UserHome";
 
 const Home = () => {
     return (
         <div>
-            <UserHome />
+            <Helmet>
+                <title>Home</title>
+            </Helmet>
+            <UserHome/>
         </div>
     )
 }
