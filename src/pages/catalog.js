@@ -2,6 +2,7 @@ import React from "react";
 import {makeStyles} from "@mui/styles";
 import Typography from "@mui/material/Typography";
 import {Helmet} from "react-helmet";
+import OpportunityCard from "../comps/opportunities/OpportunityCard";
 
 const useStyles = makeStyles(() => ({
     layout: {
@@ -34,6 +35,7 @@ const Catalog = () => {
                     <Typography paragraph>
                         Catalog page
                     </Typography>
+					<OpportunityCard title="lorem ipsum" date="April 7, 2022 - April 8, 2022" opportunityLocation="lorem ipsum"/>
                 </main>
             </div>
         </div>
