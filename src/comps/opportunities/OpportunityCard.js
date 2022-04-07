@@ -5,6 +5,9 @@ import { makeStyles } from "@mui/styles";
 const useStyles = makeStyles(() => ({
 	secondary: {
 		color: "#546DE5"
+	},
+	bold: {
+		fontWeight: "bold"
 	}
 }));
 
@@ -25,11 +28,11 @@ function OpportunityCard({ title, date, description, applicationDeadline, cost, 
 		<Card>
 			<CardContent>
 				<div>
-					<Typography variant={"h5"}>
+					<Typography variant={"h5"} fontSize="20px">
 						{title}
 					</Typography>
-					<Typography paragraph className={classes.secondary}>
-						{date}
+					<Typography paragraph fontSize="14px" className={classes.secondary}>
+						Date: {date}
 						<br />
 						{opportunityLocation && (
 							<>
@@ -37,15 +40,24 @@ function OpportunityCard({ title, date, description, applicationDeadline, cost, 
 								<br />
 							</>
 						)}
+						Cost: {cost 
+							? ( cost > 0 ? (<>${cost}</>) : ( cost == 0 ? "Free" : "Stipend Offered, Check Description"))
+							: "Check Description"
+						}
+						<br />
 						{applicationDeadline && (
-							<span>
+							<span className={classes.bold}>
+								Application Deadline: {applicationDeadline.toLocaleDateString("en-us", { weekday:"long", year:"numeric", month:"short", day:"numeric"})}
 							</span>
 						)}
 					</Typography>
 				</div>
 				<Divider />
-				<Collapse in={expanded} timeout="auto" unmountOnExit>
-				</Collapse>
+				<div>
+					{description.slice(0, description.length-100)}
+					<Collapse in={expanded} timeout="auto" unmountOnExit>
+					</Collapse>
+				</div>
 			</CardContent>
 		</Card>
 	);
