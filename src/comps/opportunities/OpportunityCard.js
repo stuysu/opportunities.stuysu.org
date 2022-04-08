@@ -11,7 +11,7 @@ const responsive = ((width) => {
 		};
 	} else if (width < 1024) { // tablet
 		return {
-			cutoffchar: 360
+			cutoffchar: 300
 		};
 	} else if (width < 3000) { // desktop
 		return {
@@ -22,6 +22,11 @@ const responsive = ((width) => {
 			cutoffchar: 600
 		};
 	}
+});
+
+const smartSnippet = ((texttocut, snippetmaxlength) => {
+	let possiblecutoff = texttocut.indexOf(" ", snippetmaxlength-15);
+	return((possiblecutoff == -1 || possiblecutoff > snippetmaxlength) ? (texttocut.substring(0, snippetmaxlength) + "...") : (texttocut.substring(0, possiblecutoff) + "..."));
 });
 
 const useStyles = makeStyles(() => ({
@@ -35,7 +40,8 @@ const useStyles = makeStyles(() => ({
 		fontWeight: "bold"
 	},
 	descDiv: {
-		marginTop: "6px"
+		marginTop: "6px",
+		fontSize: "14px"
 	},
 	readMore: {
 		color: "#707070",
@@ -47,12 +53,13 @@ const useStyles = makeStyles(() => ({
 		marginTop: "3px"
 	},
 	linkDiv: {
-		margin: "8px 0px 10px"
+		margin: "10px 0px 10px"
 	},
-	underlined: {
+	underlinedButton: {
 		"&:hover": {
 			textDecoration: "underline"
-		}
+		},
+		fontSize: "14px"
 	},
 	tag: {
 		backgroundColor: "#546DE5",
@@ -111,19 +118,21 @@ function OpportunityCard({ title, date, description, applicationDeadline, cost, 
 				<div className={classes.descDiv}>
 					{description.length > responsive(window.innerWidth).cutoffchar ?
 						<>
-							{expanded ? description : description.substring(0, responsive(window.innerWidth).cutoffchar) + "..."}
+							{expanded ? description : smartSnippet(description, responsive(window.innerWidth).cutoffchar)}
 							<br />
 							<ButtonUnstyled className={classes.readMore} onClick={() => setExpanded(!expanded)}>
-								<Typography className={classes.underlined}>{expanded ? "Hide More" : "Read More"}</Typography>
+								<Typography className={classes.underlinedButton}>{expanded ? "Hide More" : "Read More"}</Typography>
 							</ButtonUnstyled>
 						</>
 					: <>{description}</>
 					}
-					<div className={classes.linkDiv}>
-						{links && links.map(linkurl => (
-							<><Link to={linkurl}>{linkurl}</Link><br /></>
-						))}
-					</div>
+					{links &&
+						<div className={classes.linkDiv}>
+							{links && links.map(linkurl => (
+								<><Link to={linkurl}>{linkurl}</Link><br /></>
+							))}
+						</div>
+					}
 				</div>
 				{tags && 
 					<>
