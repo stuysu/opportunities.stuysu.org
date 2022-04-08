@@ -13,23 +13,24 @@ import OpportunityCard from "./OpportunityCard";
 	links: [String], optional
 	tags: [String], optional
 */
-const OpportunityList = (opportunities => {
-	return(
-		<>
-			{opportunities?.opportunities?.map(opportunity => (
-				<OpportunityCard
-				key={opportunity.id}
-				title={opportunity.title}
-				date={opportunity.date}
-				description={opportunity.description}
-				applicationDeadline={opportunity?.applicationDeadline}
-				cost={opportunity?.cost}
-				opportunityLocation={opportunity?.opportunityLocation}
-				links={opportunity?.links}
-				tags={opportunity?.tags} />
-			))}
-		</>
-	);
-});
+const OpportunityList = (opportunities) => {
+  return (
+    <>
+      {opportunities?.opportunities?.map((opportunity) => (
+        <OpportunityCard
+          key={opportunity.id}
+          title={opportunity.title}
+          date={opportunity.date}
+          description={opportunity.description}
+          applicationDeadline={opportunity?.applicationDeadline}
+          cost={opportunity?.cost}
+          opportunityLocation={opportunity?.opportunityLocation}
+          links={opportunity?.links}
+          tags={opportunity?.tags}
+        />
+      ))}
+    </>
+  );
+};
 
 export default OpportunityList;
