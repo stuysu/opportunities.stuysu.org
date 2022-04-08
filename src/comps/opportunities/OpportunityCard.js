@@ -1,6 +1,7 @@
 import React from "react";
 import { ButtonUnstyled } from "@mui/base";
 import { Card, CardContent, Divider, Typography } from "@mui/material";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@mui/styles";
 
 const responsive = ((width) => {
@@ -105,6 +106,10 @@ function OpportunityCard({ title, date, description, applicationDeadline, cost, 
 						</>
 					: <>{description}</>
 					}
+					<br />
+					{links && links.map(linkurl => (
+						<><Link to={linkurl}>{linkurl}</Link><br /></>
+					))}
 				</div>
 			</CardContent>
 		</Card>
