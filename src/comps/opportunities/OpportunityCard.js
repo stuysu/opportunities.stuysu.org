@@ -65,7 +65,7 @@ const useStyles = makeStyles(() => ({
 		backgroundColor: "#546DE5",
 		color: "#FFFFFF",
 		margin: "6px",
-		padding: "0px 5px 2px",
+		padding: "0px 8px 2px",
 		borderRadius: "10px"
 	},
 	tagDiv: {
