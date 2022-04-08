@@ -40,7 +40,7 @@ const useStyles = makeStyles(() => ({
 		fontWeight: "bold"
 	},
 	descDiv: {
-		marginTop: "6px",
+		margin: "6px 0px 10px",
 		fontSize: "14px"
 	},
 	readMore: {
