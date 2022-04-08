@@ -1,5 +1,6 @@
-import React, { useState } from "react";
-import { Card, CardContent, Collapse, Divider, Typography } from "@mui/material";
+import React from "react";
+import { ButtonUnstyled } from "@mui/base";
+import { Card, CardContent, Divider, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles(() => ({
@@ -8,6 +9,23 @@ const useStyles = makeStyles(() => ({
 	},
 	bold: {
 		fontWeight: "bold"
+	},
+	descDiv: {
+		marginTop: "12px"
+	},
+	readMore: {
+		color: "#707070",
+		padding: "0px",
+		textAlign: "left",
+		border: "0",
+		backgroundColor: "transparent",
+		cursor: "pointer",
+		marginTop: "4px"
+	},
+	underlined: {
+		"&:hover": {
+			textDecoration: "underline"
+		}
 	}
 }));
 
@@ -41,7 +59,7 @@ function OpportunityCard({ title, date, description, applicationDeadline, cost, 
 							</>
 						)}
 						Cost: {cost 
-							? ( cost > 0 ? (<>${cost}</>) : ( cost == 0 ? "Free" : "Stipend Offered, Check Description"))
+							? ( cost > 0 ? (<>${cost}</>) : ( cost === 0 ? "Free" : "Stipend Offered, Check Description"))
 							: "Check Description"
 						}
 						<br />
@@ -53,10 +71,17 @@ function OpportunityCard({ title, date, description, applicationDeadline, cost, 
 					</Typography>
 				</div>
 				<Divider />
-				<div>
-					{description.slice(0, description.length-100)}
-					<Collapse in={expanded} timeout="auto" unmountOnExit>
-					</Collapse>
+				<div className={classes.descDiv}>
+					{description.length > 480 ?
+						<>
+							{expanded ? description : description.substring(0, 480)}
+							<br />
+							<ButtonUnstyled className={classes.readMore} onClick={() => setExpanded(!expanded)}>
+								<Typography className={classes.underlined}>Read More</Typography>
+							</ButtonUnstyled>
+						</>
+					: <>{description}</>
+					}
 				</div>
 			</CardContent>
 		</Card>
