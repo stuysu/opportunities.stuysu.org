@@ -4,6 +4,9 @@ import { Card, CardContent, Divider, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
 const useStyles = makeStyles(() => ({
+	opportunityCard: {
+		margin: "12px"
+	},
 	secondary: {
 		color: "#546DE5"
 	},
@@ -43,7 +46,7 @@ function OpportunityCard({ title, date, description, applicationDeadline, cost, 
 	const [expanded, setExpanded] = React.useState(false);
 	const classes = useStyles();
 	return (
-		<Card>
+		<Card className={classes.opportunityCard}>
 			<CardContent>
 				<div>
 					<Typography variant={"h5"} fontSize="20px">
