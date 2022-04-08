@@ -26,7 +26,7 @@ const responsive = ((width) => {
 
 const smartSnippet = ((texttocut, snippetmaxlength) => {
 	let possiblecutoff = texttocut.indexOf(" ", snippetmaxlength-15);
-	return((possiblecutoff == -1 || possiblecutoff > snippetmaxlength) ? (texttocut.substring(0, snippetmaxlength) + "...") : (texttocut.substring(0, possiblecutoff) + "..."));
+	return((possiblecutoff === -1 || possiblecutoff > snippetmaxlength) ? (texttocut.substring(0, snippetmaxlength) + "...") : (texttocut.substring(0, possiblecutoff) + "..."));
 });
 
 const useStyles = makeStyles(() => ({
@@ -116,8 +116,8 @@ function OpportunityCard({ title, date, description, applicationDeadline, cost, 
 				</div>
 				<Divider />
 				<div className={classes.descDiv}>
-					{description.length > responsive(window.innerWidth).cutoffchar ?
-						<>
+					{description.length > responsive(window.innerWidth).cutoffchar
+					?	<>
 							{expanded ? description : smartSnippet(description, responsive(window.innerWidth).cutoffchar)}
 							<br />
 							<ButtonUnstyled className={classes.readMore} onClick={() => setExpanded(!expanded)}>
@@ -129,7 +129,7 @@ function OpportunityCard({ title, date, description, applicationDeadline, cost, 
 					{links &&
 						<div className={classes.linkDiv}>
 							{links && links.map(linkurl => (
-								<><Link to={linkurl}>{linkurl}</Link><br /></>
+								<><Link to={linkurl} key={linkurl}>{linkurl}</Link><br /></>
 							))}
 						</div>
 					}
@@ -139,7 +139,7 @@ function OpportunityCard({ title, date, description, applicationDeadline, cost, 
 						<Divider />
 						<div className={classes.tagDiv}>
 							{tags.map(tag => (
-							<><span className={classes.tag}>{tag.name}</span></>))}
+							<><span className={classes.tag} key={tag.name}>{tag.name}</span></>))}
 						</div>
 					</>
 				}
