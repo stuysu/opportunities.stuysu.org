@@ -3,6 +3,26 @@ import { ButtonUnstyled } from "@mui/base";
 import { Card, CardContent, Divider, Typography } from "@mui/material";
 import { makeStyles } from "@mui/styles";
 
+const responsive = ((width) => {
+	if (width < 464) { // mobile
+		return {
+			cutoffchar: 160
+		};
+	} else if (width < 1024) { // tablet
+		return {
+			cutoffchar: 360
+		};
+	} else if (width < 3000) { // desktop
+		return {
+			cutoffchar: 480
+		};
+	} else { // superlargedesktop
+		return {
+			cutoffchar: 600
+		};
+	}
+});
+
 const useStyles = makeStyles(() => ({
 	opportunityCard: {
 		margin: "12px"
@@ -75,9 +95,9 @@ function OpportunityCard({ title, date, description, applicationDeadline, cost, 
 				</div>
 				<Divider />
 				<div className={classes.descDiv}>
-					{description.length > 480 ?
+					{description.length > responsive(window.innerWidth).cutoffchar ?
 						<>
-							{expanded ? description : description.substring(0, 480)}
+							{expanded ? description : description.substring(0, responsive(window.innerWidth).cutoffchar)}...
 							<br />
 							<ButtonUnstyled className={classes.readMore} onClick={() => setExpanded(!expanded)}>
 								<Typography className={classes.underlined}>Read More</Typography>
