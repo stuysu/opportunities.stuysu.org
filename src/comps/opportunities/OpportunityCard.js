@@ -35,7 +35,7 @@ const useStyles = makeStyles(() => ({
 		fontWeight: "bold"
 	},
 	descDiv: {
-		marginTop: "12px"
+		marginTop: "6px"
 	},
 	readMore: {
 		color: "#707070",
@@ -44,12 +44,25 @@ const useStyles = makeStyles(() => ({
 		border: "0",
 		backgroundColor: "transparent",
 		cursor: "pointer",
-		marginTop: "4px"
+		marginTop: "3px"
+	},
+	linkDiv: {
+		margin: "8px 0px 10px"
 	},
 	underlined: {
 		"&:hover": {
 			textDecoration: "underline"
 		}
+	},
+	tag: {
+		backgroundColor: "#546DE5",
+		color: "#FFFFFF",
+		margin: "6px",
+		padding: "0px 5px 2px",
+		borderRadius: "10px"
+	},
+	tagDiv: {
+		paddingTop: "8px"
 	}
 }));
 
@@ -73,7 +86,7 @@ function OpportunityCard({ title, date, description, applicationDeadline, cost, 
 					<Typography variant={"h5"} fontSize="20px">
 						{title}
 					</Typography>
-					<Typography paragraph fontSize="14px" className={classes.secondary}>
+					<Typography paragraph marginBottom="8px" fontSize="14px" className={classes.secondary}>
 						Date: {date}
 						<br />
 						{opportunityLocation && (
@@ -98,19 +111,29 @@ function OpportunityCard({ title, date, description, applicationDeadline, cost, 
 				<div className={classes.descDiv}>
 					{description.length > responsive(window.innerWidth).cutoffchar ?
 						<>
-							{expanded ? description : description.substring(0, responsive(window.innerWidth).cutoffchar)}...
+							{expanded ? description : description.substring(0, responsive(window.innerWidth).cutoffchar) + "..."}
 							<br />
 							<ButtonUnstyled className={classes.readMore} onClick={() => setExpanded(!expanded)}>
-								<Typography className={classes.underlined}>Read More</Typography>
+								<Typography className={classes.underlined}>{expanded ? "Hide More" : "Read More"}</Typography>
 							</ButtonUnstyled>
 						</>
 					: <>{description}</>
 					}
-					<br />
-					{links && links.map(linkurl => (
-						<><Link to={linkurl}>{linkurl}</Link><br /></>
-					))}
+					<div className={classes.linkDiv}>
+						{links && links.map(linkurl => (
+							<><Link to={linkurl}>{linkurl}</Link><br /></>
+						))}
+					</div>
 				</div>
+				{tags && 
+					<>
+						<Divider />
+						<div className={classes.tagDiv}>
+							{tags.map(tag => (
+							<><span className={classes.tag}>{tag.name}</span></>))}
+						</div>
+					</>
+				}
 			</CardContent>
 		</Card>
 	);
