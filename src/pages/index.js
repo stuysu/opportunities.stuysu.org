@@ -4,20 +4,15 @@ import About from "./about";
 import MyOpportunities from "./myopportunities";
 import Catalog from "./catalog";
 import Archives from "./archives";
-import {BrowserRouter, Routes, Route, Link} from "react-router-dom";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
+import NavDrawer from "../comps/ui/NavDrawer";
 
 
 const Pages = () => {
     return (
         <div>
             <BrowserRouter>
-                <nav>
-                    <Link to={"/"}>Home </Link> |
-                    <Link to={"/about"}> About </Link> |
-                    <Link to={"/catalog"}> Catalog </Link> |
-                    <Link to={"/my-opportunities"}> My Opportunities </Link> |
-                    <Link to={"/archives"}> Archives </Link>
-                </nav>
+                <NavDrawer/>
                 <Routes>
                     <Route path={"/"} element={<Home/>}/>
                     <Route path={"/about"} element={<About/>}/>
