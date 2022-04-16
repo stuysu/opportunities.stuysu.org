@@ -30,31 +30,31 @@ const NavDrawer = () => {
             <Drawer anchor={"left"} open={open} onClose={() => updateOpen(false)}>
                 <List>
                     <ListItem disablePadding={true}>
-                        <ListItemButton component={Link} to="/">
+                        <ListItemButton component={Link} to="/" onClick={() => updateOpen(false)}>
                             <ListItemIcon><HomeRoundedIcon /></ListItemIcon>
                             <ListItemText primary={"Home"}/>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding={true}>
-                        <ListItemButton component={Link} to="/about">
+                        <ListItemButton component={Link} to="/about" onClick={() => updateOpen(false)}>
                             <ListItemIcon><InfoRoundedIcon /></ListItemIcon>
                             <ListItemText primary={"About"}/>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding={true}>
-                        <ListItemButton component={Link} to="/catalog">
+                        <ListItemButton component={Link} to="/catalog" onClick={() => updateOpen(false)}>
                             <ListItemIcon><ArticleRoundedIcon /></ListItemIcon>
                             <ListItemText primary={"Catalog"}/>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding={true}>
-                        <ListItemButton component={Link} to="/my-opportunities">
+                        <ListItemButton component={Link} to="/my-opportunities" onClick={() => updateOpen(false)}>
                             <ListItemIcon><AssignmentIndRoundedIcon /></ListItemIcon>
                             <ListItemText primary={"My Opportunities"}/>
                         </ListItemButton>
                     </ListItem>
                     <ListItem disablePadding={true}>
-                        <ListItemButton component={Link} to="/archives">
+                        <ListItemButton component={Link} to="/archives" onClick={() => updateOpen(false)}>
                             <ListItemIcon><ArchiveRoundedIcon /></ListItemIcon>
                             <ListItemText primary={"Archives"}/>
                         </ListItemButton>
