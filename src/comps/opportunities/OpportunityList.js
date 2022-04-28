@@ -5,27 +5,28 @@ import OpportunityCard from "./OpportunityCard";
 	Expected opportunity format:
 	id: Int, mandatory
 	title: String, mandatory
-	date: String, mandatory
+	date: String, optional
 	description: String, mandatory
-	applicationDeadline: Date, optional
+	appDeadline: Date, optional
 	cost: Int, optional
 	opportunityLocation: String, optional
-	links: [String], optional
+	link: [String], optional
 	tags: [String], optional
 */
-const OpportunityList = (opportunities) => {
+const OpportunityList = (data) => {
+  // console.log(data?.opportunities.opportunities);
   return (
     <>
-      {opportunities?.opportunities?.map((opportunity) => (
+      {data?.opportunities?.opportunities?.map((opportunity) => (
         <OpportunityCard
           key={opportunity.id}
           title={opportunity.title}
-          date={opportunity.date}
+          date={opportunity?.date}
           description={opportunity.description}
-          applicationDeadline={opportunity?.applicationDeadline}
+          appDeadline={opportunity?.appDeadline}
           cost={opportunity?.cost}
-          opportunityLocation={opportunity?.opportunityLocation}
-          links={opportunity?.links}
+          location={opportunity?.location}
+          link={opportunity?.link}
           tags={opportunity?.tags}
         />
       ))}

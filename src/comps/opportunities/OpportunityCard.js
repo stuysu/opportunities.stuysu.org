@@ -80,27 +80,29 @@ const useStyles = makeStyles(() => ({
 }));
 
 /*
-	title: String, mandatory
-	date: String, mandatory
-	description: String, mandatory
-	applicationDeadline: Date, optional
-	cost: Int, optional
-	opportunityLocation: String, optional
-	links: [String], optional
-	tags: [String], optional
+  title: String, mandatory
+  date: String, mandatory
+  description: String, mandatory
+  appDeadline: Date, optional
+  cost: Int, optional
+  location: String, optional
+  link: [String], optional
+  tags: [String], optional
 */
 function OpportunityCard({
   title,
   date,
   description,
-  applicationDeadline,
+  appDeadline,
   cost,
-  opportunityLocation,
-  links,
+  location,
+  link,
   tags,
 }) {
   const [expanded, setExpanded] = React.useState(false);
   const classes = useStyles();
+  // TODO: Date type in GraphQL
+  if (appDeadline) appDeadline = new Date(appDeadline);
   return (
     <Card className={classes.opportunityCard}>
       <CardContent>
@@ -116,33 +118,38 @@ function OpportunityCard({
           >
             Date: {date}
             <br />
-            {opportunityLocation && (
+            {location && (
               <>
-                Location: {opportunityLocation}
+                Location: {location}
                 <br />
               </>
             )}
             Cost:{" "}
-            {cost ? (
-              cost > 0 ? (
-                <>${cost}</>
-              ) : cost === 0 ? (
+            {
+              cost === 0 ? (
                 "Free"
               ) : (
-                "Stipend Offered, Check Description"
+                cost ? (
+                  cost > 0 ? (
+                    <>${cost}</>
+                  ) : (
+                    "Stipend Offered, Check Description"
+                  )
+                ) : (
+                  "Check Description"
+                )
               )
-            ) : (
-              "Check Description"
-            )}
+            } 
             <br />
-            {applicationDeadline && (
+            {appDeadline && (
               <span className={classes.bold}>
                 Application Deadline:{" "}
-                {applicationDeadline.toLocaleDateString("en-us", {
+                {appDeadline.toLocaleDateString("en-us", {
                   weekday: "long",
                   year: "numeric",
                   month: "short",
                   day: "numeric",
+                  timeZone: "UTC", // TODO: Temporary fix
                 })}
               </span>
             )}
@@ -155,9 +162,9 @@ function OpportunityCard({
               {expanded
                 ? description
                 : smartSnippet(
-                    description,
-                    responsive(window.innerWidth).cutoffchar
-                  )}
+                  description,
+                  responsive(window.innerWidth).cutoffchar
+                )}
               <br />
               <ButtonUnstyled
                 className={classes.readMore}
@@ -171,17 +178,14 @@ function OpportunityCard({
           ) : (
             <>{description}</>
           )}
-          {links && (
+          {link && (
             <div className={classes.linkDiv}>
-              {links &&
-                links.map((linkurl) => (
-                  <>
-                    <Link to={linkurl} key={linkurl}>
-                      {linkurl}
-                    </Link>
-                    <br />
-                  </>
-                ))}
+              <>
+                <Link to={link} key={link}>
+                  {link}
+                </Link>
+                <br />
+              </>
             </div>
           )}
         </div>
