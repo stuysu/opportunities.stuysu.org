@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import {makeStyles} from "@mui/styles";
 import Typography from "@mui/material/Typography";
 import {Helmet} from "react-helmet";
 import OpportunityList from "../comps/opportunities/OpportunityList";
+import { gql, useQuery } from "@apollo/client";
 
 const useStyles = makeStyles(() => ({
     layout: {
@@ -22,8 +23,36 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
+const QUERY = gql`
+	query {
+		opportunities(
+			category:8
+		) {
+			id
+			title
+			description
+			categories {
+				id
+				name
+				description
+			}
+			date
+			location
+			cost
+			appDeadline
+			link
+		}
+	}
+`;
+
 const Catalog = () => {
     const classes = useStyles();
+	const category = 8;
+
+	const { data, loading, error } = useQuery(QUERY);
+	if (loading) return <p>Loading...</p>;
+	if (error) return <p>Error :(</p>;
+
 	const testopportunities = [
 	{
 		title: "Lorem ipsum dolor sit amet",
@@ -66,7 +95,7 @@ const Catalog = () => {
                     <Typography paragraph>
                         Catalog page
                     </Typography>
-					<OpportunityList opportunities={testopportunities}/>
+					<OpportunityList opportunities={data}/>
 				</main>
             </div>
         </div>
