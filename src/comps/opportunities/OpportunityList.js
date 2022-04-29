@@ -14,7 +14,6 @@ import OpportunityCard from "./OpportunityCard";
 	tags: [String], optional
 */
 const OpportunityList = (data) => {
-  // console.log(data?.opportunities.opportunities);
   return (
     <>
       {data?.opportunities?.opportunities?.map((opportunity) => (

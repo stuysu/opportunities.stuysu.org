@@ -24,9 +24,11 @@ const useStyles = makeStyles(() => ({
 }));
 
 const QUERY = gql`
-	query {
+	query Opportunities(
+		$category: Int
+	) {
 		opportunities(
-			category:8
+			category: $category
 		) {
 			id
 			title
@@ -47,9 +49,13 @@ const QUERY = gql`
 
 const Catalog = () => {
     const classes = useStyles();
-	const category = 8;
+	const category = 7; // TODO: useState later
 
-	const { data, loading, error } = useQuery(QUERY);
+	const { data, loading, error } = useQuery(QUERY, {
+		variables: {
+			category
+		}
+	});
 	if (loading) return <p>Loading...</p>;
 	if (error) return <p>Error :(</p>;
 
