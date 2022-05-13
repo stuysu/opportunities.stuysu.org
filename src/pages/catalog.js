@@ -4,6 +4,7 @@ import Typography from "@mui/material/Typography";
 import {Helmet} from "react-helmet";
 import OpportunityList from "../comps/opportunities/OpportunityList";
 import { gql, useQuery } from "@apollo/client";
+import { useLocation } from "react-router-dom";
 
 const useStyles = makeStyles(() => ({
     layout: {
@@ -56,8 +57,9 @@ const QUERY = gql`
 
 const Catalog = () => {
     const classes = useStyles();
-	const categories = [8]; // TODO: useState later
-	const eligibilities = [3]
+	let location = useLocation();
+	let categories = [location.state?.category];
+	let eligibilities = location.state?.eligibilities;
 
 	const { data, loading, error } = useQuery(QUERY, {
 		variables: {
@@ -68,38 +70,6 @@ const Catalog = () => {
 	if (loading) return <p>Loading...</p>;
 	if (error) return <p>Error :(</p>;
 
-	const testopportunities = [
-	{
-		title: "Lorem ipsum dolor sit amet",
-		id: 1,
-		date: "April 7, 2022 - April 8, 2022",
-		opportunityLocation: "New York, NY",
-		links: ["https://example.org", "https://stuysu.org"],
-		applicationDeadline: new Date("December 17, 1995 03:24:00"),
-		description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Blandit volutpat maecenas volutpat blandit aliquam etiam erat velit scelerisque. Integer eget aliquet nibh praesent tristique magna. Nibh cras pulvinar mattis nunc sed blandit libero volutpat sed. Egestas pretium aenean pharetra magna ac placerat vestibulum. Quam quisque id diam vel quam. Ullamcorper a lacus vestibulum sed. Elit at imperdiet dui accumsan. Tortor dignissim convallis aenean et tortor at risus viverra adipiscing. Pharetra et ultrices neque ornare aenean euismod. Eu consequat ac felis donec et odio pellentesque diam volutpat. Amet mauris commodo quis imperdiet massa. Ligula ullamcorper malesuada proin libero nunc consequat."
-	},
-	{
-		title: "Lorem ipsum dolor sit amet 2",
-		id: 2,
-		date: "April 7, 2022 - April 8, 2022",
-		cost: 100,
-		opportunityLocation: "Toronto, Canada",
-		links: ["https://example.org", "https://stuyactivities.org/explore", "https://github.com/stuysu/stuyactivities.org/tree/master/src/comps"],
-		applicationDeadline: new Date("December 17, 1995 03:24:00"),
-		description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit",
-		tags: [{name: "test"}, {name: "Financial Aid Available"}, {name: "Lorem Ipsum Dolor Sit Amet"}]
-	},
-	{
-		title: "Lorem ipsum dolor sit amet 3",
-		id: 3,
-		date: "April 7, 2022 - April 8, 2022",
-		cost: 0,
-		opportunityLocation: "Berlin, Germany",
-		applicationDeadline: new Date("December 17, 2023 03:24:00"),
-		description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-		tags: [{name: "International"},{name: "Seniors"}, {name: "Juniors"}]
-	}
-	];
     return (
         <div>
             <Helmet>
