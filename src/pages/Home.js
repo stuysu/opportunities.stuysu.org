@@ -19,6 +19,8 @@ import MoneyRoundedIcon from '@mui/icons-material/MoneyRounded';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
 import MoneyOffCsredRoundedIcon from '@mui/icons-material/MoneyOffCsredRounded';
 
+import GoogleLoginButton from "../comps/auth/GoogleLoginButton";
+
 const buttons_left = [
     <Button 
         component={Link}
@@ -143,6 +145,7 @@ const Home = () => {
                     {buttons_right}
                 </ButtonGroup>
             </Box>
+			<GoogleLoginButton />
         </div>
     )
 }
