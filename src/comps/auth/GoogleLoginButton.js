@@ -1,6 +1,6 @@
 import React, {useEffect, useRef, useState} from "react";
 
-const GOOGLE_CLIENT_ID = "1050067653053-vucndte6832mr9alr7njifidrbgnmrio.apps.googleusercontent.com";
+import {GOOGLE_LOGIN_CLIENT_ID} from "../../constants";
 
 const GoogleLoginButton = ({}) => {
 	const ref = useRef(null);
@@ -22,7 +22,7 @@ const GoogleLoginButton = ({}) => {
 				console.log(profile);
 			};
 			window.google.accounts.id.initialize({
-				client_id: GOOGLE_CLIENT_ID,
+				client_id: GOOGLE_LOGIN_CLIENT_ID,
 				callback,
 				cancel_on_tap_outside: true
 			});
