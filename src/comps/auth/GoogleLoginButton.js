@@ -1,11 +1,33 @@
 import React, {useEffect, useRef, useState} from "react";
 
+import {gql, useMutation} from "@apollo/client";
+
 import {GOOGLE_LOGIN_CLIENT_ID} from "../../constants";
 
-const GoogleLoginButton = ({}) => {
+import { CircularProgress } from '@mui/material';
+
+const LOGIN_WITH_GOOGLE = gql`
+	mutation loginWithGoogle($token: String!){
+		loginWithGoogle(googleOAuthToken: $token)
+	}
+`;
+
+const GoogleLoginButton = () => {
 	const ref = useRef(null);
+	const [loginWithGoogle, {error, loading}] = useMutation(LOGIN_WITH_GOOGLE);
 	const [loadedGoogleScript, setLoadedGoogleScript] = useState("loading");
 	const [initializedGoogleScript, setInitializedGoogleScript] = useState(false);
+	const attemptLogin = React.useCallback(
+		async ({token, profile}) => {
+			try {
+				const { data } = await loginWithGoogle({variables: {token}});
+				console.log(data);
+				window.localStorage.setItem("auth-jwt", data?.login);
+			} catch (er) {
+			}
+		},
+		[loginWithGoogle]
+	);
 	useEffect(() => {
 		const script = document.createElement("script");
 		script.src = "https://accounts.google.com/gsi/client";
@@ -20,6 +42,7 @@ const GoogleLoginButton = ({}) => {
 				//console.log(response.credential);
 				const profile = JSON.parse(atob(response.credential.split(".")[1]));
 				console.log(profile);
+				attemptLogin({token: response.credential, profile});
 			};
 			window.google.accounts.id.initialize({
 				client_id: GOOGLE_LOGIN_CLIENT_ID,
@@ -29,7 +52,7 @@ const GoogleLoginButton = ({}) => {
 			window.google.accounts.id.prompt(); // one tap dialog https://developers.google.com/identity/gsi/web/guides/display-button#javascript
 			setInitializedGoogleScript(true);
 		}
-	}, [loadedGoogleScript]);
+	}, [attemptLogin, loadedGoogleScript]);
 	useEffect(() => {
 		if(initializedGoogleScript && ref.current){
 			window.google.accounts.id.renderButton(ref.current, {
@@ -40,7 +63,7 @@ const GoogleLoginButton = ({}) => {
 	});
 	return(
 		<div>
-			<div style={{display: "flex", justifyContent: "center"}} ref={ref} />
+			{loading || !initializedGoogleScript ? <CircularProgress /> : <div style={{display: "flex", justifyContent: "center"}} ref={ref} />}
 		</div>
 	);
 };
