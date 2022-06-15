@@ -58,8 +58,8 @@ const QUERY = gql`
 const Catalog = () => {
     const classes = useStyles();
 	let location = useLocation();
-	let categories = [location.state?.category];
-	let eligibilities = location.state?.eligibilities;
+	let categories = location.state?.category ? [location.state?.category] : [];
+	let eligibilities = location.state?.eligibilities ? [location.state?.eligibilities] : [];
 
 	const { data, loading, error } = useQuery(QUERY, {
 		variables: {
@@ -69,6 +69,8 @@ const Catalog = () => {
 	});
 	if (loading) return <p>Loading...</p>;
 	if (error) return <p>Error :(</p>;
+
+	console.log(data);
 
     return (
         <div>
