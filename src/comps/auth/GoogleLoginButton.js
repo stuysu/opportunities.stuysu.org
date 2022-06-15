@@ -1,10 +1,12 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useContext, useEffect, useRef, useState} from "react";
 
 import {gql, useMutation} from "@apollo/client";
 
 import {GOOGLE_LOGIN_CLIENT_ID} from "../../constants";
 
 import { CircularProgress } from '@mui/material';
+
+import UserContext from "../context/UserContext";
 
 const LOGIN_WITH_GOOGLE = gql`
 	mutation loginWithGoogle($token: String!){
@@ -13,6 +15,7 @@ const LOGIN_WITH_GOOGLE = gql`
 `;
 
 const GoogleLoginButton = () => {
+	const user = useContext(UserContext);
 	const ref = useRef(null);
 	const [loginWithGoogle, {error, loading}] = useMutation(LOGIN_WITH_GOOGLE);
 	const [loadedGoogleScript, setLoadedGoogleScript] = useState("loading");
@@ -21,8 +24,9 @@ const GoogleLoginButton = () => {
 		async ({token, profile}) => {
 			try {
 				const { data } = await loginWithGoogle({variables: {token}});
-				console.log(data);
+				//console.log(data);
 				window.localStorage.setItem("auth-jwt", data.loginWithGoogle);
+				user.refetch();
 			} catch (er) {
 			}
 		},
