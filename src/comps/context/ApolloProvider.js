@@ -1,11 +1,19 @@
 import React from "react";
-import {ApolloClient, InMemoryCache, ApolloProvider as Provider} from "@apollo/client";
+import {ApolloClient, HttpLink, InMemoryCache, ApolloProvider as Provider} from "@apollo/client";
 
 import {GRAPHQL_URI} from "../../constants";
 
-const client = new ApolloClient({
+const authJWT = window.localStorage.getItem("auth-jwt");
+
+const link = new HttpLink({
 	uri: GRAPHQL_URI,
-	cache: new InMemoryCache()
+	credentials: "include",
+	headers: {Authorization: authJWT ? ("Bearer " + authJWT) : ""}
+});
+
+const client = new ApolloClient({
+	cache: new InMemoryCache(),
+	link,
 })
 
 const ApolloProvider = props => {

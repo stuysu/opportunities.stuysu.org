@@ -22,7 +22,7 @@ const GoogleLoginButton = () => {
 			try {
 				const { data } = await loginWithGoogle({variables: {token}});
 				console.log(data);
-				window.localStorage.setItem("auth-jwt", data?.login);
+				window.localStorage.setItem("auth-jwt", data.loginWithGoogle);
 			} catch (er) {
 			}
 		},
