@@ -6,7 +6,7 @@ import {GOOGLE_LOGIN_CLIENT_ID} from "../../constants";
 
 import { CircularProgress } from '@mui/material';
 
-import UserContext from "../context/UserContext";
+//import UserContext from "../context/UserContext";
 
 const LOGIN_WITH_GOOGLE = gql`
 	mutation loginWithGoogle($token: String!){
@@ -15,9 +15,9 @@ const LOGIN_WITH_GOOGLE = gql`
 `;
 
 const GoogleLoginButton = () => {
-	const user = useContext(UserContext);
+	//const user = useContext(UserContext);
 	const ref = useRef(null);
-	const [loginWithGoogle, {error, loading}] = useMutation(LOGIN_WITH_GOOGLE);
+	const [loginWithGoogle, {loading}] = useMutation(LOGIN_WITH_GOOGLE);
 	const [loadedGoogleScript, setLoadedGoogleScript] = useState("loading");
 	const [initializedGoogleScript, setInitializedGoogleScript] = useState(false);
 	const attemptLogin = React.useCallback(
