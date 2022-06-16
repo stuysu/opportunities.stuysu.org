@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext } from "react";
 import {makeStyles} from "@mui/styles";
 import Typography from "@mui/material/Typography";
 import {Helmet} from "react-helmet";
 import OpportunityList from "../comps/opportunities/OpportunityList";
 import { gql, useQuery } from "@apollo/client";
 import { useLocation } from "react-router-dom";
+import AuthenticationRequired from "../comps/auth/AuthenticationRequired";
+import UserContext from "../comps/context/UserContext";
 
 const useStyles = makeStyles(() => ({
     layout: {
@@ -57,6 +59,9 @@ const QUERY = gql`
 
 const Catalog = () => {
     const classes = useStyles();
+	
+	const user = useContext(UserContext);
+	
 	let location = useLocation();
 	let categories = location.state?.category ? [location.state?.category] : [];
 	let eligibilities = location.state?.eligibilities ? [location.state?.eligibilities] : [];
@@ -67,10 +72,14 @@ const Catalog = () => {
 			eligibilities
 		}
 	});
+	
+	//console.log(user);
+	
+	if (!user.signedIn) return <AuthenticationRequired />;
 	if (loading) return <p>Loading...</p>;
 	if (error) return <p>Error :(</p>;
 
-	console.log(data);
+	//console.log(data);
 
     return (
         <div>

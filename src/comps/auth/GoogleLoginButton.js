@@ -26,7 +26,8 @@ const GoogleLoginButton = () => {
 				const { data } = await loginWithGoogle({variables: {token}});
 				//console.log(data);
 				window.localStorage.setItem("auth-jwt", data.loginWithGoogle);
-				user.refetch();
+				//user.refetch(); - doesn't work
+				window.location.reload();
 			} catch (er) {
 			}
 		},
@@ -45,7 +46,7 @@ const GoogleLoginButton = () => {
 				//console.log(response);
 				//console.log(response.credential);
 				const profile = JSON.parse(atob(response.credential.split(".")[1]));
-				console.log(profile);
+				//console.log(profile);
 				attemptLogin({token: response.credential, profile});
 			};
 			window.google.accounts.id.initialize({
