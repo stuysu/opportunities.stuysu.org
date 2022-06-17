@@ -4,6 +4,9 @@ import UserHome from "../comps/home/UserHome";
 import Box from "@mui/material/Box";
 import Button from '@mui/material/Button';
 import ButtonGroup from '@mui/material/ButtonGroup';
+import IconButton from "@mui/material/IconButton";
+import InputAdornment from "@mui/material/InputAdornment";
+import TextField from "@mui/material/TextField";
 import {Link} from "react-router-dom";
 
 import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
@@ -18,6 +21,7 @@ import TheaterComedyRoundedIcon from '@mui/icons-material/TheaterComedyRounded';
 import MoneyRoundedIcon from '@mui/icons-material/MoneyRounded';
 import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
 import MoneyOffCsredRoundedIcon from '@mui/icons-material/MoneyOffCsredRounded';
+import SearchIcon from "@mui/icons-material/Search";
 
 import GoogleLoginButton from "../comps/auth/GoogleLoginButton";
 
@@ -129,6 +133,28 @@ const Home = () => {
                 <title>Home</title>
             </Helmet>
             <UserHome/>
+            <Box
+                sx={{
+                    margin: 'auto',
+                    paddingBottom: "4vh",
+                    width: '50vw',
+                }}
+            >
+                <TextField fullWidth id="fullWidth" label="Search for anything..." autoFocus={true} color="secondary"
+                           InputProps={{
+                               endAdornment: (
+                                   <InputAdornment position="end">
+                                       <IconButton
+                                           aria-label={"search"}
+                                       >
+                                           <SearchIcon />
+                                       </IconButton>
+                                   </InputAdornment>
+                               )
+                           }}
+                />
+            </Box>
+
             <Box
                 display="flex"
                 justifyContent="center"
