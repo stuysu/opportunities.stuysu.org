@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {Helmet} from "react-helmet";
 import UserHome from "../comps/home/UserHome";
 import Box from "@mui/material/Box";
@@ -127,6 +127,8 @@ const buttons_right = [
 ]
 
 const Home = () => {
+    const [search, setSearch] = useState("");
+
     return (
         <div>
             <Helmet>
@@ -140,15 +142,18 @@ const Home = () => {
                     width: '50vw',
                 }}
             >
-                <TextField fullWidth id="fullWidth" label="Search for anything..." autoFocus={true} color="secondary"
+                <TextField fullWidth id="fullWidth" label="Search for an opportunity..." color="secondary" autoFocus={true}
+                           onChange={(event) => setSearch(event.target.value)}
                            InputProps={{
                                endAdornment: (
                                    <InputAdornment position="end">
-                                       <IconButton
-                                           aria-label={"search"}
-                                       >
-                                           <SearchIcon />
-                                       </IconButton>
+                                       <Link to={`/catalog?q=${search}`}>
+                                           <IconButton
+                                               aria-label={"search"}
+                                           >
+                                               <SearchIcon />
+                                           </IconButton>
+                                       </Link>
                                    </InputAdornment>
                                )
                            }}
