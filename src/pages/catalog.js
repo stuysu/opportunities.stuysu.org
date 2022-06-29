@@ -4,7 +4,7 @@ import Typography from "@mui/material/Typography";
 import {Helmet} from "react-helmet";
 import OpportunityList from "../comps/opportunities/OpportunityList";
 import { gql, useQuery } from "@apollo/client";
-import { useLocation } from "react-router-dom";
+import { useLocation, useSearchParams } from "react-router-dom";
 import AuthenticationRequired from "../comps/auth/AuthenticationRequired";
 import UserContext from "../comps/context/UserContext";
 
@@ -61,9 +61,12 @@ const Catalog = () => {
     const classes = useStyles();
 	
 	const user = useContext(UserContext);
-	
-	let location = useLocation();
-	let categories = location.state?.category ? [location.state?.category] : [];
+
+	// uses ? parameters as search params, targeting `q` as the search engine query key
+    let [searchParams, ] = useSearchParams();  // TODO: filter data server-side in the GraphQL query
+
+    let location = useLocation();
+	let categories = location.state?.category ? [location.state?.category] : [];  // TODO: add in-page user interface for categories
 	let eligibilities = location.state?.eligibilities ? [location.state?.eligibilities] : [];
 
 	const { data, loading, error } = useQuery(QUERY, {
@@ -79,6 +82,19 @@ const Catalog = () => {
 	if (loading) return <p>Loading...</p>;
 	if (error) return <p>Error :(</p>;
 
+
+	let filtered = data["opportunities"];
+	if (searchParams.get('q')) {
+		filtered = data["opportunities"].filter((opportunity) => {
+					for (const key of ['title', 'description', 'date', 'location', 'link']) {
+						if (opportunity[key]?.match(searchParams.get('q'))) {
+							return opportunity;
+						}
+					}
+					return null;
+				})
+	}
+
 	//console.log(data);
 
     return (
@@ -91,7 +107,10 @@ const Catalog = () => {
                     <Typography paragraph>
                         Catalog page
                     </Typography>
-					<OpportunityList opportunities={data}/>
+					<Typography paragraph>
+						Search Query: {searchParams.get('q')}
+					</Typography>
+					<OpportunityList opportunities={{opportunities: filtered}}/>
 				</main>
             </div>
         </div>
