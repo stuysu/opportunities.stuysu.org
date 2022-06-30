@@ -7,8 +7,8 @@ import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 
-import {Drawer, IconButton, List, ListItem, ListItemIcon, ListItemText, ListItemButton} from "@mui/material";
-import {Link} from "react-router-dom";
+import {Drawer, IconButton, List} from "@mui/material";
+import NavBarLink from './NavBarLink.js';
 
 const NavDrawer = () => {
     const [open, updateOpen] = React.useState(false);
@@ -29,36 +29,11 @@ const NavDrawer = () => {
 
             <Drawer anchor={"left"} open={open} onClose={() => updateOpen(false)}>
                 <List>
-                    <ListItem disablePadding={true}>
-                        <ListItemButton component={Link} to="/" onClick={() => updateOpen(false)}>
-                            <ListItemIcon><HomeRoundedIcon /></ListItemIcon>
-                            <ListItemText primary={"Home"}/>
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding={true}>
-                        <ListItemButton component={Link} to="/about" onClick={() => updateOpen(false)}>
-                            <ListItemIcon><InfoRoundedIcon /></ListItemIcon>
-                            <ListItemText primary={"About"}/>
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding={true}>
-                        <ListItemButton component={Link} to="/catalog" onClick={() => updateOpen(false)}>
-                            <ListItemIcon><ArticleRoundedIcon /></ListItemIcon>
-                            <ListItemText primary={"Catalog"}/>
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding={true}>
-                        <ListItemButton component={Link} to="/my-opportunities" onClick={() => updateOpen(false)}>
-                            <ListItemIcon><AssignmentIndRoundedIcon /></ListItemIcon>
-                            <ListItemText primary={"My Opportunities"}/>
-                        </ListItemButton>
-                    </ListItem>
-                    <ListItem disablePadding={true}>
-                        <ListItemButton component={Link} to="/archives" onClick={() => updateOpen(false)}>
-                            <ListItemIcon><ArchiveRoundedIcon /></ListItemIcon>
-                            <ListItemText primary={"Archives"}/>
-                        </ListItemButton>
-                    </ListItem>
+                    <NavBarLink label="Home" link="/" icon={<HomeRoundedIcon />} updateOpen={updateOpen}/>
+                    <NavBarLink label="About" link="/about" icon={<InfoRoundedIcon />} updateOpen={updateOpen}/>
+                    <NavBarLink label="Catalog" link="/catalog" icon={<ArticleRoundedIcon/>} updateOpen={updateOpen}/>
+                    <NavBarLink label="My Opportunities" link="/my-opportunities" icon={<AssignmentIndRoundedIcon/>} updateOpen={updateOpen}/>
+                    <NavBarLink label="Archives" link="/archives" icon={<ArchiveRoundedIcon/>} updateOpen={updateOpen}/>
                 </List>
             </Drawer>
         </nav>
