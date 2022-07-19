@@ -9,19 +9,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import {Link} from "react-router-dom";
 
-import SchoolRoundedIcon from '@mui/icons-material/SchoolRounded';
-import WorkRoundedIcon from '@mui/icons-material/WorkRounded';
-import VolunteerActivismRoundedIcon from '@mui/icons-material/VolunteerActivismRounded';
-import GavelRoundedIcon from '@mui/icons-material/GavelRounded';
-import ColorLensRoundedIcon from '@mui/icons-material/ColorLensRounded';
-import ForestRoundedIcon from '@mui/icons-material/ForestRounded';
-import ScienceRoundedIcon from '@mui/icons-material/ScienceRounded';
-import LocalHospitalRoundedIcon from '@mui/icons-material/LocalHospitalRounded';
-import TheaterComedyRoundedIcon from '@mui/icons-material/TheaterComedyRounded';
-import MoneyRoundedIcon from '@mui/icons-material/MoneyRounded';
-import HelpRoundedIcon from '@mui/icons-material/HelpRounded';
-import MoneyOffCsredRoundedIcon from '@mui/icons-material/MoneyOffCsredRounded';
-import SearchIcon from "@mui/icons-material/Search";
+import {SchoolRounded, WorkRounded, VolunteerActivismRounded, GavelRounded, ColorLensRounded, ForestRounded, ScienceRounded, LocalHospitalRounded, TheaterComedyRounded, MoneyRounded, HelpRounded, MoneyOffCsredRounded, Search} from '@mui/icons-material';
 
 import GoogleLoginButton from "../comps/auth/GoogleLoginButton";
 
@@ -30,7 +18,7 @@ const buttons_left = [
         component={Link}
         to={"/catalog"}
         state={{category: 2}}
-        startIcon={<SchoolRoundedIcon />}
+        startIcon={<SchoolRounded />}
     >
         Academic Programs
     </Button>,
@@ -38,7 +26,7 @@ const buttons_left = [
         component={Link}
         to={"/catalog"}
         state={{category: 3}}
-        startIcon={<WorkRoundedIcon/>}
+        startIcon={<WorkRounded />}
     >
         Business and Jobs
     </Button>,
@@ -46,7 +34,7 @@ const buttons_left = [
         component={Link}
         to={"/catalog"}
         state={{category: 4}}
-        startIcon={<VolunteerActivismRoundedIcon/>}
+        startIcon={<VolunteerActivismRounded />}
     >
         Community Service
     </Button>,
@@ -54,7 +42,7 @@ const buttons_left = [
         component={Link}
         to={"/catalog"}
         state={{category: 5}}
-        startIcon={<GavelRoundedIcon/>}
+        startIcon={<GavelRounded />}
     >
         Leadership, Government, International
     </Button>,
@@ -62,7 +50,7 @@ const buttons_left = [
         component={Link}
         to={"/catalog"}
         state={{category: 6}}
-        startIcon={<ColorLensRoundedIcon/>}
+        startIcon={<ColorLensRounded />}
     >
         Museum, Art, Design
     </Button>,
@@ -70,7 +58,7 @@ const buttons_left = [
         component={Link}
         to={"/catalog"}
         state={{category: 7}}
-        startIcon={<ForestRoundedIcon/>}
+        startIcon={<ForestRounded />}
     >
         Parks, Zoo, Nature
     </Button>,
@@ -80,7 +68,7 @@ const buttons_right = [
         component={Link}
         to={"/catalog"}
         state={{category: 8}}
-        startIcon={<ScienceRoundedIcon/>}
+        startIcon={<ScienceRounded />}
     >
         Engineering, Math, Computer Science
     </Button>,
@@ -88,7 +76,7 @@ const buttons_right = [
         component={Link}
         to={"/catalog"}
         state={{category: 9}}
-        startIcon={<LocalHospitalRoundedIcon/>}
+        startIcon={<LocalHospitalRounded />}
     >
         Medical, Life Sciences
     </Button>,
@@ -96,7 +84,7 @@ const buttons_right = [
         component={Link}
         to={"/catalog"}
         state={{category: 10}}
-        startIcon={<TheaterComedyRoundedIcon/>}
+        startIcon={<TheaterComedyRounded />}
     >
         Theater, Music, Writing, Videos
     </Button>,
@@ -104,7 +92,7 @@ const buttons_right = [
         component={Link}
         to={"/catalog"}
         state={{category: 11}}
-        startIcon={<MoneyRoundedIcon/>}
+        startIcon={<MoneyRounded />}
     >
         Contests, Competitions
     </Button>,
@@ -112,7 +100,7 @@ const buttons_right = [
         component={Link}
         to={"/catalog"}
         state={{category: 12}}
-        startIcon={<HelpRoundedIcon/>}
+        startIcon={<HelpRounded />}
     >
         Additional Links and Resources
     </Button>,
@@ -120,7 +108,7 @@ const buttons_right = [
         component={Link}
         to={"/catalog"}
         state={{category: 13}}
-        startIcon={<MoneyOffCsredRoundedIcon/>}
+        startIcon={<MoneyOffCsredRounded />}
     >
         Scholarships
     </Button>,
@@ -151,7 +139,7 @@ const Home = () => {
                                            <IconButton
                                                aria-label={"search"}
                                            >
-                                               <SearchIcon />
+                                               <Search />
                                            </IconButton>
                                        </Link>
                                    </InputAdornment>
