@@ -8,6 +8,7 @@ import {BrowserRouter, Routes, Route, Link} from "react-router-dom";
 import {useContext} from "react";
 import UserContext from "../comps/context/UserContext";
 import {Button} from "@mui/material";
+import NavDrawer from "../comps/ui/NavDrawer";
 
 const Pages = () => {
 	const user = useContext(UserContext);
@@ -25,6 +26,7 @@ const Pages = () => {
 						| <Button variant="text" onClick={user.logout}>Log Out</Button>
 					</>)}
                 </nav>
+                <NavDrawer/>
                 <Routes>
                     <Route path={"/"} element={<Home/>}/>
                     <Route path={"/about"} element={<About/>}/>
