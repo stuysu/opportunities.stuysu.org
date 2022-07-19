@@ -1,8 +1,6 @@
 import React from "react";
-import { ButtonUnstyled } from "@mui/base";
 import { Card, CardContent, Divider, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
-import { makeStyles } from "@mui/styles";
 
 const responsive = (width) => {
   if (width < 464) {
@@ -35,50 +33,6 @@ const smartSnippet = (texttocut, snippetmaxlength) => {
     : texttocut.substring(0, possiblecutoff) + "...";
 };
 
-const useStyles = makeStyles(() => ({
-  opportunityCard: {
-    margin: "12px",
-  },
-  secondary: {
-    color: "#546DE5",
-  },
-  bold: {
-    fontWeight: "bold",
-  },
-  descDiv: {
-    margin: "6px 0px 10px",
-    fontSize: "14px",
-  },
-  readMore: {
-    color: "#707070",
-    padding: "0px",
-    textAlign: "left",
-    border: "0",
-    backgroundColor: "transparent",
-    cursor: "pointer",
-    marginTop: "3px",
-  },
-  linkDiv: {
-    margin: "10px 0px 10px",
-  },
-  underlinedButton: {
-    "&:hover": {
-      textDecoration: "underline",
-    },
-    fontSize: "14px",
-  },
-  tag: {
-    backgroundColor: "#546DE5",
-    color: "#FFFFFF",
-    margin: "6px",
-    padding: "0px 8px 2px",
-    borderRadius: "10px",
-  },
-  tagDiv: {
-    paddingTop: "8px",
-  },
-}));
-
 /*
   title: String, mandatory
   date: String, mandatory
@@ -100,11 +54,10 @@ function OpportunityCard({
   tags,
 }) {
   const [expanded, setExpanded] = React.useState(false);
-  const classes = useStyles();
   // TODO: Date type in GraphQL
   if (appDeadline) appDeadline = new Date(appDeadline);
   return (
-    <Card className={classes.opportunityCard}>
+    <Card sx = {{margin: "12px"}}>
       <CardContent>
         <div>
           <Typography variant={"h5"} fontSize="20px">
@@ -114,7 +67,7 @@ function OpportunityCard({
             paragraph
             marginBottom="8px"
             fontSize="14px"
-            className={classes.secondary}
+            sx={{color: "#546DE5"}}
           >
             Date: {date}
             <br />
@@ -142,7 +95,7 @@ function OpportunityCard({
             } 
             <br />
             {appDeadline && (
-              <span className={classes.bold}>
+              <span style={{fontWeight: "bold"}}>
                 Application Deadline:{" "}
                 {appDeadline.toLocaleDateString("en-us", {
                   weekday: "long",
@@ -156,7 +109,7 @@ function OpportunityCard({
           </Typography>
         </div>
         <Divider />
-        <div className={classes.descDiv}>
+        <div style={{margin: "6px 0px 10px", fontSize: "14px"}}>
           {description.length > responsive(window.innerWidth).cutoffchar ? (
             <>
               {expanded
@@ -166,20 +119,21 @@ function OpportunityCard({
                   responsive(window.innerWidth).cutoffchar
                 )}
               <br />
-              <ButtonUnstyled
-                className={classes.readMore}
+              <button
+                style={{color: "#707070", padding: "0px", textAlign: "left", border: "0", backgroundColor: "transparent", cursor: "pointer", marginTop: "3px"}}
                 onClick={() => setExpanded(!expanded)}
               >
-                <Typography className={classes.underlinedButton}>
+                <Typography sx={{"&:hover": {textDecoration: "underline"},
+				fontSize: "14px"}}>
                   {expanded ? "Hide More" : "Read More"}
                 </Typography>
-              </ButtonUnstyled>
+              </button>
             </>
           ) : (
             <>{description}</>
           )}
           {link && (
-            <div className={classes.linkDiv}>
+		  <div style={{margin: "10px 0px 10px"}}>
               <>
                 <Link to={link} key={link}>
                   {link}
@@ -192,10 +146,10 @@ function OpportunityCard({
         {tags && (
           <>
             <Divider />
-            <div className={classes.tagDiv}>
+            <div paddingTop="8px">
               {tags.map((tag) => (
                 <>
-                  <span className={classes.tag} key={tag.name}>
+                  <span style={{backgroundColor: "#546DE5", color: "#FFFFFF", margin: "6px", padding: "0px 8px 2px", borderRadius: "10px"}} key={tag.name}>
                     {tag.name}
                   </span>
                 </>
