@@ -6,12 +6,14 @@ import AssignmentIndRoundedIcon from '@mui/icons-material/AssignmentIndRounded';
 import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
+import LogoutRoundedIcon from '@mui/icons-material/LogoutRounded';
 
 import {Drawer, IconButton, List} from "@mui/material";
 import NavBarLink from './NavBarLink.js';
 
-const NavDrawer = () => {
+const NavDrawer = ({user}) => {
     const [open, updateOpen] = React.useState(false);
+	console.log(user);
     return (
         <nav>
             <IconButton
@@ -34,6 +36,9 @@ const NavDrawer = () => {
                     <NavBarLink label="Catalog" link="/catalog" icon={<ArticleRoundedIcon/>} updateOpen={updateOpen}/>
                     <NavBarLink label="My Opportunities" link="/my-opportunities" icon={<AssignmentIndRoundedIcon/>} updateOpen={updateOpen}/>
                     <NavBarLink label="Archives" link="/archives" icon={<ArchiveRoundedIcon/>} updateOpen={updateOpen}/>
+					{(user && user.signedIn && <>
+						<NavBarLink label="Log out" link="" icon={<LogoutRoundedIcon/>} updateOpen={() => {user.logout(); updateOpen();}}/>
+					</>)}
                 </List>
             </Drawer>
         </nav>

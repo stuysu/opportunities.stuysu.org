@@ -4,10 +4,9 @@ import About from "./about";
 import MyOpportunities from "./myopportunities";
 import Catalog from "./catalog";
 import Archives from "./archives";
-import {BrowserRouter, Routes, Route, Link} from "react-router-dom";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 import {useContext} from "react";
 import UserContext from "../comps/context/UserContext";
-import {Button} from "@mui/material";
 import NavDrawer from "../comps/ui/NavDrawer";
 import Box from "@mui/material/Box";
 
@@ -18,10 +17,7 @@ const Pages = () => {
     return (
         <div>
             <BrowserRouter>
-				{(user.signedIn && <>
-					| <Button variant="text" onClick={user.logout}>Log Out</Button>
-				</>)}
-                <NavDrawer/>
+                <NavDrawer user={user}/>
                 <Box sx={{
                     display: "flex",
                     justifyContent: "center",
