@@ -1,5 +1,4 @@
 import React, { useContext } from "react";
-import {makeStyles} from "@mui/styles";
 import Typography from "@mui/material/Typography";
 import {Helmet} from "react-helmet";
 import OpportunityList from "../comps/opportunities/OpportunityList";
@@ -7,24 +6,6 @@ import { gql, useQuery } from "@apollo/client";
 import { useLocation, useSearchParams } from "react-router-dom";
 import AuthenticationRequired from "../comps/auth/AuthenticationRequired";
 import UserContext from "../comps/context/UserContext";
-
-const useStyles = makeStyles(() => ({
-    layout: {
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "left",
-        minHeight: "80vh",
-        padding: "2rem",
-        flexDirection: "column",
-        maxWidth: "1200px",
-        margin: "auto"
-    },
-
-    title: {
-        textAlign: "center",
-        margin: "1rem"
-    }
-}));
 
 const QUERY = gql`
 	query Opportunities(
@@ -58,7 +39,6 @@ const QUERY = gql`
 `;
 
 const Catalog = () => {
-    const classes = useStyles();
 	
 	const user = useContext(UserContext);
 
@@ -96,23 +76,20 @@ const Catalog = () => {
 	}
 
 	//console.log(data);
-
     return (
         <div>
             <Helmet>
                 <title>Catalog</title>
             </Helmet>
-            <div className={classes.layout}>
-                <main>
-                    <Typography paragraph>
-                        Catalog page
-                    </Typography>
-					<Typography paragraph>
-						Search Query: {searchParams.get('q')}
-					</Typography>
-					<OpportunityList opportunities={{opportunities: filtered}}/>
-				</main>
-            </div>
+			<main>
+				<Typography paragraph>
+					Catalog page
+				</Typography>
+				<Typography paragraph>
+					Search Query: {searchParams.get('q')}
+				</Typography>
+				<OpportunityList opportunities={{opportunities: filtered}}/>
+			</main>
         </div>
     )
 }
