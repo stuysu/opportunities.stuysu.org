@@ -4,16 +4,12 @@ import About from "./about";
 import MyOpportunities from "./myopportunities";
 import Catalog from "./catalog";
 import Archives from "./archives";
-<<<<<<< HEAD
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import NavDrawer from "../comps/ui/NavDrawer";
 import Box from "@mui/material/Box";
-=======
 import Admin from "./admin";
 
 import {BrowserRouter, Routes, Route, Link} from "react-router-dom";
->>>>>>> Initial setup
-
 
 const Pages = () => {
     return (
