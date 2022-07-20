@@ -37,7 +37,7 @@ const NavDrawer = ({user}) => {
                     <NavBarLink label="My Opportunities" link="/my-opportunities" icon={<AssignmentIndRoundedIcon/>} updateOpen={updateOpen}/>
                     <NavBarLink label="Archives" link="/archives" icon={<ArchiveRoundedIcon/>} updateOpen={updateOpen}/>
 					{(user && user.signedIn && <>
-						<NavBarLink label="Log out" link="" icon={<LogoutRoundedIcon/>} updateOpen={() => {user.logout(); updateOpen();}}/>
+						<NavBarLink label="Log out" link="" icon={<LogoutRoundedIcon/>} updateOpen={(value) => {user.logout(); updateOpen(value);}}/>
 					</>)}
                 </List>
             </Drawer>
