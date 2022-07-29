@@ -5,15 +5,19 @@ import MyOpportunities from "./myopportunities";
 import Catalog from "./catalog";
 import Archives from "./archives";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
+import {useContext} from "react";
+import UserContext from "../comps/context/UserContext";
 import NavDrawer from "../comps/ui/NavDrawer";
 import Box from "@mui/material/Box";
 
 
 const Pages = () => {
+	const user = useContext(UserContext);
+	//console.log(user);
     return (
         <div>
             <BrowserRouter>
-                <NavDrawer/>
+                <NavDrawer user={user}/>
                 <Box sx={{
                     display: "flex",
                     justifyContent: "center",
