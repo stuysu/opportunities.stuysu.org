@@ -9,7 +9,7 @@ import OpportunityCard from "./OpportunityCard";
 	description: String, mandatory
 	appDeadline: Date, optional
 	cost: Int, optional
-	opportunityLocation: String, optional
+	location: String, optional
 	link: [String], optional
 	tags: [String], optional
 */
