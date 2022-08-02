@@ -4,6 +4,7 @@ import About from "./about";
 import MyOpportunities from "./myopportunities";
 import Catalog from "./catalog";
 import Archives from "./archives";
+import Admin from "./admin";
 import {BrowserRouter, Routes, Route} from "react-router-dom";
 import {useContext} from "react";
 import UserContext from "../comps/context/UserContext";
@@ -34,6 +35,7 @@ const Pages = () => {
                         <Route path={"/catalog"} element={<Catalog/>}/>
                         <Route path={"/my-opportunities"} element={<MyOpportunities/>}/>
                         <Route path={"/archives"} element={<Archives/>}/>
+                        <Route path={"/admin"} element={<Admin/>}/>
                     </Routes>
                 </Box>
             </BrowserRouter>
