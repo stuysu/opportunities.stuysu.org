@@ -12,7 +12,7 @@ const Admin = () => {
 
       <Box>
         <OpportunityForm>
-          
+
         </OpportunityForm>
       </Box>
     </div>

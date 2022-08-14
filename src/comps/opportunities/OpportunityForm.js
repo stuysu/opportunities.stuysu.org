@@ -1,7 +1,40 @@
-import { Grid, TextField } from "@mui/material";
+import { Button, Grid, Snackbar, TextField } from "@mui/material";
 import React from "react";
+import { gql, useMutation } from "@apollo/client";
+
+const CREATE_MUTATION = gql`
+  mutation CreateOpportunity(
+    $title: String!
+    $description: String!
+    $categories: [Int]
+    $eligibilities: [Int]
+    $date: String
+    $location: String
+    $cost: Int
+    $appDeadline: Date
+    $link: String
+  ) {
+    createOpportunity(
+      title: $title
+      description: $description
+      categories: $categories
+      eligibilities: $eligibilities
+      date: $date
+      location: $location
+      cost: $cost
+      appDeadline: $appDeadline
+      link: $link
+    ) {
+      id
+      title
+      description
+    }
+  }
+`;
 
 const OpportunityForm = (opportunity = {}) => {
+  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+
   const [title, setTitle] = React.useState(opportunity.title || "");
   const [date, setDate] = React.useState(opportunity.date || "");
   const [appDeadline, setAppDeadline] = React.useState(
@@ -13,6 +46,9 @@ const OpportunityForm = (opportunity = {}) => {
   const [description, setDescription] = React.useState(
     opportunity.description || ""
   );
+
+  const [createOpportunity] = useMutation(CREATE_MUTATION);
+
   return (
     <div>
       <Grid container spacing={2}>
@@ -53,7 +89,9 @@ const OpportunityForm = (opportunity = {}) => {
             label={"Cost"}
             value={cost}
             placeholder={"0"}
-            onChange={(e) => setCost(e.target.value)}
+            onChange={(e) => {
+              setCost(e.target.value);
+            }}
           />
         </Grid>
         <Grid item xs={12} sm={12} md={6} lg={6} xl={6}>
@@ -84,6 +122,7 @@ const OpportunityForm = (opportunity = {}) => {
             maxRows={10}
             label={"Description"}
             value={description}
+            sx={{ marginBottom: "10px" }}
             placeholder={
               "Summer Youth Employment Program (SYEP) is the nation’s largest youth employment program, connecting NYC youth between the ages of 14 and 24 with career exploration opportunities and paid work experiences each summer. "
             }
@@ -91,6 +130,33 @@ const OpportunityForm = (opportunity = {}) => {
           />
         </Grid>
       </Grid>
+      <Button
+        onClick={() => {
+          createOpportunity({
+            variables: {
+              title,
+              description,
+              categories: [],
+              eligibilities: [],
+              date,
+              location,
+              cost: parseInt(cost) || 0,
+              appDeadline: appDeadline || "2100-01-01",
+              link,
+            },
+          });
+          setSnackbarOpen(true);
+        }}
+        variant="contained"
+      >
+        Create Opportunity
+      </Button>
+      <Snackbar
+        autoHideDuration={2000}
+        open={snackbarOpen}
+        onClose={() => setSnackbarOpen(false)}
+        message={"Opportunity Created!"}
+      />
     </div>
   );
 };
