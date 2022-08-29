@@ -7,7 +7,7 @@ import ButtonGroup from "@mui/material/ButtonGroup";
 import IconButton from "@mui/material/IconButton";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import WorkRoundedIcon from "@mui/icons-material/WorkRounded";
@@ -128,6 +128,7 @@ const buttons_right = [
 
 const Home = () => {
   const [search, setSearch] = useState("");
+  const navigate = useNavigate();
 
   return (
     <div>
@@ -149,11 +150,11 @@ const Home = () => {
           color="secondary"
           autoFocus={true}
           onChange={(event) => setSearch(event.target.value)}
-          onKeyDown={(event) => console.log("submit", event)}
+          onKeyDown={(event) => {if (event.code === "Enter") navigate(`/catalog?q=${search}`)}}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                  <IconButton onClick={} aria-label={"search"}>
+                  <IconButton onClick={() => navigate(`/catalog?q=${search}`)} aria-label={"search"}>
                     <SearchIcon />
                   </IconButton>
               </InputAdornment>
