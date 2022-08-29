@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, CardContent, Divider, Typography } from "@mui/material";
+import { Box, Card, CardContent, Divider, Typography } from "@mui/material";
 import { Link } from "react-router-dom";
 
 const responsive = (width) => {
@@ -154,7 +154,7 @@ function OpportunityCard({
         {tags && (
           <>
             <Divider />
-            <div paddingTop="8px">
+            <Box sx={{paddingTop: "8px"}}>
               {tags.map((tag) => (
                 <>
                   <span
@@ -171,7 +171,7 @@ function OpportunityCard({
                   </span>
                 </>
               ))}
-            </div>
+            </Box>
           </>
         )}
       </CardContent>
