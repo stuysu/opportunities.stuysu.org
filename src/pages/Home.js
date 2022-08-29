@@ -1,13 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import { Helmet } from "react-helmet";
 import UserHome from "../comps/home/UserHome";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import ButtonGroup from "@mui/material/ButtonGroup";
-import IconButton from "@mui/material/IconButton";
-import InputAdornment from "@mui/material/InputAdornment";
-import TextField from "@mui/material/TextField";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import WorkRoundedIcon from "@mui/icons-material/WorkRounded";
@@ -21,9 +18,9 @@ import TheaterComedyRoundedIcon from "@mui/icons-material/TheaterComedyRounded";
 import MoneyRoundedIcon from "@mui/icons-material/MoneyRounded";
 import HelpRoundedIcon from "@mui/icons-material/HelpRounded";
 import MoneyOffCsredRoundedIcon from "@mui/icons-material/MoneyOffCsredRounded";
-import SearchIcon from "@mui/icons-material/Search";
 
 import GoogleLoginButton from "../comps/auth/GoogleLoginButton";
+import SearchBar from "../comps/home/SearchBar";
 
 const buttons_left = [
   <Button
@@ -127,15 +124,13 @@ const buttons_right = [
 ];
 
 const Home = () => {
-  const [search, setSearch] = useState("");
-  const navigate = useNavigate();
-
   return (
     <div>
       <Helmet>
         <title>Home</title>
       </Helmet>
       <UserHome />
+
       <Box
         sx={{
           margin: "auto",
@@ -143,24 +138,7 @@ const Home = () => {
           width: "50vw",
         }}
       >
-        <TextField
-          fullWidth
-          id="fullWidth"
-          label="Search for an opportunity..."
-          color="secondary"
-          autoFocus={true}
-          onChange={(event) => setSearch(event.target.value)}
-          onKeyDown={(event) => {if (event.code === "Enter") navigate(`/catalog?q=${search}`)}}
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                  <IconButton onClick={() => navigate(`/catalog?q=${search}`)} aria-label={"search"}>
-                    <SearchIcon />
-                  </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
+        <SearchBar />
       </Box>
 
       <Box display="flex" justifyContent="center" alignItems="center">
