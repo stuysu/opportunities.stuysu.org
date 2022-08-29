@@ -1,6 +1,5 @@
 import React from "react";
 import { Box, Card, CardContent, Divider, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
 
 const responsive = (width) => {
   if (width < 464) {
@@ -143,9 +142,9 @@ function OpportunityCard({
           {link && (
             <div style={{ margin: "10px 0px 10px" }}>
               <>
-                <Link to={link} key={link}>
+                <a href={link} target="_blank" key={link}>
                   {link}
-                </Link>
+                </a>
                 <br />
               </>
             </div>
