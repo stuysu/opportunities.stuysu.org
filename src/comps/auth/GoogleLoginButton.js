@@ -68,11 +68,11 @@ const GoogleLoginButton = () => {
     }
   });
   return (
-    <div>
+    <div style={{ display: "flex", justifyContent: "center" }}>
       {loading || !initializedGoogleScript ? (
         <CircularProgress />
       ) : (
-        <div style={{ display: "flex", justifyContent: "center" }} ref={ref} />
+        <div ref={ref} />
       )}
     </div>
   );

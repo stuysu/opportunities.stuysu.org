@@ -149,14 +149,13 @@ const Home = () => {
           color="secondary"
           autoFocus={true}
           onChange={(event) => setSearch(event.target.value)}
+          onKeyDown={(event) => console.log("submit", event)}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <Link to={`/catalog?q=${search}`}>
-                  <IconButton aria-label={"search"}>
+                  <IconButton onClick={} aria-label={"search"}>
                     <SearchIcon />
                   </IconButton>
-                </Link>
               </InputAdornment>
             ),
           }}
