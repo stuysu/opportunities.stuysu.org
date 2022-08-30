@@ -1,7 +1,7 @@
 .container {
   min-height: 25vh;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   justify-content: center;
   align-items: center;
   max-width: 1400px;
@@ -26,12 +26,14 @@
   align-items: center;
 }
 
-.title,
-.description {
-  text-align: center;
+.title {
+  min-height: 25vh;
+  width: 70%;
+  margin: auto;
 }
 
 .description {
+  text-align: center;
   line-height: 1.5;
   font-size: 1.5rem;
 }
