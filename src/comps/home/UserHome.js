@@ -1,9 +1,7 @@
 import React from "react";
 import Box from "@mui/material/Box";
+import Category from "./Category";
 import SearchBar from "./SearchBar";
-import ButtonGroup from "@mui/material/ButtonGroup";
-import Button from "@mui/material/Button";
-import { Link } from "react-router-dom";
 
 import SchoolRoundedIcon from "@mui/icons-material/SchoolRounded";
 import WorkRoundedIcon from "@mui/icons-material/WorkRounded";
@@ -18,45 +16,19 @@ import MoneyRoundedIcon from "@mui/icons-material/MoneyRounded";
 import HelpRoundedIcon from "@mui/icons-material/HelpRounded";
 import MoneyOffCsredRoundedIcon from "@mui/icons-material/MoneyOffCsredRounded";
 
-const buttons_left = [
-    <Button component={Link} to={"/catalog"} state={{ category: 2 }} startIcon={<SchoolRoundedIcon />}>
-        Academic Programs
-    </Button>,
-    <Button component={Link} to={"/catalog"} state={{ category: 3 }} startIcon={<WorkRoundedIcon />}>
-        Business and Jobs
-    </Button>,
-    <Button component={Link} to={"/catalog"} state={{ category: 4 }} startIcon={<VolunteerActivismRoundedIcon />}>
-        Community Service
-    </Button>,
-    <Button component={Link} to={"/catalog"} state={{ category: 5 }} startIcon={<GavelRoundedIcon />}>
-        Leadership, Government, International
-    </Button>,
-    <Button component={Link} to={"/catalog"} state={{ category: 6 }} startIcon={<ColorLensRoundedIcon />}>
-        Museum, Art, Design
-    </Button>,
-    <Button component={Link} to={"/catalog"} state={{ category: 7 }} startIcon={<ForestRoundedIcon />}>
-        Parks, Zoo, Nature
-    </Button>,
-];
-const buttons_right = [
-    <Button component={Link} to={"/catalog"} state={{ category: 8 }} startIcon={<ScienceRoundedIcon />}>
-        Engineering, Math, Computer Science
-    </Button>,
-    <Button component={Link} to={"/catalog"} state={{ category: 9 }} startIcon={<LocalHospitalRoundedIcon />}>
-        Medical, Life Sciences
-    </Button>,
-    <Button component={Link} to={"/catalog"} state={{ category: 10 }} startIcon={<TheaterComedyRoundedIcon />}>
-        Theater, Music, Writing, Videos
-    </Button>,
-    <Button component={Link} to={"/catalog"} state={{ category: 11 }} startIcon={<MoneyRoundedIcon />}>
-        Contests, Competitions
-    </Button>,
-    <Button component={Link} to={"/catalog"} state={{ category: 12 }} startIcon={<HelpRoundedIcon />}>
-        Additional Links and Resources
-    </Button>,
-    <Button component={Link} to={"/catalog"} state={{ category: 13 }} startIcon={<MoneyOffCsredRoundedIcon />}>
-        Scholarships
-    </Button>,
+const tags = [
+    { id: 2, name: "Academic Programs", icon: SchoolRoundedIcon },
+    { id: 3, name: "Business and Jobs", icon: WorkRoundedIcon },
+    { id: 4, name: "Community Service", icon: VolunteerActivismRoundedIcon },
+    { id: 5, name: "Leadership, Government, International", icon: GavelRoundedIcon },
+    { id: 6, name: "Museum, Art, Design", icon: ColorLensRoundedIcon },
+    { id: 7, name: "Parks, Zoo, Nature", icon: ForestRoundedIcon },
+    { id: 8, name: "Engineering, Math, Computer Science", icon: ScienceRoundedIcon },
+    { id: 9, name: "Medical, Life Sciences", icon: LocalHospitalRoundedIcon },
+    { id: 10, name: "Theater, Music, Writing, Videos", icon: TheaterComedyRoundedIcon },
+    { id: 11, name: "Contests, Competitions", icon: MoneyRoundedIcon },
+    { id: 12, name: "Additional Links and Resources", icon: HelpRoundedIcon },
+    { id: 13, name: "Scholarships", icon: MoneyOffCsredRoundedIcon },
 ];
 
 const UserHome = () => {
@@ -71,9 +43,12 @@ const UserHome = () => {
             >
                 <SearchBar />
             </Box>
-            <Box display="flex" justifyContent="center" alignItems="center">
-                <ButtonGroup orientation="vertical">{buttons_left}</ButtonGroup>
-                <ButtonGroup orientation="vertical">{buttons_right}</ButtonGroup>
+            <Box display="flex" justifyContent="space-evenly" alignContent="space-between" flexWrap="wrap">
+                {tags.map((tag) => (
+                    <Box component="span" paddingBottom="1%">
+                        <Category key={tag.id} id={tag.id} icon={<tag.icon fontSize="small" />} name={tag.name} />
+                    </Box>
+                ))}
             </Box>
         </div>
     );
