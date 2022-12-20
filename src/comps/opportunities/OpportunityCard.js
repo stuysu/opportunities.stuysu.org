@@ -1,6 +1,5 @@
 import React from "react";
-import { Card, CardContent, Divider, Typography } from "@mui/material";
-import { Link } from "react-router-dom";
+import { Box, Card, CardContent, Divider, Link, Typography } from "@mui/material";
 
 const responsive = (width) => {
   if (width < 464) {
@@ -57,7 +56,7 @@ function OpportunityCard({
   // TODO: Date type in GraphQL
   if (appDeadline) appDeadline = new Date(appDeadline);
   return (
-    <Card sx = {{margin: "12px"}}>
+    <Card sx={{ margin: "12px" }}>
       <CardContent>
         <div>
           <Typography variant={"h5"} fontSize="20px">
@@ -67,7 +66,7 @@ function OpportunityCard({
             paragraph
             marginBottom="8px"
             fontSize="14px"
-            sx={{color: "#546DE5"}}
+            sx={{ color: "#546DE5" }}
           >
             Date: {date}
             <br />
@@ -78,24 +77,20 @@ function OpportunityCard({
               </>
             )}
             Cost:{" "}
-            {
-              cost === 0 ? (
-                "Free"
+            {cost === 0 ? (
+              "Free"
+            ) : cost ? (
+              cost > 0 ? (
+                <>${cost}</>
               ) : (
-                cost ? (
-                  cost > 0 ? (
-                    <>${cost}</>
-                  ) : (
-                    "Stipend Offered, Check Description"
-                  )
-                ) : (
-                  "Check Description"
-                )
+                "Stipend Offered, Check Description"
               )
-            } 
+            ) : (
+              "Check Description"
+            )}
             <br />
             {appDeadline && (
-              <span style={{fontWeight: "bold"}}>
+              <span style={{ fontWeight: "bold" }}>
                 Application Deadline:{" "}
                 {appDeadline.toLocaleDateString("en-us", {
                   weekday: "long",
@@ -109,22 +104,34 @@ function OpportunityCard({
           </Typography>
         </div>
         <Divider />
-        <div style={{margin: "6px 0px 10px", fontSize: "14px"}}>
+        <div style={{ margin: "6px 0px 10px", fontSize: "14px" }}>
           {description.length > responsive(window.innerWidth).cutoffchar ? (
             <>
               {expanded
                 ? description
                 : smartSnippet(
-                  description,
-                  responsive(window.innerWidth).cutoffchar
-                )}
+                    description,
+                    responsive(window.innerWidth).cutoffchar
+                  )}
               <br />
               <button
-                style={{color: "#707070", padding: "0px", textAlign: "left", border: "0", backgroundColor: "transparent", cursor: "pointer", marginTop: "3px"}}
+                style={{
+                  color: "#707070",
+                  padding: "0px",
+                  textAlign: "left",
+                  border: "0",
+                  backgroundColor: "transparent",
+                  cursor: "pointer",
+                  marginTop: "3px",
+                }}
                 onClick={() => setExpanded(!expanded)}
               >
-                <Typography sx={{"&:hover": {textDecoration: "underline"},
-				fontSize: "14px"}}>
+                <Typography
+                  sx={{
+                    "&:hover": { textDecoration: "underline" },
+                    fontSize: "14px",
+                  }}
+                >
                   {expanded ? "Hide More" : "Read More"}
                 </Typography>
               </button>
@@ -133,9 +140,9 @@ function OpportunityCard({
             <>{description}</>
           )}
           {link && (
-		  <div style={{margin: "10px 0px 10px"}}>
+            <div style={{ margin: "10px 0px 10px" }}>
               <>
-                <Link to={link} key={link}>
+                <Link href={link} target="_blank" rel="noreferrer" key={link}>
                   {link}
                 </Link>
                 <br />
@@ -146,15 +153,24 @@ function OpportunityCard({
         {tags && (
           <>
             <Divider />
-            <div paddingTop="8px">
+            <Box sx={{paddingTop: "8px"}}>
               {tags.map((tag) => (
                 <>
-                  <span style={{backgroundColor: "#546DE5", color: "#FFFFFF", margin: "6px", padding: "0px 8px 2px", borderRadius: "10px"}} key={tag.name}>
+                  <span
+                    style={{
+                      backgroundColor: "#546DE5",
+                      color: "#FFFFFF",
+                      margin: "6px",
+                      padding: "0px 8px 2px",
+                      borderRadius: "10px",
+                    }}
+                    key={tag.name}
+                  >
                     {tag.name}
                   </span>
                 </>
               ))}
-            </div>
+            </Box>
           </>
         )}
       </CardContent>
