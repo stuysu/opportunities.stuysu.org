@@ -72,7 +72,7 @@ const eligibilities = [
 ];
 
 const OpportunityForm = (opportunity = {}) => {
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+  const [snackbarOpen, setSnackbarOpen] = React.useState("");
 
   const [title, setTitle] = React.useState(opportunity.title || "");
   const [date, setDate] = React.useState(opportunity.date || "");
@@ -102,7 +102,7 @@ const OpportunityForm = (opportunity = {}) => {
     console.log(allEligibility);
   };
 
-  const [createOpportunity] = useMutation(CREATE_MUTATION);
+  const [createOpportunity, {data, loading, error}] = useMutation(CREATE_MUTATION);
 
   return (
     <div>
@@ -267,7 +267,12 @@ const OpportunityForm = (opportunity = {}) => {
               link,
             },
           });
-          setSnackbarOpen(true);
+          
+          if (error) {
+            setSnackbarOpen(error.message);
+          } else {
+            setSnackbarOpen("Opportunity Created!");
+          }
         }}
         variant="contained"
       >
@@ -275,9 +280,9 @@ const OpportunityForm = (opportunity = {}) => {
       </Button>
       <Snackbar
         autoHideDuration={2000}
-        open={snackbarOpen}
-        onClose={() => setSnackbarOpen(false)}
-        message={"Opportunity Created!"}
+        open={snackbarOpen.length > 0}
+        onClose={() => setSnackbarOpen("")}
+        message={snackbarOpen}
       />
     </div>
   );
