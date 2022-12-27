@@ -102,7 +102,14 @@ const OpportunityForm = (opportunity = {}) => {
     console.log(allEligibility);
   };
 
-  const [createOpportunity, {data, loading, error}] = useMutation(CREATE_MUTATION);
+  const [createOpportunity] = useMutation(CREATE_MUTATION, {
+    onCompleted(data) {
+      console.log(data);
+      setSnackbarOpen(`Opportunity #${data.createOpportunity.id} Created!`);
+    },
+    onError(error) {
+      setSnackbarOpen(error.message);
+    }});
 
   return (
     <div>
@@ -251,8 +258,8 @@ const OpportunityForm = (opportunity = {}) => {
         </Grid>
       </Grid>
       <Button
-        onClick={() => {
-          createOpportunity({
+        onClick={async () => {
+          await createOpportunity({
             variables: {
               title,
               description,
@@ -267,12 +274,6 @@ const OpportunityForm = (opportunity = {}) => {
               link,
             },
           });
-          
-          if (error) {
-            setSnackbarOpen(error.message);
-          } else {
-            setSnackbarOpen("Opportunity Created!");
-          }
         }}
         variant="contained"
       >
