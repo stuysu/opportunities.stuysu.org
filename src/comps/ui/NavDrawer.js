@@ -14,7 +14,6 @@ import NavBarLink from "./NavBarLink.js";
 
 const NavDrawer = ({ user }) => {
   const [open, updateOpen] = React.useState(false);
-  console.log(user);
   return (
     <nav>
       <IconButton

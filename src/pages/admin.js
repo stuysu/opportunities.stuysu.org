@@ -18,9 +18,7 @@ const Admin = () => {
       </Helmet>
 
       <Box>
-        <OpportunityForm>
-
-        </OpportunityForm>
+        <OpportunityForm />
       </Box>
     </div>
   );

@@ -51,8 +51,6 @@ const Catalog = () => {
     },
   });
 
-  //console.log(user);
-
   if (!user.signedIn) return <AuthenticationRequired />;
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
@@ -69,7 +67,6 @@ const Catalog = () => {
     });
   }
 
-  //console.log(data);
   return (
     <div>
       <Helmet>

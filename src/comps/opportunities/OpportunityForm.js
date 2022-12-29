@@ -13,8 +13,11 @@ import {
   TextField,
   MenuItem,
 } from "@mui/material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment"
 import React from "react";
 import { gql, useMutation } from "@apollo/client";
+import moment from "moment";
 
 const CREATE_MUTATION = gql`
   mutation CreateOpportunity(
@@ -72,12 +75,22 @@ const eligibilities = [
 ];
 
 const OpportunityForm = (opportunity = {}) => {
+  /**
+   * Creates the OpportunityForm used on the admin page.
+   * @constructor
+   * @param {Object} opportunity - React properties, customarily referred to as "props" (described below)
+   * @property {string} title - Title data of the opportunity being operated on
+   * @property {string} date - Date of the opportunity in an arbitrary string
+   * @property {string} appDeadline - Deadline of the app, non-flexible string in YYYY-MM-DD format for DB/sorting
+   * @property {string} cost - Cost of the opportunity in an arbitrary string
+   * @property {string} link - Link of the opportunity in an arbitrary string
+   */
   const [snackbarOpen, setSnackbarOpen] = React.useState("");
 
   const [title, setTitle] = React.useState(opportunity.title || "");
   const [date, setDate] = React.useState(opportunity.date || "");
   const [appDeadline, setAppDeadline] = React.useState(
-    opportunity.appDeadline || ""
+    (opportunity.appDeadline && moment(opportunity.appDeadline)) || null
   );
   const [cost, setCost] = React.useState(opportunity.cost || "");
   const [location, setLocation] = React.useState(opportunity.location || "");
@@ -87,6 +100,9 @@ const OpportunityForm = (opportunity = {}) => {
   );
   const [allCategory, setAllCategory] = React.useState([]);
   const [allEligibility, setAllEligibility] = React.useState([]);
+
+  const [deadlineError, setDeadlineError] = React.useState(false);
+
   const handleCategoryChange = (event) => {
     const {
       target: { value },
@@ -113,6 +129,7 @@ const OpportunityForm = (opportunity = {}) => {
 
   return (
     <div>
+      <LocalizationProvider dateAdapter={AdapterMoment} >
       <Grid container spacing={2} alignItems="stretch">
         <Grid item xs={12} sm={12} md={12} lg={8} xl={8}>
           <Grid container spacing={2}>
@@ -137,13 +154,19 @@ const OpportunityForm = (opportunity = {}) => {
               />
             </Grid>
             <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-              <TextField
+              <DatePicker
                 variant={"outlined"}
                 fullWidth
                 label={"Deadline"}
+                onChange={(e) => {
+                  setAppDeadline(e);
+                  setDeadlineError(!(e === null || e?.isValid()));
+              }}
                 value={appDeadline}
-                placeholder={"2022-05-06"}
-                onChange={(e) => setAppDeadline(e.target.value)}
+                renderInput={(params) =>
+                  // managing the error state directly in the DatePicker is bugged, moved down here
+                  <TextField error={deadlineError} {...params}/>
+              }
               />
             </Grid>
             <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
@@ -257,8 +280,13 @@ const OpportunityForm = (opportunity = {}) => {
           </Grid>
         </Grid>
       </Grid>
+      </LocalizationProvider>
       <Button
         onClick={async () => {
+          if (deadlineError) {
+            setSnackbarOpen("Error: Deadline date is not in the correct format. (MM/DD/YYYY)");
+            return;
+          }
           await createOpportunity({
             variables: {
               title,
@@ -270,7 +298,7 @@ const OpportunityForm = (opportunity = {}) => {
               date,
               location,
               cost: parseInt(cost) || 0,
-              appDeadline: appDeadline || "2100-01-01",
+              appDeadline: (appDeadline && appDeadline.format("YYYY-MM-DD")) || "1970-01-01",
               link,
             },
           });

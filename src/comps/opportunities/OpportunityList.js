@@ -17,9 +17,7 @@ import UserContext from "../context/UserContext";
 const OpportunityList = (data) => {
   const user = React.useContext(UserContext);
   
-
   if (data?.opportunities?.opportunities.length) {
-    
     return (
       <>
         {data?.opportunities?.opportunities?.map((opportunity) => (
