@@ -4,7 +4,7 @@ import { Box, Card, CardContent, Divider, Link, Typography, Button, Snackbar } f
 import { gql, useMutation } from "@apollo/client";
 
 const DELETE_MUTATION = gql`
-  mutation CreateOpportunity(
+  mutation DeleteOpportunity(
     $id: Int!
   ) {
     deleteOpportunity(id: $id)
