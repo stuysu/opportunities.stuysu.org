@@ -1,5 +1,6 @@
 import React from "react";
 import OpportunityCard from "./OpportunityCard";
+import UserContext from "../context/UserContext";
 
 /*
 	Expected opportunity format:
@@ -14,7 +15,12 @@ import OpportunityCard from "./OpportunityCard";
 	tags: [String], optional
 */
 const OpportunityList = (data) => {
+  const user = React.useContext(UserContext);
+  
+
   if (data?.opportunities?.opportunities.length) {
+    
+    console.log(data.opportunities.opportunities[9]);
     return (
       <>
         {data?.opportunities?.opportunities?.map((opportunity) => (
@@ -27,7 +33,8 @@ const OpportunityList = (data) => {
             cost={opportunity?.cost}
             location={opportunity?.location}
             link={opportunity?.link}
-            tags={opportunity?.tags}
+            tags={opportunity?.eligibilities?.concat(opportunity?.categories)}
+            isAdmin={user.signedIn && user.isFaculty}
           />
         ))}
       </>
