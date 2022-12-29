@@ -5,9 +5,8 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
     title: String
     description: String,
     open: Boolean,
-    onCancel: Function,
-    onConfirm: Function,
-    
+    onCancel: Function, 
+    onConfirm: Function, 
 */
 
 export default function ConfirmationDialog({
@@ -16,11 +15,17 @@ export default function ConfirmationDialog({
     open,
     onCancel,
     onConfirm,
+    onClose
 }) {
+    
+    const [isOpen, setOpen] = React.useState(false);
+    
+    if (open && !isOpen) setOpen(true);
+
     return (
         <div>
             <Dialog
-            open={open}
+            open={isOpen}
             >
             {title && (<DialogTitle>
                 {title}
@@ -31,8 +36,16 @@ export default function ConfirmationDialog({
                 </DialogContentText>
             </DialogContent>)}
             <DialogActions>
-                <Button onClick={onCancel}>Cancel</Button>
-                <Button onClick={onConfirm} autoFocus>Confirm</Button>
+                <Button onClick={() => {
+                    setOpen(false);
+                    onClose();
+                    if (onCancel) onCancel();
+                }}>Cancel</Button>
+                <Button onClick={() => {
+                    setOpen(false);
+                    onClose();
+                    if (onConfirm) onConfirm();
+                }} autoFocus>Confirm</Button>
             </DialogActions>
             </Dialog>
         </div>

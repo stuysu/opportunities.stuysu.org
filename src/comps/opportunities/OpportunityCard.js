@@ -236,16 +236,15 @@ function OpportunityCard({
         title={"Delete this Opportunity?"}
         description={"We cannot recover it once deleted."}
         open={confirmDelete}
+        onClose={() => {
+          setDelete(false);
+        }}
         onConfirm={async () => {
           await deleteOpportunity({
             variables: {
               id: parseInt(id),
             }
           });
-          setDelete(false);
-        }}
-        onCancel={() => {
-          setDelete(false);
         }}
       />
     </div>
