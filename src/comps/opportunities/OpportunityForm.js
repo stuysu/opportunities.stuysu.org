@@ -127,8 +127,6 @@ const OpportunityForm = (opportunity = {}) => {
       setSnackbarOpen(error.message);
     }});
 
-  console.log("deadline", deadlineError)
-
   return (
     <div>
       <LocalizationProvider dateAdapter={AdapterMoment} >
@@ -163,7 +161,6 @@ const OpportunityForm = (opportunity = {}) => {
                 onChange={(e) => {
                   setAppDeadline(e);
                   setDeadlineError(!(e === null || e?.isValid()));
-                  console.log("processed")
               }}
                 value={appDeadline}
                 renderInput={(params) =>

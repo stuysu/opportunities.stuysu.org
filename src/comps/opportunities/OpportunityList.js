@@ -19,8 +19,6 @@ const OpportunityList = (data) => {
   
 
   if (data?.opportunities?.opportunities.length) {
-    
-    console.log(data.opportunities.opportunities[9]);
     return (
       <>
         {data?.opportunities?.opportunities?.map((opportunity) => (

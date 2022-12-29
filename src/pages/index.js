@@ -13,7 +13,6 @@ import Box from "@mui/material/Box";
 
 const Pages = () => {
   const user = useContext(UserContext);
-  //console.log(user);
   return (
     <div>
       <BrowserRouter>
