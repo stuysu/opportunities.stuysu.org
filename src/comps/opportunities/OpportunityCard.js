@@ -55,6 +55,7 @@ const smartSnippet = (texttocut, snippetmaxlength) => {
   link: [String], optional
   tags: [String], optional
   isAdmin: [Boolean], optional 
+  onDelete: [Function], mandatory
 */
 function OpportunityCard({
   id,
@@ -67,6 +68,7 @@ function OpportunityCard({
   link,
   tags,
   isAdmin, 
+  onDelete,
 }) {
   const [snackbarOpen, setSnackbarOpen] = React.useState("");
   const [confirmDelete, setDelete] = React.useState(false);
@@ -245,6 +247,7 @@ function OpportunityCard({
               id: parseInt(id),
             }
           });
+          onDelete();
         }}
       />
     </div>

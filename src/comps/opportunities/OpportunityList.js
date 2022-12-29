@@ -16,7 +16,14 @@ import UserContext from "../context/UserContext";
 */
 const OpportunityList = (data) => {
   const user = React.useContext(UserContext);
-  
+
+  // admin
+  const [deleted, setDeleted] = React.useState([]);
+  data.opportunities.opportunities = data
+  .opportunities
+  .opportunities
+  .filter(opportunity => !deleted.includes(opportunity.id));
+
   if (data?.opportunities?.opportunities.length) {
     return (
       <>
@@ -33,6 +40,7 @@ const OpportunityList = (data) => {
             link={opportunity?.link}
             tags={opportunity?.eligibilities?.concat(opportunity?.categories)}
             isAdmin={user.signedIn && user.isFaculty}
+            onDelete={() => setDeleted([...deleted, opportunity.id])}
           />
         ))}
       </>
