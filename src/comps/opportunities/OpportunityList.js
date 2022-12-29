@@ -20,12 +20,12 @@ const OpportunityList = (data) => {
 
   if (data?.opportunities?.opportunities.length) {
     
-    console.log(data.opportunities.opportunities[9]);
     return (
       <>
         {data?.opportunities?.opportunities?.map((opportunity) => (
           <OpportunityCard
             key={opportunity.id}
+            id={opportunity.id}
             title={opportunity.title}
             date={opportunity?.date}
             description={opportunity.description}
