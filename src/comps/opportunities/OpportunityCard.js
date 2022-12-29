@@ -3,6 +3,8 @@ import { Box, Card, CardContent, Divider, Link, Typography, Button, Snackbar } f
 
 import { gql, useMutation } from "@apollo/client";
 
+import ConfirmationDialog from "../ui/ConfirmationDialog.js";
+
 const DELETE_MUTATION = gql`
   mutation DeleteOpportunity(
     $id: Int!
@@ -67,6 +69,7 @@ function OpportunityCard({
   isAdmin, 
 }) {
   const [snackbarOpen, setSnackbarOpen] = React.useState("");
+  const [confirmDelete, setDelete] = React.useState(false);
 
   const [deleteOpportunity] = useMutation(DELETE_MUTATION, {
     onCompleted(data) {
@@ -211,12 +214,8 @@ function OpportunityCard({
                 </Button>
                 <Button
                   variant="contained"
-                  onClick={async () => {
-                    await deleteOpportunity({
-                      variables: {
-                        id: parseInt(id),
-                      }
-                    })
+                  onClick={() => {
+                    setDelete(true);
                   }}
                 >
                 Delete
@@ -232,6 +231,22 @@ function OpportunityCard({
         open={snackbarOpen.length > 0}
         onClose={() => setSnackbarOpen("")}
         message={snackbarOpen}
+      />
+      <ConfirmationDialog 
+        title={"Delete this Opportunity?"}
+        description={"We cannot recover it once deleted."}
+        open={confirmDelete}
+        onConfirm={async () => {
+          await deleteOpportunity({
+            variables: {
+              id: parseInt(id),
+            }
+          });
+          setDelete(false);
+        }}
+        onCancel={() => {
+          setDelete(false);
+        }}
       />
     </div>
   );
