@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, Card, CardContent, Divider, Link, Typography } from "@mui/material";
+import { Box, Card, CardContent, Divider, Link, Typography, Button } from "@mui/material";
 
 const responsive = (width) => {
   if (width < 464) {
@@ -41,6 +41,7 @@ const smartSnippet = (texttocut, snippetmaxlength) => {
   location: String, optional
   link: [String], optional
   tags: [String], optional
+  isAdmin: [Boolean], optional 
 */
 function OpportunityCard({
   title,
@@ -51,7 +52,9 @@ function OpportunityCard({
   location,
   link,
   tags,
+  isAdmin, 
 }) {
+  
   const [expanded, setExpanded] = React.useState(false);
   // TODO: Date type in GraphQL
   if (appDeadline) appDeadline = new Date(appDeadline);
@@ -150,7 +153,7 @@ function OpportunityCard({
             </div>
           )}
         </div>
-        {tags && (
+        {tags.length != 0 && (
           <>
             <Divider />
             <Box sx={{paddingTop: "8px"}}>
@@ -170,6 +173,23 @@ function OpportunityCard({
                   </span>
                 </>
               ))}
+            </Box>
+          </>
+        )}
+        {isAdmin && (
+          <>
+            <Divider sx={{ marginTop: "8px" }} />
+              <Box sx={{paddingTop: "16px"}}>
+              <Button sx={{ marginRight: "16px"}}
+                variant="contained"
+              >
+              Edit
+              </Button>
+              <Button
+                variant="contained"
+              >
+              Delete
+              </Button>
             </Box>
           </>
         )}

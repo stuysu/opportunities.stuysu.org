@@ -38,6 +38,9 @@ const UserProvider = (props) => {
         ...data.authenticatedUser,
       }
     : { signedIn: false, refetch };
+  
+  // DEBUG
+  // value.isFaculty = true;
 
   return (
     <UserContext.Provider value={value}>{props.children}</UserContext.Provider>
