@@ -74,6 +74,26 @@ const eligibilities = [
   "Underrepresented Community",
 ];
 
+const DatePickerErrorMessage = (error) => {
+  /**
+   * Creates the OpportunityForm used on the admin page.
+   * @function
+   * @param {string|null} error - Error code, refer to the {@link https://next.material-ui-pickers.dev/api/DatePicker DatePicker documentation}
+   */
+  switch (error) {
+    case "invalidDate":
+      return ('Deadline date is not in the correct format. (MM/DD/YYYY)');
+    case "minDate":
+      return ('Deadline date is too far in the past.');  // the limit is January 1, 1900
+    case "maxDate":
+      return ('Deadline date is too far in the future.');  // the limit is December 31, 2099
+    case null:
+      return false;
+    default:  // catch-all for the ones that shouldn't show up
+      return (`Deadline date has unknown error. Error Code: ${error}`);
+  }
+}
+
 const OpportunityForm = (opportunity = {}) => {
   /**
    * Creates the OpportunityForm used on the admin page.
@@ -120,8 +140,19 @@ const OpportunityForm = (opportunity = {}) => {
 
   const [createOpportunity] = useMutation(CREATE_MUTATION, {
     onCompleted(data) {
-      console.log(data);
       setSnackbarOpen(`Opportunity #${data.createOpportunity.id} Created!`);
+
+      // reset form state
+      setTitle("");
+      setDate("");
+      setAppDeadline(null);
+      setCost("");
+      setLocation("");
+      setLink("");
+      setDescription("");
+      setAllCategory([]);
+      setAllEligibility([]);
+      // deadlineError is guaranteed to be false by here
     },
     onError(error) {
       setSnackbarOpen(error.message);
@@ -135,6 +166,7 @@ const OpportunityForm = (opportunity = {}) => {
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
               <TextField
+                autoFocus={true}
                 variant={"outlined"}
                 fullWidth
                 label={"Title"}
@@ -160,12 +192,12 @@ const OpportunityForm = (opportunity = {}) => {
                 label={"Deadline"}
                 onChange={(e) => {
                   setAppDeadline(e);
-                  setDeadlineError(!(e === null || e?.isValid()));
-              }}
+                }}
+                onError={e => setDeadlineError(DatePickerErrorMessage(e))}
                 value={appDeadline}
                 renderInput={(params) =>
                   // managing the error state directly in the DatePicker is bugged, moved down here
-                  <TextField error={deadlineError} {...params}/>
+                  <TextField error={deadlineError} helperText={deadlineError} {...params}/>
               }
               />
             </Grid>
@@ -284,7 +316,7 @@ const OpportunityForm = (opportunity = {}) => {
       <Button
         onClick={async () => {
           if (deadlineError) {
-            setSnackbarOpen("Error: Deadline date is not in the correct format. (MM/DD/YYYY)");
+            setSnackbarOpen("Error: " + deadlineError);
             return;
           }
           await createOpportunity({
