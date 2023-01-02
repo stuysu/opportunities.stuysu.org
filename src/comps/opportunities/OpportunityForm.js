@@ -362,23 +362,6 @@ const OpportunityForm = (opportunity = {}) => {
             return;
           }
 
-          console.log({
-            variables: {
-              id: opportunity.id,
-              title,
-              description,
-              categories: allCategory.map((e) => categories.indexOf(e) + 1),
-              eligibilities: allEligibility.map(
-                (e) => eligibilities.indexOf(e) + 1
-              ),
-              date,
-              location,
-              cost: parseInt(cost) || 0,
-              appDeadline: (appDeadline && appDeadline.format("YYYY-MM-DD")) || "1970-01-01",
-              link,
-            },
-          });
-
           if (opportunity.id) {
             await editOpportunity({
               variables: {
