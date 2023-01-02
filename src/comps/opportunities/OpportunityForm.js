@@ -49,6 +49,38 @@ const CREATE_MUTATION = gql`
   }
 `;
 
+const EDIT_MUTATION = gql`
+  mutation EditOpportunity(
+    $id: Int!
+    $title: String!
+    $description: String!
+    $categories: [Int]
+    $eligibilities: [Int]
+    $date: String
+    $location: String
+    $cost: Int
+    $appDeadline: Date
+    $link: String
+  ) {
+    editOpportunity(
+      id: $id
+      title: $title
+      description: $description
+      categories: $categories
+      eligibilities: $eligibilities
+      date: $date
+      location: $location
+      cost: $cost
+      appDeadline: $appDeadline
+      link: $link
+    ) {
+      id
+      title
+      description
+    }
+  }
+`;
+
 const categories = [
   "Events of Interest",
   "Academic Programs",
@@ -79,6 +111,7 @@ const OpportunityForm = (opportunity = {}) => {
    * Creates the OpportunityForm used on the admin page.
    * @constructor
    * @param {Object} opportunity - React properties, customarily referred to as "props" (described below)
+   * @property {number} id - Id of the opportunity being operated on (if there's an id, opportunity is now edited instead of created)
    * @property {string} title - Title data of the opportunity being operated on
    * @property {string} date - Date of the opportunity in an arbitrary string
    * @property {string} appDeadline - Deadline of the app, non-flexible string in YYYY-MM-DD format for DB/sorting
@@ -86,7 +119,7 @@ const OpportunityForm = (opportunity = {}) => {
    * @property {string} link - Link of the opportunity in an arbitrary string
    */
   const [snackbarOpen, setSnackbarOpen] = React.useState("");
-
+  
   const [title, setTitle] = React.useState(opportunity.title || "");
   const [date, setDate] = React.useState(opportunity.date || "");
   const [appDeadline, setAppDeadline] = React.useState(
@@ -122,6 +155,15 @@ const OpportunityForm = (opportunity = {}) => {
     onCompleted(data) {
       console.log(data);
       setSnackbarOpen(`Opportunity #${data.createOpportunity.id} Created!`);
+    },
+    onError(error) {
+      setSnackbarOpen(error.message);
+    }});
+  
+  const [editOpportunity] = useMutation(EDIT_MUTATION, {
+    onCompleted(data) {
+      console.log(data);
+      setSnackbarOpen(`Opportunity #${data.createOpportunity.id} Edited!`);
     },
     onError(error) {
       setSnackbarOpen(error.message);
@@ -287,8 +329,10 @@ const OpportunityForm = (opportunity = {}) => {
             setSnackbarOpen("Error: Deadline date is not in the correct format. (MM/DD/YYYY)");
             return;
           }
-          await createOpportunity({
+
+          console.log({
             variables: {
+              id: opportunity.id,
               title,
               description,
               categories: allCategory.map((e) => categories.indexOf(e) + 1),
@@ -302,10 +346,45 @@ const OpportunityForm = (opportunity = {}) => {
               link,
             },
           });
+
+          if (opportunity.id) {
+            await editOpportunity({
+              variables: {
+                id: opportunity.id,
+                title,
+                description,
+                categories: allCategory.map((e) => categories.indexOf(e) + 1),
+                eligibilities: allEligibility.map(
+                  (e) => eligibilities.indexOf(e) + 1
+                ),
+                date,
+                location,
+                cost: parseInt(cost) || 0,
+                appDeadline: (appDeadline && appDeadline.format("YYYY-MM-DD")) || "1970-01-01",
+                link,
+              },
+            })
+          } else {
+            await createOpportunity({
+              variables: {
+                title,
+                description,
+                categories: allCategory.map((e) => categories.indexOf(e) + 1),
+                eligibilities: allEligibility.map(
+                  (e) => eligibilities.indexOf(e) + 1
+                ),
+                date,
+                location,
+                cost: parseInt(cost) || 0,
+                appDeadline: (appDeadline && appDeadline.format("YYYY-MM-DD")) || "1970-01-01",
+                link,
+              },
+            });
+          }
         }}
         variant="contained"
       >
-        Create Opportunity
+        {opportunity.id ? "Edit Opportunity" : "Create Opportunity"}
       </Button>
       <Snackbar
         autoHideDuration={2000}
