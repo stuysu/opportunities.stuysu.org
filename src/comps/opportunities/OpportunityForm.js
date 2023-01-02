@@ -193,8 +193,19 @@ const OpportunityForm = (opportunity = {}) => {
   
   const [editOpportunity] = useMutation(EDIT_MUTATION, {
     onCompleted(data) {
-      console.log(data);
       setSnackbarOpen(`Opportunity #${data.createOpportunity.id} Edited!`);
+
+       // reset form state
+       setTitle("");
+       setDate("");
+       setAppDeadline(null);
+       setCost("");
+       setLocation("");
+       setLink("");
+       setDescription("");
+       setAllCategory([]);
+       setAllEligibility([]);
+       // deadlineError is guaranteed to be false by here
     },
     onError(error) {
       setSnackbarOpen(error.message);
