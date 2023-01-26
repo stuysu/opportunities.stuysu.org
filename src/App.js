@@ -1,4 +1,4 @@
-import "./App.css";
+import "./tailwind.css";
 import React from "react";
 import Pages from "./pages";
 

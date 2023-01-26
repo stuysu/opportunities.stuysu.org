@@ -16,10 +16,11 @@ import OpportunityCard from "./OpportunityCard";
 const OpportunityList = (data) => {
   if (data?.opportunities?.opportunities.length) {
     return (
-      <>
+      <div>
         {data?.opportunities?.opportunities?.map((opportunity) => (
           <OpportunityCard
             key={opportunity.id}
+            id={opportunity.id}
             title={opportunity.title}
             date={opportunity?.date}
             description={opportunity.description}
@@ -30,7 +31,7 @@ const OpportunityList = (data) => {
             tags={opportunity?.tags}
           />
         ))}
-      </>
+      </div>
     );
   } else {
     return <h1>No opportunities found.</h1>;

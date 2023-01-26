@@ -1,0 +1,129 @@
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import React from "react";
+import {Badge, Button, ButtonGroup, Typography} from "@mui/material";
+
+let dataStyles = {
+	display: "flex",
+	flexDirection: "row",
+	alignItems: "center",
+	gap: "0.5rem",
+	my: "0.5rem",
+}
+
+Date.prototype.toDateStringCustom = function () {
+	return this.toLocaleDateString("en-US", {
+		weekday: "long",
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	});
+};
+
+const OpportunityOverview = ({opp}) => {
+	return (
+		<div>
+			<Typography variant={"h1"}>{opp.title}</Typography>
+			<div>
+				{ /* TODO: Fix bug where opp.categories is always null in GraphQL query */ }
+				{opp.categories && opp.categories.map((category) => (
+					<Badge
+						key={category}
+						sx={{ mr: 1 }}
+						badgeContent={category}
+						color="primary"
+					/>
+				))}
+			</div>
+			<Typography
+				variant={"p"}
+				className={"block text-blue-500"}
+				sx={dataStyles}
+			>
+				<CalendarMonthIcon/>
+				<b>Date(s): </b>{opp.date}
+			</Typography>
+			<Typography
+				variant={"p"}
+				className={"block text-blue-500"}
+				sx={dataStyles}
+			>
+				<LocationOnIcon
+				/>
+				<b>Location(s): </b>{opp.location}
+			</Typography>
+			<Typography
+				variant={"p"}
+				className={"block text-blue-500"}
+				sx={dataStyles}
+			>
+				<MonetizationOnIcon
+				/>
+				<b>Cost:</b>{" "}
+				{opp.cost === 0 ? (
+					"Free"
+				) : opp.cost ? (
+					opp.cost > 0 ? (
+						<>${opp.cost}</>
+					) : (
+						"Stipend Offered, Check Description"
+					)
+				) : (
+					"Check Description"
+				)}
+			</Typography>
+			<Typography
+				variant={"p"}
+				className={"block text-blue-500"}
+				sx={dataStyles}
+			>
+				<AccessTimeIcon
+				/>
+				<b>Deadline: </b> {
+				// Ugh
+				new Date(opp.appDeadline).toDateStringCustom()
+			}
+			</Typography>
+			<Typography variant={"h4"}>Description</Typography>
+			<Typography variant={"body1"}>{opp.description}</Typography>
+			<div
+				className={"flex flex-row justify-between"}
+				sx={{fontSize: "0.9rem"}}
+			>
+				<ButtonGroup
+					variant={"contained"}
+					color={"primary"}
+					aria-label={"contained primary button group"}
+				>
+					{opp.link && (
+						// Apply button
+						<Button
+							variant={"outlined"}
+							color={"primary"}
+							sx={{my: 1}}
+							onClick={() => {
+								window.open(opp.link, "_blank");
+							}}
+						>
+							Apply
+						</Button>
+					)}
+					<Button
+						variant={"outlined"}
+						color={"primary"}
+						sx={{my: 1}}
+						onClick={() => {
+							alert("TODO: Implement My Opportunities List");
+						}}
+					>
+						Save to My Opportunities
+					</Button>
+				</ButtonGroup>
+			</div>
+		</div>
+	)
+}
+
+export default OpportunityOverview;

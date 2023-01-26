@@ -13,7 +13,7 @@ const SearchBar = () => {
     <TextField
       fullWidth
       id="fullWidth"
-      label="Search for an opportunity..."
+      label="Search for opportunities..."
       color="secondary"
       autoFocus={true}
       onChange={(event) => setSearch(event.target.value)}
