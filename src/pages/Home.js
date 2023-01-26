@@ -3,7 +3,7 @@ import {Helmet} from "react-helmet";
 import UserHome from "../comps/home/UserHome";
 import UnauthenticatedLanding from "../comps/home/UnauthenticatedLanding";
 import UserContext from "../comps/context/UserContext";
-import {Box, Typography, Link, Grid} from "@mui/material";
+import {Typography, Link, Grid} from "@mui/material";
 import opportunities from "../img/vector/goodstudio-reaching-for-opportunities.svg";
 
 // TEMP BECAUSE MATERIAL UI IS GARBAGE

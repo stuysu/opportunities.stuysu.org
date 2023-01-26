@@ -5,14 +5,13 @@ import MyOpportunities from "./myopportunities";
 import Catalog from "./catalog";
 import Archives from "./archives";
 import Admin from "./admin";
-import {BrowserRouter, Routes, Route, generatePath,Navigate} from "react-router-dom";
+import {BrowserRouter, Routes, Route} from "react-router-dom";
 import { useContext } from "react";
 import UserContext from "../comps/context/UserContext";
 import NavDrawer from "../comps/ui/NavDrawer";
 import Box from "@mui/material/Box";
 import "../tailwind.css";
 import HTTP404 from "./404";
-import slugify from "../util/slugify";
 import OppRouter from "./opportunity/index.js";
 
 const Pages = () => {

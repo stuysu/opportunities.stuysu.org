@@ -1,14 +1,6 @@
 import React from "react";
-import {Typography, Link, Card, CardContent, Divider, Box, Button} from "@mui/material";
+import {Typography, Card,  Divider, Button} from "@mui/material";
 
-Date.prototype.toDateStringCustom = function () {
-	return this.toLocaleDateString("en-US", {
-		weekday: "long",
-		year: "numeric",
-		month: "long",
-		day: "numeric",
-	});
-}
 const responsive = (width) => {
 	if (width < 464) {
 		// mobile
@@ -51,7 +43,6 @@ const smartSnippet = (texttocut, snippetmaxlength) => {
   tags: [String], optional
 */
 function OpportunityCard({id, title, date, description, appDeadline, cost, location, link, tags}) {
-	const [expanded, setExpanded] = React.useState(false);
 	// TODO: Date type in GraphQL
 	if (appDeadline) appDeadline = new Date(appDeadline);
 	return (
@@ -116,9 +107,7 @@ function OpportunityCard({id, title, date, description, appDeadline, cost, locat
 					sx={{fontSize: "0.9rem"}}
 					className={"block"}
 				>
-					{expanded
-						? description
-						: smartSnippet(description, responsive(window.innerWidth).cutoffchar)}
+					{smartSnippet(description, responsive(window.innerWidth).cutoffchar)}
 				</Typography>
 				<div
 					className={"flex flex-row justify-between"}
