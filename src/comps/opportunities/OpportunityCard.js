@@ -1,6 +1,15 @@
 import React from "react";
 import {Typography, Card,  Divider, Button} from "@mui/material";
 
+function toDateStringCustom (date) {
+	return date.toLocaleDateString("en-US", {
+		weekday: "long",
+		year: "numeric",
+		month: "long",
+		day: "numeric",
+	});
+};
+
 const responsive = (width) => {
 	if (width < 464) {
 		// mobile
@@ -96,7 +105,7 @@ function OpportunityCard({id, title, date, description, appDeadline, cost, locat
 					className={"text-blue-500 block"}
 				>
 					Deadline: {
-					(appDeadline) ? appDeadline.toDateStringCustom() : "None"
+					(appDeadline) ? toDateStringCustom(appDeadline) : "None"
 				}
 				</Typography>
 				<Divider
