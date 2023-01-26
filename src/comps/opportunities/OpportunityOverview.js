@@ -26,15 +26,17 @@ const OpportunityOverview = ({opp}) => {
 	return (
 		<div>
 			<Typography variant={"h1"}>{opp.title}</Typography>
-			<div>
+			<div
+				className={"mb-4"}
+			>
 				{ /* TODO: Fix bug where opp.categories is always null in GraphQL query */ }
 				{opp.categories && opp.categories.map((category) => (
-					<Badge
-						key={category}
-						sx={{ mr: 1 }}
-						badgeContent={category}
-						color="primary"
-					/>
+					<div
+					  className={"inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2"}
+					  key={category}
+					>
+						{category.name}
+					</div>
 				))}
 			</div>
 			<Typography
