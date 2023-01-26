@@ -171,21 +171,24 @@ const OpportunityForm = (opportunity = {}) => {
     console.log(allEligibility);
   };
 
+  const resetForm = () => {
+    // reset form state
+    setTitle("");
+    setDate("");
+    setAppDeadline(null);
+    setCost("");
+    setLocation("");
+    setLink("");
+    setDescription("");
+    setAllCategory([]);
+    setAllEligibility([]);
+    // deadlineError is guaranteed to be false by here
+  }
+
   const [createOpportunity] = useMutation(CREATE_MUTATION, {
     onCompleted(data) {
       setSnackbarOpen(`Opportunity #${data.createOpportunity.id} Created!`);
-
-      // reset form state
-      setTitle("");
-      setDate("");
-      setAppDeadline(null);
-      setCost("");
-      setLocation("");
-      setLink("");
-      setDescription("");
-      setAllCategory([]);
-      setAllEligibility([]);
-      // deadlineError is guaranteed to be false by here
+      resetForm();
     },
     onError(error) {
       setSnackbarOpen(error.message);
@@ -193,19 +196,8 @@ const OpportunityForm = (opportunity = {}) => {
   
   const [editOpportunity] = useMutation(EDIT_MUTATION, {
     onCompleted(data) {
-      setSnackbarOpen(`Opportunity #${data.createOpportunity.id} Edited!`);
-
-       // reset form state
-       setTitle("");
-       setDate("");
-       setAppDeadline(null);
-       setCost("");
-       setLocation("");
-       setLink("");
-       setDescription("");
-       setAllCategory([]);
-       setAllEligibility([]);
-       // deadlineError is guaranteed to be false by here
+      setSnackbarOpen(`Opportunity #${data.editOpportunity.id} Edited!`);
+      resetForm();
     },
     onError(error) {
       setSnackbarOpen(error.message);

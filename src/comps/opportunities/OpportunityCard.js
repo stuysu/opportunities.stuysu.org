@@ -192,7 +192,7 @@ function OpportunityCard({
               </div>
             )}
           </div>
-          {tags.length != 0 && (
+          {tags.length !== 0 && (
             <>
               <Divider />
               <Box sx={{paddingTop: "8px"}}>

@@ -9,14 +9,14 @@ import UserContext from "../comps/context/UserContext";
 
 const Admin = () => {
   const user = React.useContext(UserContext);
-  const [searchParams] = useSearchParams();;
+  const [searchParams] = useSearchParams();
 
   if (!user.signedIn) return <AuthenticationRequired />;
   if (!user.isFaculty) return <FacultyRequired />
 
   
   let opportunity = false;
-  if (searchParams.get("edit") == "true") {
+  if (searchParams.get("edit") === "true") {
     opportunity = {
       id: parseInt(searchParams.get("id")),
       title: searchParams.get("title"),
