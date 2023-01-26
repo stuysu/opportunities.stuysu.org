@@ -1,20 +1,11 @@
-import React, {useContext} from "react";
-import Typography from "@mui/material/Typography";
+import React from "react";
 import {Helmet} from "react-helmet";
 import OpportunityOverview from "../../comps/opportunities/OpportunityOverview";
 import {gql, useQuery} from "@apollo/client";
-import {generatePath, useParams} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import AuthenticationRequired from "../../comps/auth/AuthenticationRequired";
 import UserContext from "../../comps/context/UserContext";
-import slugify from "../../util/slugify";
 import {client} from "../../comps/context/ApolloProvider";
-import Error404 from "../404";
-import Loading from "../../comps/ui/Loading";
-
-import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
-import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 export const OppContext = React.createContext({});
 

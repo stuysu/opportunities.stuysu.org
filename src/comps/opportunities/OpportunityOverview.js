@@ -13,8 +13,8 @@ let dataStyles = {
 	my: "0.5rem",
 }
 
-Date.prototype.toDateStringCustom = function () {
-	return this.toLocaleDateString("en-US", {
+function toDateStringCustom (date) {
+	return date.toLocaleDateString("en-US", {
 		weekday: "long",
 		year: "numeric",
 		month: "long",
@@ -83,7 +83,7 @@ const OpportunityOverview = ({opp}) => {
 				/>
 				<b>Deadline: </b> {
 				// Ugh
-				new Date(opp.appDeadline).toDateStringCustom()
+				toDateStringCustom(new Date(opp.appDeadline))
 			}
 			</Typography>
 			<Typography variant={"h4"}>Description</Typography>
