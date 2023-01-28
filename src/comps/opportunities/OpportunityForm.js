@@ -131,7 +131,7 @@ const OpportunityForm = (opportunity = {}) => {
    * Creates the OpportunityForm used on the admin page.
    * @constructor
    * @param {Object} opportunity - React properties, customarily referred to as "props" (described below)
-   * @property {number} id - Id of the opportunity being operated on (if there's an id, opportunity is now edited instead of created)
+   * @property {number} id - ID of the opportunity being operated on (if there's an id, opportunity is now edited instead of created)
    * @property {string} title - Title data of the opportunity being operated on
    * @property {string} date - Date of the opportunity in an arbitrary string
    * @property {string} appDeadline - Deadline of the app, non-flexible string in YYYY-MM-DD format for DB/sorting
@@ -140,6 +140,7 @@ const OpportunityForm = (opportunity = {}) => {
    */
   const [snackbarOpen, setSnackbarOpen] = React.useState("");
   
+  const [id, setId] = React.useState(opportunity.id);
   const [title, setTitle] = React.useState(opportunity.title || "");
   const [date, setDate] = React.useState(opportunity.date || "");
   const [appDeadline, setAppDeadline] = React.useState(
@@ -173,6 +174,7 @@ const OpportunityForm = (opportunity = {}) => {
 
   const resetForm = () => {
     // reset form state
+    setId(undefined);
     setTitle("");
     setDate("");
     setAppDeadline(null);
@@ -365,10 +367,10 @@ const OpportunityForm = (opportunity = {}) => {
             return;
           }
 
-          if (opportunity.id) {
+          if (id) {
             await editOpportunity({
               variables: {
-                id: opportunity.id,
+                id: id,
                 title,
                 description,
                 categories: allCategory.map((e) => categories.indexOf(e) + 1),
@@ -402,7 +404,7 @@ const OpportunityForm = (opportunity = {}) => {
         }}
         variant="contained"
       >
-        {opportunity.id ? "Edit Opportunity" : "Create Opportunity"}
+        {id ? "Edit Opportunity" : "Create Opportunity"}
       </Button>
       <Snackbar
         autoHideDuration={2000}

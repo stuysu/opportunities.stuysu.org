@@ -5,7 +5,7 @@ import { gql, useMutation } from "@apollo/client";
 
 import ConfirmationDialog from "../ui/ConfirmationDialog.js";
 
-import { Navigate } from "react-router-dom";
+import { Link as DomLink } from "react-router-dom";
 
 const DELETE_MUTATION = gql`
   mutation DeleteOpportunity(
@@ -46,10 +46,6 @@ const smartSnippet = (texttocut, snippetmaxlength) => {
     : texttocut.substring(0, possiblecutoff) + "...";
 };
 
-const editQuery = ({id, title, date, description, appDeadline, cost, location, link }) => {
-  return `/admin?edit=true&id=${id}&title=${title}&date=${date}&description=${description}&appdeadline=${appDeadline}&cost=${cost}&location=${location}&link=${link}`
-}
-
 /*
   id: String, mandatory
   title: String, mandatory
@@ -78,7 +74,6 @@ function OpportunityCard({
 }) {
   const [snackbarOpen, setSnackbarOpen] = React.useState("");
   const [confirmDelete, setDelete] = React.useState(false);
-  const [edit, setEdit] = React.useState(false);
 
   const [deleteOpportunity] = useMutation(DELETE_MUTATION, {
     onCompleted(data) {
@@ -95,9 +90,6 @@ function OpportunityCard({
   if (appDeadline) appDeadline = new Date(appDeadline);
   return (
     <div>
-      { edit && isAdmin && (
-        <Navigate to={editQuery({id, title, date, description, appDeadline, cost, location, link })} />
-      )}
       <Card sx={{ margin: "12px" }}>
         <CardContent>
           <div>
@@ -197,7 +189,6 @@ function OpportunityCard({
               <Divider />
               <Box sx={{paddingTop: "8px"}}>
                 {tags.map((tag) => (
-                  <>
                     <span
                       style={{
                         backgroundColor: "#546DE5",
@@ -210,7 +201,6 @@ function OpportunityCard({
                     >
                       {tag.name}
                     </span>
-                  </>
                 ))}
               </Box>
             </>
@@ -219,14 +209,13 @@ function OpportunityCard({
             <>
               <Divider sx={{ marginTop: "8px" }} />
                 <Box sx={{paddingTop: "16px"}}>
-                <Button sx={{ marginRight: "16px"}}
-                  variant="contained"
-                  onClick={() => {
-                    setEdit(true);
-                  }}
+                <DomLink to="/admin"
+                  state={{id, title, date, description, appDeadline, cost, location, link }}
                 >
-                Edit
-                </Button>
+                  <Button sx={{ marginRight: "16px"}} variant="contained">
+                    Edit
+                  </Button>
+                </DomLink>
                 <Button
                   variant="contained"
                   onClick={() => {
