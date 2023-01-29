@@ -1,6 +1,6 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import { Box } from "@mui/material";
+import { Box, CircularProgress } from "@mui/material";
 import { useLocation } from "react-router-dom";
 import OpportunityForm from "../comps/opportunities/OpportunityForm";
 import AuthenticationRequired from "../comps/auth/AuthenticationRequired";
@@ -11,8 +11,9 @@ const Admin = () => {
   const user = React.useContext(UserContext);
   const location = useLocation();
 
+  if (user.loading) return <CircularProgress />;
   if (!user.signedIn) return <AuthenticationRequired />;
-  if (!user.isFaculty) return <FacultyRequired />
+  if (!user.isFaculty) return <FacultyRequired />;
 
   
   let opportunity = location?.state;  // returns null on no state

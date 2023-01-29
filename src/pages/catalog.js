@@ -6,6 +6,7 @@ import { gql, useQuery } from "@apollo/client";
 import { useLocation, useSearchParams } from "react-router-dom";
 import AuthenticationRequired from "../comps/auth/AuthenticationRequired";
 import UserContext from "../comps/context/UserContext";
+import { CircularProgress } from "@mui/material";
 
 const QUERY = gql`
   query Opportunities($categories: [Int], $eligibilities: [Int]) {
@@ -51,8 +52,8 @@ const Catalog = () => {
     },
   });
 
+  if (loading || user.loading) return <CircularProgress />;
   if (!user.signedIn) return <AuthenticationRequired />;
-  if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
 
   let filtered = data["opportunities"];
