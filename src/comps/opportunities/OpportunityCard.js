@@ -91,7 +91,6 @@ function OpportunityCard({
       setSnackbarOpen(error.message);
     }});
 
-  const [expanded, setExpanded] = React.useState(false);
   // TODO: Date type in GraphQL
   if (appDeadline) appDeadline = new Date(appDeadline);
   return (
@@ -155,12 +154,10 @@ function OpportunityCard({
 				>
 					{description.length > responsive(window.innerWidth).cutoffchar ? (
               <>
-                {expanded
-                  ? description
-                  : smartSnippet(
+                {smartSnippet(
                       description,
                       responsive(window.innerWidth).cutoffchar
-                    )}
+                )}
                 <br />
               </>
             ) : (
