@@ -16,7 +16,6 @@ import OppRouter from "./opportunity/index.js";
 
 const Pages = () => {
   const user = useContext(UserContext);
-  //console.log(user);
   return (
     <div>
       <BrowserRouter>

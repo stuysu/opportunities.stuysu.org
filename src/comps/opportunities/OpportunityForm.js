@@ -13,8 +13,11 @@ import {
   TextField,
   MenuItem,
 } from "@mui/material";
+import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment"
 import React from "react";
 import { gql, useMutation } from "@apollo/client";
+import moment from "moment";
 
 const CREATE_MUTATION = gql`
   mutation CreateOpportunity(
@@ -29,6 +32,38 @@ const CREATE_MUTATION = gql`
     $link: String
   ) {
     createOpportunity(
+      title: $title
+      description: $description
+      categories: $categories
+      eligibilities: $eligibilities
+      date: $date
+      location: $location
+      cost: $cost
+      appDeadline: $appDeadline
+      link: $link
+    ) {
+      id
+      title
+      description
+    }
+  }
+`;
+
+const EDIT_MUTATION = gql`
+  mutation EditOpportunity(
+    $id: Int!
+    $title: String!
+    $description: String!
+    $categories: [Int]
+    $eligibilities: [Int]
+    $date: String
+    $location: String
+    $cost: Int
+    $appDeadline: Date
+    $link: String
+  ) {
+    editOpportunity(
+      id: $id
       title: $title
       description: $description
       categories: $categories
@@ -71,13 +106,45 @@ const eligibilities = [
   "Underrepresented Community",
 ];
 
-const OpportunityForm = (opportunity = {}) => {
-  const [snackbarOpen, setSnackbarOpen] = React.useState(false);
+const DatePickerErrorMessage = (error) => {
+  /**
+   * Creates the OpportunityForm used on the admin page.
+   * @function
+   * @param {string|null} error - Error code, refer to the {@link https://next.material-ui-pickers.dev/api/DatePicker DatePicker documentation}
+   */
+  switch (error) {
+    case "invalidDate":
+      return ('Deadline date is not in the correct format. (MM/DD/YYYY)');
+    case "minDate":
+      return ('Deadline date is too far in the past.');  // the limit is January 1, 1900
+    case "maxDate":
+      return ('Deadline date is too far in the future.');  // the limit is December 31, 2099
+    case null:
+      return false;
+    default:  // catch-all for the ones that shouldn't show up
+      return (`Deadline date has unknown error. Error Code: ${error}`);
+  }
+}
 
+const OpportunityForm = (opportunity = {}) => {
+  /**
+   * Creates the OpportunityForm used on the admin page.
+   * @constructor
+   * @param {Object} opportunity - React properties, customarily referred to as "props" (described below)
+   * @property {number} id - ID of the opportunity being operated on (if there's an id, opportunity is now edited instead of created)
+   * @property {string} title - Title data of the opportunity being operated on
+   * @property {string} date - Date of the opportunity in an arbitrary string
+   * @property {string} appDeadline - Deadline of the app, non-flexible string in YYYY-MM-DD format for DB/sorting
+   * @property {string} cost - Cost of the opportunity in an arbitrary string
+   * @property {string} link - Link of the opportunity in an arbitrary string
+   */
+  const [snackbarOpen, setSnackbarOpen] = React.useState("");
+  
+  const [id, setId] = React.useState(opportunity.id);
   const [title, setTitle] = React.useState(opportunity.title || "");
   const [date, setDate] = React.useState(opportunity.date || "");
   const [appDeadline, setAppDeadline] = React.useState(
-    opportunity.appDeadline || ""
+    (opportunity.appDeadline && moment(opportunity.appDeadline)) || null
   );
   const [cost, setCost] = React.useState(opportunity.cost || "");
   const [location, setLocation] = React.useState(opportunity.location || "");
@@ -87,6 +154,9 @@ const OpportunityForm = (opportunity = {}) => {
   );
   const [allCategory, setAllCategory] = React.useState([]);
   const [allEligibility, setAllEligibility] = React.useState([]);
+
+  const [deadlineError, setDeadlineError] = React.useState(false);
+
   const handleCategoryChange = (event) => {
     const {
       target: { value },
@@ -102,15 +172,48 @@ const OpportunityForm = (opportunity = {}) => {
     console.log(allEligibility);
   };
 
-  const [createOpportunity] = useMutation(CREATE_MUTATION);
+  const resetForm = () => {
+    // reset form state
+    setId(undefined);
+    setTitle("");
+    setDate("");
+    setAppDeadline(null);
+    setCost("");
+    setLocation("");
+    setLink("");
+    setDescription("");
+    setAllCategory([]);
+    setAllEligibility([]);
+    // deadlineError is guaranteed to be false by here
+  }
+
+  const [createOpportunity] = useMutation(CREATE_MUTATION, {
+    onCompleted(data) {
+      setSnackbarOpen(`Opportunity #${data.createOpportunity.id} Created!`);
+      resetForm();
+    },
+    onError(error) {
+      setSnackbarOpen(error.message);
+    }});
+  
+  const [editOpportunity] = useMutation(EDIT_MUTATION, {
+    onCompleted(data) {
+      setSnackbarOpen(`Opportunity #${data.editOpportunity.id} Edited!`);
+      resetForm();
+    },
+    onError(error) {
+      setSnackbarOpen(error.message);
+    }});
 
   return (
     <div>
+      <LocalizationProvider dateAdapter={AdapterMoment} >
       <Grid container spacing={2} alignItems="stretch">
         <Grid item xs={12} sm={12} md={12} lg={8} xl={8}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
               <TextField
+                autoFocus={true}
                 variant={"outlined"}
                 fullWidth
                 label={"Title"}
@@ -130,13 +233,19 @@ const OpportunityForm = (opportunity = {}) => {
               />
             </Grid>
             <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-              <TextField
+              <DatePicker
                 variant={"outlined"}
                 fullWidth
                 label={"Deadline"}
+                onChange={(e) => {
+                  setAppDeadline(e);
+                }}
+                onError={e => setDeadlineError(DatePickerErrorMessage(e))}
                 value={appDeadline}
-                placeholder={"2022-05-06"}
-                onChange={(e) => setAppDeadline(e.target.value)}
+                renderInput={(params) =>
+                  // managing the error state directly in the DatePicker is bugged, moved down here
+                  <TextField error={deadlineError} helperText={deadlineError} {...params}/>
+              }
               />
             </Grid>
             <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
@@ -250,34 +359,58 @@ const OpportunityForm = (opportunity = {}) => {
           </Grid>
         </Grid>
       </Grid>
+      </LocalizationProvider>
       <Button
-        onClick={() => {
-          createOpportunity({
-            variables: {
-              title,
-              description,
-              categories: allCategory.map((e) => categories.indexOf(e) + 1),
-              eligibilities: allEligibility.map(
-                (e) => eligibilities.indexOf(e) + 1
-              ),
-              date,
-              location,
-              cost: parseInt(cost) || 0,
-              appDeadline: appDeadline || "2100-01-01",
-              link,
-            },
-          });
-          setSnackbarOpen(true);
+        onClick={async () => {
+          if (deadlineError) {
+            setSnackbarOpen("Error: " + deadlineError);
+            return;
+          }
+
+          if (id) {
+            await editOpportunity({
+              variables: {
+                id: id,
+                title,
+                description,
+                categories: allCategory.map((e) => categories.indexOf(e) + 1),
+                eligibilities: allEligibility.map(
+                  (e) => eligibilities.indexOf(e) + 1
+                ),
+                date,
+                location,
+                cost: parseInt(cost) || 0,
+                appDeadline: (appDeadline && appDeadline.format("YYYY-MM-DD")) || "1970-01-01",
+                link,
+              },
+            })
+          } else {
+            await createOpportunity({
+              variables: {
+                title,
+                description,
+                categories: allCategory.map((e) => categories.indexOf(e) + 1),
+                eligibilities: allEligibility.map(
+                  (e) => eligibilities.indexOf(e) + 1
+                ),
+                date,
+                location,
+                cost: parseInt(cost) || 0,
+                appDeadline: (appDeadline && appDeadline.format("YYYY-MM-DD")) || "1970-01-01",
+                link,
+              },
+            });
+          }
         }}
         variant="contained"
       >
-        Create Opportunity
+        {id ? "Edit Opportunity" : "Create Opportunity"}
       </Button>
       <Snackbar
         autoHideDuration={2000}
-        open={snackbarOpen}
-        onClose={() => setSnackbarOpen(false)}
-        message={"Opportunity Created!"}
+        open={snackbarOpen.length > 0}
+        onClose={() => setSnackbarOpen("")}
+        message={snackbarOpen}
       />
     </div>
   );

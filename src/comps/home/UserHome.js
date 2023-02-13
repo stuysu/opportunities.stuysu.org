@@ -45,8 +45,8 @@ const UserHome = () => {
             </Box>
             <Box display="flex" justifyContent="space-evenly" alignContent="space-between" flexWrap="wrap">
                 {tags.map((tag) => (
-                    <Box component="span" paddingBottom="1%">
-                        <Category key={tag.id} id={tag.id} icon={<tag.icon fontSize="small" />} name={tag.name} />
+                    <Box key={tag.id} component="span" paddingBottom="1%">
+                        <Category id={tag.id} icon={<tag.icon fontSize="small" />} name={tag.name} />
                     </Box>
                 ))}
             </Box>

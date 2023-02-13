@@ -1,5 +1,6 @@
 import React from "react";
 import OpportunityCard from "./OpportunityCard";
+import UserContext from "../context/UserContext";
 
 /*
 	Expected opportunity format:
@@ -14,6 +15,15 @@ import OpportunityCard from "./OpportunityCard";
 	tags: [String], optional
 */
 const OpportunityList = (data) => {
+  const user = React.useContext(UserContext);
+
+  // admin
+  const [deleted, setDeleted] = React.useState([]);
+  data.opportunities.opportunities = data
+  .opportunities
+  .opportunities
+  .filter(opportunity => !deleted.includes(opportunity.id));
+
   if (data?.opportunities?.opportunities.length) {
     return (
       <div>
@@ -28,7 +38,9 @@ const OpportunityList = (data) => {
             cost={opportunity?.cost}
             location={opportunity?.location}
             link={opportunity?.link}
-            tags={opportunity?.tags}
+            tags={opportunity?.eligibilities?.concat(opportunity?.categories)}
+            isAdmin={user.signedIn && user.isFaculty}
+            onDelete={() => setDeleted([...deleted, opportunity.id])}
           />
         ))}
       </div>

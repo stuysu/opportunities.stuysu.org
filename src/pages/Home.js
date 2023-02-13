@@ -1,10 +1,10 @@
 import React, {useContext} from "react";
 import {Helmet} from "react-helmet";
 import UserHome from "../comps/home/UserHome";
-import UnauthenticatedLanding from "../comps/home/UnauthenticatedLanding";
+import GoogleLoginButton from "../comps/auth/GoogleLoginButton";
 import UserContext from "../comps/context/UserContext";
-import {Typography, Link, Grid} from "@mui/material";
 import opportunities from "../img/vector/goodstudio-reaching-for-opportunities.svg";
+import { Box, CircularProgress, Typography, Link, Grid } from "@mui/material";
 
 // TEMP BECAUSE MATERIAL UI IS GARBAGE
 let textBlockStyles = {
@@ -69,10 +69,10 @@ const Home = () => {
 						</Typography>
 					</Grid>
 				</Grid>
-				{user.signedIn ? <UserHome /> : <UnauthenticatedLanding />}
+				{user.loading ? <CircularProgress /> : (user.signedIn ? <UserHome /> : <GoogleLoginButton />)}
 			</div>
 		</div>
-);
+	);
 };
 
 export default Home;

@@ -22,7 +22,7 @@ const logoutMutation = gql`
 `;
 
 const UserProvider = (props) => {
-  const { data, refetch } = useQuery(userQuery);
+  const { loading, data, refetch } = useQuery(userQuery);
   const [logoutCookie] = useMutation(logoutMutation);
   const logout = async () => {
     await logoutCookie();
@@ -33,11 +33,15 @@ const UserProvider = (props) => {
   const value = data?.authenticatedUser
     ? {
         signedIn: true,
+        loading,
         refetch,
         logout,
         ...data.authenticatedUser,
       }
-    : { signedIn: false, refetch };
+    : { signedIn: false, loading, refetch };
+  
+  // DEBUG
+  // value.isFaculty = true;
 
   return (
     <UserContext.Provider value={value}>{props.children}</UserContext.Provider>
