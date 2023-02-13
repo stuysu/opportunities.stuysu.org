@@ -61,13 +61,14 @@ const NavDrawer = ({ user }) => {
             icon={<ArchiveRoundedIcon />}
             updateOpen={updateOpen}
           />
-          {user?.isFaculty &&
-          <NavBarLink
-            label="Admin"
-            link="/admin"
-            icon={<AdminPanelSettingsIcon />}
-            updateOpen={updateOpen}
-          />}
+          {user?.isFaculty && (
+            <NavBarLink
+              label="Admin"
+              link="/admin"
+              icon={<AdminPanelSettingsIcon />}
+              updateOpen={updateOpen}
+            />
+          )}
           {user && user.signedIn && (
             <>
               <NavBarLink

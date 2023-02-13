@@ -19,10 +19,9 @@ const OpportunityList = (data) => {
 
   // admin
   const [deleted, setDeleted] = React.useState([]);
-  data.opportunities.opportunities = data
-  .opportunities
-  .opportunities
-  .filter(opportunity => !deleted.includes(opportunity.id));
+  data.opportunities.opportunities = data.opportunities.opportunities.filter(
+    (opportunity) => !deleted.includes(opportunity.id)
+  );
 
   if (data?.opportunities?.opportunities.length) {
     return (

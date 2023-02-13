@@ -15,8 +15,7 @@ const Admin = () => {
   if (!user.signedIn) return <AuthenticationRequired />;
   if (!user.isFaculty) return <FacultyRequired />;
 
-  
-  let opportunity = location?.state;  // returns null on no state
+  let opportunity = location?.state; // returns null on no state
 
   return (
     <div>
@@ -25,9 +24,11 @@ const Admin = () => {
       </Helmet>
 
       <Box>
-        {
-          opportunity ? <OpportunityForm {...opportunity} /> : <OpportunityForm />
-        }
+        {opportunity ? (
+          <OpportunityForm {...opportunity} />
+        ) : (
+          <OpportunityForm />
+        )}
       </Box>
     </div>
   );

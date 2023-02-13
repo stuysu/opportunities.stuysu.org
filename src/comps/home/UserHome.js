@@ -17,41 +17,62 @@ import HelpRoundedIcon from "@mui/icons-material/HelpRounded";
 import MoneyOffCsredRoundedIcon from "@mui/icons-material/MoneyOffCsredRounded";
 
 const tags = [
-    { id: 2, name: "Academic Programs", icon: SchoolRoundedIcon },
-    { id: 3, name: "Business and Jobs", icon: WorkRoundedIcon },
-    { id: 4, name: "Community Service", icon: VolunteerActivismRoundedIcon },
-    { id: 5, name: "Leadership, Government, International", icon: GavelRoundedIcon },
-    { id: 6, name: "Museum, Art, Design", icon: ColorLensRoundedIcon },
-    { id: 7, name: "Parks, Zoo, Nature", icon: ForestRoundedIcon },
-    { id: 8, name: "Engineering, Math, Computer Science", icon: ScienceRoundedIcon },
-    { id: 9, name: "Medical, Life Sciences", icon: LocalHospitalRoundedIcon },
-    { id: 10, name: "Theater, Music, Writing, Videos", icon: TheaterComedyRoundedIcon },
-    { id: 11, name: "Contests, Competitions", icon: MoneyRoundedIcon },
-    { id: 12, name: "Additional Links and Resources", icon: HelpRoundedIcon },
-    { id: 13, name: "Scholarships", icon: MoneyOffCsredRoundedIcon },
+  { id: 2, name: "Academic Programs", icon: SchoolRoundedIcon },
+  { id: 3, name: "Business and Jobs", icon: WorkRoundedIcon },
+  { id: 4, name: "Community Service", icon: VolunteerActivismRoundedIcon },
+  {
+    id: 5,
+    name: "Leadership, Government, International",
+    icon: GavelRoundedIcon,
+  },
+  { id: 6, name: "Museum, Art, Design", icon: ColorLensRoundedIcon },
+  { id: 7, name: "Parks, Zoo, Nature", icon: ForestRoundedIcon },
+  {
+    id: 8,
+    name: "Engineering, Math, Computer Science",
+    icon: ScienceRoundedIcon,
+  },
+  { id: 9, name: "Medical, Life Sciences", icon: LocalHospitalRoundedIcon },
+  {
+    id: 10,
+    name: "Theater, Music, Writing, Videos",
+    icon: TheaterComedyRoundedIcon,
+  },
+  { id: 11, name: "Contests, Competitions", icon: MoneyRoundedIcon },
+  { id: 12, name: "Additional Links and Resources", icon: HelpRoundedIcon },
+  { id: 13, name: "Scholarships", icon: MoneyOffCsredRoundedIcon },
 ];
 
 const UserHome = () => {
-    return (
-        <div>
-            <Box
-                sx={{
-                    margin: "auto",
-                    paddingBottom: "4vh",
-                    width: "50vw",
-                }}
-            >
-                <SearchBar />
-            </Box>
-            <Box display="flex" justifyContent="space-evenly" alignContent="space-between" flexWrap="wrap">
-                {tags.map((tag) => (
-                    <Box key={tag.id} component="span" paddingBottom="1%">
-                        <Category id={tag.id} icon={<tag.icon fontSize="small" />} name={tag.name} />
-                    </Box>
-                ))}
-            </Box>
-        </div>
-    );
+  return (
+    <div>
+      <Box
+        sx={{
+          margin: "auto",
+          paddingBottom: "4vh",
+          width: "50vw",
+        }}
+      >
+        <SearchBar />
+      </Box>
+      <Box
+        display="flex"
+        justifyContent="space-evenly"
+        alignContent="space-between"
+        flexWrap="wrap"
+      >
+        {tags.map((tag) => (
+          <Box key={tag.id} component="span" paddingBottom="1%">
+            <Category
+              id={tag.id}
+              icon={<tag.icon fontSize="small" />}
+              name={tag.name}
+            />
+          </Box>
+        ))}
+      </Box>
+    </div>
+  );
 };
 
 export default UserHome;

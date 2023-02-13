@@ -17,18 +17,23 @@ const SearchBar = () => {
       color="secondary"
       autoFocus={true}
       onChange={(event) => setSearch(event.target.value)}
-      onKeyDown={(event) => {if (event.code === "Enter") navigate(`/catalog?q=${search}`)}}
+      onKeyDown={(event) => {
+        if (event.code === "Enter") navigate(`/catalog?q=${search}`);
+      }}
       InputProps={{
         endAdornment: (
           <InputAdornment position="end">
-            <IconButton onClick={() => navigate(`/catalog?q=${search}`)} aria-label={"search"}>
+            <IconButton
+              onClick={() => navigate(`/catalog?q=${search}`)}
+              aria-label={"search"}
+            >
               <SearchIcon />
             </IconButton>
           </InputAdornment>
         ),
       }}
     />
-  )
-}
+  );
+};
 
 export default SearchBar;

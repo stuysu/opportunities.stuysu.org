@@ -5,7 +5,7 @@ import MyOpportunities from "./myopportunities";
 import Catalog from "./catalog";
 import Archives from "./archives";
 import Admin from "./admin";
-import {BrowserRouter, Routes, Route} from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { useContext } from "react";
 import UserContext from "../comps/context/UserContext";
 import NavDrawer from "../comps/ui/NavDrawer";
@@ -39,7 +39,7 @@ const Pages = () => {
             <Route path={"/my-opportunities"} element={<MyOpportunities />} />
             <Route path={"/archives"} element={<Archives />} />
             <Route path={"/admin"} element={<Admin />} />
-            <Route path={"/opportunity/:oppId"} element={ <OppRouter /> } />
+            <Route path={"/opportunity/:oppId"} element={<OppRouter />} />
             <Route path={"*"} element={<HTTP404 />} />
           </Routes>
         </Box>

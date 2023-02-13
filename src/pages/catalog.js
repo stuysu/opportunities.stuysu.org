@@ -73,13 +73,13 @@ const Catalog = () => {
       <Helmet>
         <title>Catalog</title>
       </Helmet>
-        <Typography variant={"h1"}>Catalog</Typography>
-      {
-        searchParams && searchParams.get("q") ? (
-          <Typography variant={"h2"}>Search Query: {searchParams.get("q")}</Typography>
-        ) : null
-      }
-        <OpportunityList opportunities={{ opportunities: filtered }} />
+      <Typography variant={"h1"}>Catalog</Typography>
+      {searchParams && searchParams.get("q") ? (
+        <Typography variant={"h2"}>
+          Search Query: {searchParams.get("q")}
+        </Typography>
+      ) : null}
+      <OpportunityList opportunities={{ opportunities: filtered }} />
     </div>
   );
 };

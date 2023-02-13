@@ -1,5 +1,12 @@
-import * as React from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import * as React from "react";
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+} from "@mui/material";
 
 /* 
     title: String
@@ -10,44 +17,48 @@ import { Button, Dialog, DialogActions, DialogContent, DialogContentText, Dialog
 */
 
 export default function ConfirmationDialog({
-    title,
-    description,
-    open,
-    onCancel,
-    onConfirm,
-    onClose
+  title,
+  description,
+  open,
+  onCancel,
+  onConfirm,
+  onClose,
 }) {
-    
-    const [isOpen, setOpen] = React.useState(false);
-    
-    if (open && !isOpen) setOpen(true);
+  const [isOpen, setOpen] = React.useState(false);
 
-    return (
-        <div>
-            <Dialog
-            open={isOpen}
-            >
-            {title && (<DialogTitle>
-                {title}
-            </DialogTitle>)}
-            {description && (<DialogContent>
-                <DialogContentText>
-                {description}
-                </DialogContentText>
-            </DialogContent>)}
-            <DialogActions>
-                <Button onClick={() => {
-                    setOpen(false);
-                    onClose();
-                    if (onCancel) onCancel();
-                }}>Cancel</Button>
-                <Button onClick={() => {
-                    setOpen(false);
-                    onClose();
-                    if (onConfirm) onConfirm();
-                }} autoFocus>Confirm</Button>
-            </DialogActions>
-            </Dialog>
-        </div>
-    );
+  if (open && !isOpen) setOpen(true);
+
+  return (
+    <div>
+      <Dialog open={isOpen}>
+        {title && <DialogTitle>{title}</DialogTitle>}
+        {description && (
+          <DialogContent>
+            <DialogContentText>{description}</DialogContentText>
+          </DialogContent>
+        )}
+        <DialogActions>
+          <Button
+            onClick={() => {
+              setOpen(false);
+              onClose();
+              if (onCancel) onCancel();
+            }}
+          >
+            Cancel
+          </Button>
+          <Button
+            onClick={() => {
+              setOpen(false);
+              onClose();
+              if (onConfirm) onConfirm();
+            }}
+            autoFocus
+          >
+            Confirm
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </div>
+  );
 }
