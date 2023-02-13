@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { Helmet } from "react-helmet";
 import UserHome from "../comps/home/UserHome";
-import UnauthenticatedLanding from "../comps/home/UnauthenticatedLanding";
+import GoogleLoginButton from "../comps/auth/GoogleLoginButton";
 import UserContext from "../comps/context/UserContext";
-import { Box, Typography } from "@mui/material";
+import { Box, CircularProgress, Typography } from "@mui/material";
 import opportunities from "../img/vector/clip-online-education.svg";
 
 const layout = {
@@ -91,7 +91,7 @@ const Home = () => {
                     }}
                 />
             </Box>
-            {user.signedIn ? <UserHome /> : <UnauthenticatedLanding />}
+            {user.loading ? <CircularProgress /> : (user.signedIn ? <UserHome /> : <GoogleLoginButton />)}
         </div>
     );
 };
