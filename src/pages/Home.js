@@ -4,7 +4,7 @@ import UserHome from "../comps/home/UserHome";
 import GoogleLoginButton from "../comps/auth/GoogleLoginButton";
 import UserContext from "../comps/context/UserContext";
 import opportunities from "../img/vector/goodstudio-reaching-for-opportunities.svg";
-import { Box, CircularProgress, Typography, Link, Grid } from "@mui/material";
+import { CircularProgress, Typography, Link, Grid } from "@mui/material";
 
 // TEMP BECAUSE MATERIAL UI IS GARBAGE
 let textBlockStyles = {

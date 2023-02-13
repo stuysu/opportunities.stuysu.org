@@ -1,5 +1,8 @@
 import React from "react";
-//import {Typography, Card,  Divider, Button} from "@mui/material";
+import { Box, Card, Divider, Typography, Button, Snackbar } from "@mui/material";
+import { gql, useMutation } from "@apollo/client";
+import ConfirmationDialog from "../ui/ConfirmationDialog.js";
+import { Link as DomLink } from "react-router-dom";
 
 function toDateStringCustom (date) {
 	return date.toLocaleDateString("en-US", {
@@ -9,14 +12,6 @@ function toDateStringCustom (date) {
 		day: "numeric",
 	});
 };
-
-import { Box, Card, CardContent, Divider, Link, Typography, Button, Snackbar } from "@mui/material";
-
-import { gql, useMutation } from "@apollo/client";
-
-import ConfirmationDialog from "../ui/ConfirmationDialog.js";
-
-import { Link as DomLink } from "react-router-dom";
 
 const DELETE_MUTATION = gql`
   mutation DeleteOpportunity(
@@ -237,6 +232,28 @@ function OpportunityCard({
             </>
           )}
 		</Card>
+		  <Snackbar
+			autoHideDuration={2000}
+			open={snackbarOpen.length > 0}
+			onClose={() => setSnackbarOpen("")}
+			message={snackbarOpen}
+		  />
+		  <ConfirmationDialog 
+			title={"Delete this Opportunity?"}
+			description={"We cannot recover it once deleted."}
+			open={confirmDelete}
+			onClose={() => {
+			  setDelete(false);
+			}}
+			onConfirm={async () => {
+			  await deleteOpportunity({
+				variables: {
+				  id: parseInt(id),
+				}
+			  });
+			  onDelete();
+			}}
+		  />
 	</a>
   );
 }
