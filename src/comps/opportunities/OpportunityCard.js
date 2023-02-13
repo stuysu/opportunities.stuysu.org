@@ -149,27 +149,6 @@ function OpportunityCard({
 				<Divider
 					sx={{my: 1}}
 				/>
-				<button
-                  style={{
-                    color: "#707070",
-                    padding: "0px",
-                    textAlign: "left",
-                    border: "0",
-                    backgroundColor: "transparent",
-                    cursor: "pointer",
-                    marginTop: "3px",
-                  }}
-                  onClick={() => setExpanded(!expanded)}
-                >
-                  <Typography
-                    sx={{
-                      "&:hover": { textDecoration: "underline" },
-                      fontSize: "14px",
-                    }}
-                  >
-                    {expanded ? "Hide More" : "Read More"}
-                  </Typography>
-                </button>
 				<div
 					className={"flex flex-row justify-between"}
 					sx={{fontSize: "0.9rem"}}
@@ -183,27 +162,6 @@ function OpportunityCard({
                       responsive(window.innerWidth).cutoffchar
                     )}
                 <br />
-                <button
-                  style={{
-                    color: "#707070",
-                    padding: "0px",
-                    textAlign: "left",
-                    border: "0",
-                    backgroundColor: "transparent",
-                    cursor: "pointer",
-                    marginTop: "3px",
-                  }}
-                  onClick={() => setExpanded(!expanded)}
-                >
-                  <Typography
-                    sx={{
-                      "&:hover": { textDecoration: "underline" },
-                      fontSize: "14px",
-                    }}
-                  >
-                    {expanded ? "Hide More" : "Read More"}
-                  </Typography>
-                </button>
               </>
             ) : (
               <>{description}</>
