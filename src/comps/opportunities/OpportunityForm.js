@@ -14,7 +14,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment"
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import React from "react";
 import { gql, useMutation } from "@apollo/client";
 import moment from "moment";
@@ -114,17 +114,17 @@ const DatePickerErrorMessage = (error) => {
    */
   switch (error) {
     case "invalidDate":
-      return ('Deadline date is not in the correct format. (MM/DD/YYYY)');
+      return "Deadline date is not in the correct format. (MM/DD/YYYY)";
     case "minDate":
-      return ('Deadline date is too far in the past.');  // the limit is January 1, 1900
+      return "Deadline date is too far in the past."; // the limit is January 1, 1900
     case "maxDate":
-      return ('Deadline date is too far in the future.');  // the limit is December 31, 2099
+      return "Deadline date is too far in the future."; // the limit is December 31, 2099
     case null:
       return false;
-    default:  // catch-all for the ones that shouldn't show up
-      return (`Deadline date has unknown error. Error Code: ${error}`);
+    default: // catch-all for the ones that shouldn't show up
+      return `Deadline date has unknown error. Error Code: ${error}`;
   }
-}
+};
 
 const OpportunityForm = (opportunity = {}) => {
   /**
@@ -139,7 +139,7 @@ const OpportunityForm = (opportunity = {}) => {
    * @property {string} link - Link of the opportunity in an arbitrary string
    */
   const [snackbarOpen, setSnackbarOpen] = React.useState("");
-  
+
   const [id, setId] = React.useState(opportunity.id);
   const [title, setTitle] = React.useState(opportunity.title || "");
   const [date, setDate] = React.useState(opportunity.date || "");
@@ -185,7 +185,7 @@ const OpportunityForm = (opportunity = {}) => {
     setAllCategory([]);
     setAllEligibility([]);
     // deadlineError is guaranteed to be false by here
-  }
+  };
 
   const [createOpportunity] = useMutation(CREATE_MUTATION, {
     onCompleted(data) {
@@ -194,8 +194,9 @@ const OpportunityForm = (opportunity = {}) => {
     },
     onError(error) {
       setSnackbarOpen(error.message);
-    }});
-  
+    },
+  });
+
   const [editOpportunity] = useMutation(EDIT_MUTATION, {
     onCompleted(data) {
       setSnackbarOpen(`Opportunity #${data.editOpportunity.id} Edited!`);
@@ -203,162 +204,169 @@ const OpportunityForm = (opportunity = {}) => {
     },
     onError(error) {
       setSnackbarOpen(error.message);
-    }});
+    },
+  });
 
   return (
     <div>
-      <LocalizationProvider dateAdapter={AdapterMoment} >
-      <Grid container spacing={2} alignItems="stretch">
-        <Grid item xs={12} sm={12} md={12} lg={8} xl={8}>
-          <Grid container spacing={2}>
-            <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-              <TextField
-                autoFocus={true}
-                variant={"outlined"}
-                fullWidth
-                label={"Title"}
-                value={title}
-                placeholder={"Summer Youth Employment Program"}
-                onChange={(e) => setTitle(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-              <TextField
-                variant={"outlined"}
-                fullWidth
-                label={"Date"}
-                value={date}
-                placeholder={"June 20 - August 12"}
-                onChange={(e) => setDate(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-              <DatePicker
-                variant={"outlined"}
-                fullWidth
-                label={"Deadline"}
-                onChange={(e) => {
-                  setAppDeadline(e);
-                }}
-                onError={e => setDeadlineError(DatePickerErrorMessage(e))}
-                value={appDeadline}
-                renderInput={(params) =>
-                  // managing the error state directly in the DatePicker is bugged, moved down here
-                  <TextField error={deadlineError} helperText={deadlineError} {...params}/>
-              }
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-              <TextField
-                variant={"outlined"}
-                fullWidth
-                label={"Cost"}
-                value={cost}
-                placeholder={"0"}
-                onChange={(e) => {
-                  setCost(e.target.value);
-                }}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-              <TextField
-                variant={"outlined"}
-                fullWidth
-                label={"Location"}
-                value={location}
-                placeholder={"New York City"}
-                onChange={(e) => setLocation(e.target.value)}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
-              <TextField
-                variant={"outlined"}
-                fullWidth
-                label={"Link"}
-                value={link}
-                placeholder={"https://application.nycsyep.com/"}
-                onChange={(e) => setLink(e.target.value)}
-              />
-            </Grid>
-
-            <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
-              <TextField
-                variant={"outlined"}
-                fullWidth
-                multiline
-                maxRows={10}
-                label={"Description"}
-                value={description}
-                sx={{ marginBottom: "10px" }}
-                placeholder={
-                  "Summer Youth Employment Program (SYEP) is the nation’s largest youth employment program, connecting NYC youth between the ages of 14 and 24 with career exploration opportunities and paid work experiences each summer. "
-                }
-                onChange={(e) => setDescription(e.target.value)}
-              />
-            </Grid>
-          </Grid>
-        </Grid>
-        <Grid item xs={6} sm={6} md={6} lg={2} xl={2}>
-          <Grid style={{ height: "100%" }}>
-            <FormControl fullWidth>
-              <InputLabel id="multiple-categories-label">Categories</InputLabel>
-              <Select
-                labelId="multiple-categories-label"
-                multiple
-                value={allCategory}
-                onChange={handleCategoryChange}
-                input={<OutlinedInput label={"Chip"} />}
-                renderValue={(selected) => (
-                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} />
-                    ))}
-                  </Box>
-                )}
-              >
-                {categories.map((category) => (
-                  <MenuItem key={category} value={category}>
-                    <Checkbox checked={allCategory.indexOf(category) > -1} />
-                    <ListItemText primary={category} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
-          </Grid>
-        </Grid>
-        <Grid item xs={6} sm={6} md={6} lg={2} xl={2}>
-          <Grid style={{ height: "100%" }}>
-            <FormControl fullWidth>
-              <InputLabel id="multiple-eligibilities-label">
-                Eligibilities
-              </InputLabel>
-              <Select
-                labelId="multiple-eligibilities-label"
-                multiple
-                value={allEligibility}
-                onChange={handleEligibilityChange}
-                input={<OutlinedInput label={"Chip"} />}
-                renderValue={(selected) => (
-                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                    {selected.map((value) => (
-                      <Chip key={value} label={value} />
-                    ))}
-                  </Box>
-                )}
-              >
-                {eligibilities.map((eligibility) => (
-                  <MenuItem key={eligibility} value={eligibility}>
-                    <Checkbox
-                      checked={allEligibility.indexOf(eligibility) > -1}
+      <LocalizationProvider dateAdapter={AdapterMoment}>
+        <Grid container spacing={2} alignItems="stretch">
+          <Grid item xs={12} sm={12} md={12} lg={8} xl={8}>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+                <TextField
+                  autoFocus={true}
+                  variant={"outlined"}
+                  fullWidth
+                  label={"Title"}
+                  value={title}
+                  placeholder={"Summer Youth Employment Program"}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+                <TextField
+                  variant={"outlined"}
+                  fullWidth
+                  label={"Date"}
+                  value={date}
+                  placeholder={"June 20 - August 12"}
+                  onChange={(e) => setDate(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+                <DatePicker
+                  variant={"outlined"}
+                  fullWidth
+                  label={"Deadline"}
+                  onChange={(e) => {
+                    setAppDeadline(e);
+                  }}
+                  onError={(e) => setDeadlineError(DatePickerErrorMessage(e))}
+                  value={appDeadline}
+                  renderInput={(params) => (
+                    // managing the error state directly in the DatePicker is bugged, moved down here
+                    <TextField
+                      error={deadlineError}
+                      helperText={deadlineError}
+                      {...params}
                     />
-                    <ListItemText primary={eligibility} />
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+                  )}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+                <TextField
+                  variant={"outlined"}
+                  fullWidth
+                  label={"Cost"}
+                  value={cost}
+                  placeholder={"0"}
+                  onChange={(e) => {
+                    setCost(e.target.value);
+                  }}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+                <TextField
+                  variant={"outlined"}
+                  fullWidth
+                  label={"Location"}
+                  value={location}
+                  placeholder={"New York City"}
+                  onChange={(e) => setLocation(e.target.value)}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
+                <TextField
+                  variant={"outlined"}
+                  fullWidth
+                  label={"Link"}
+                  value={link}
+                  placeholder={"https://application.nycsyep.com/"}
+                  onChange={(e) => setLink(e.target.value)}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+                <TextField
+                  variant={"outlined"}
+                  fullWidth
+                  multiline
+                  maxRows={10}
+                  label={"Description"}
+                  value={description}
+                  sx={{ marginBottom: "10px" }}
+                  placeholder={
+                    "Summer Youth Employment Program (SYEP) is the nation’s largest youth employment program, connecting NYC youth between the ages of 14 and 24 with career exploration opportunities and paid work experiences each summer. "
+                  }
+                  onChange={(e) => setDescription(e.target.value)}
+                />
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={6} sm={6} md={6} lg={2} xl={2}>
+            <Grid style={{ height: "100%" }}>
+              <FormControl fullWidth>
+                <InputLabel id="multiple-categories-label">
+                  Categories
+                </InputLabel>
+                <Select
+                  labelId="multiple-categories-label"
+                  multiple
+                  value={allCategory}
+                  onChange={handleCategoryChange}
+                  input={<OutlinedInput label={"Chip"} />}
+                  renderValue={(selected) => (
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {selected.map((value) => (
+                        <Chip key={value} label={value} />
+                      ))}
+                    </Box>
+                  )}
+                >
+                  {categories.map((category) => (
+                    <MenuItem key={category} value={category}>
+                      <Checkbox checked={allCategory.indexOf(category) > -1} />
+                      <ListItemText primary={category} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
+          </Grid>
+          <Grid item xs={6} sm={6} md={6} lg={2} xl={2}>
+            <Grid style={{ height: "100%" }}>
+              <FormControl fullWidth>
+                <InputLabel id="multiple-eligibilities-label">
+                  Eligibilities
+                </InputLabel>
+                <Select
+                  labelId="multiple-eligibilities-label"
+                  multiple
+                  value={allEligibility}
+                  onChange={handleEligibilityChange}
+                  input={<OutlinedInput label={"Chip"} />}
+                  renderValue={(selected) => (
+                    <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                      {selected.map((value) => (
+                        <Chip key={value} label={value} />
+                      ))}
+                    </Box>
+                  )}
+                >
+                  {eligibilities.map((eligibility) => (
+                    <MenuItem key={eligibility} value={eligibility}>
+                      <Checkbox
+                        checked={allEligibility.indexOf(eligibility) > -1}
+                      />
+                      <ListItemText primary={eligibility} />
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+            </Grid>
           </Grid>
         </Grid>
-      </Grid>
       </LocalizationProvider>
       <Button
         onClick={async () => {
@@ -380,10 +388,12 @@ const OpportunityForm = (opportunity = {}) => {
                 date,
                 location,
                 cost: parseInt(cost) || 0,
-                appDeadline: (appDeadline && appDeadline.format("YYYY-MM-DD")) || "1970-01-01",
+                appDeadline:
+                  (appDeadline && appDeadline.format("YYYY-MM-DD")) ||
+                  "1970-01-01",
                 link,
               },
-            })
+            });
           } else {
             await createOpportunity({
               variables: {
@@ -396,7 +406,9 @@ const OpportunityForm = (opportunity = {}) => {
                 date,
                 location,
                 cost: parseInt(cost) || 0,
-                appDeadline: (appDeadline && appDeadline.format("YYYY-MM-DD")) || "1970-01-01",
+                appDeadline:
+                  (appDeadline && appDeadline.format("YYYY-MM-DD")) ||
+                  "1970-01-01",
                 link,
               },
             });

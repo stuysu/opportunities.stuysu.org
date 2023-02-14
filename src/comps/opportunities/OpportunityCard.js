@@ -1,16 +1,27 @@
 import React from "react";
-import { Box, Card, CardContent, Divider, Link, Typography, Button, Snackbar } from "@mui/material";
-
+import {
+  Box,
+  Card,
+  Divider,
+  Typography,
+  Button,
+  Snackbar,
+} from "@mui/material";
 import { gql, useMutation } from "@apollo/client";
-
 import ConfirmationDialog from "../ui/ConfirmationDialog.js";
-
 import { Link as DomLink } from "react-router-dom";
 
+function toDateStringCustom(date) {
+  return date.toLocaleDateString("en-US", {
+    weekday: "long",
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+}
+
 const DELETE_MUTATION = gql`
-  mutation DeleteOpportunity(
-    $id: Int!
-  ) {
+  mutation DeleteOpportunity($id: Int!) {
     deleteOpportunity(id: $id)
   }
 `;
@@ -69,7 +80,7 @@ function OpportunityCard({
   location,
   link,
   tags,
-  isAdmin, 
+  isAdmin,
   onDelete,
 }) {
   const [snackbarOpen, setSnackbarOpen] = React.useState("");
@@ -83,152 +94,143 @@ function OpportunityCard({
     onError(error) {
       console.log(error);
       setSnackbarOpen(error.message);
-    }});
+    },
+  });
 
-  const [expanded, setExpanded] = React.useState(false);
   // TODO: Date type in GraphQL
   if (appDeadline) appDeadline = new Date(appDeadline);
   return (
-    <div>
-      <Card sx={{ margin: "12px" }}>
-        <CardContent>
-          <div>
-            <Typography variant={"h5"} fontSize="20px">
-              {title}
-            </Typography>
-            <Typography
-              paragraph
-              marginBottom="8px"
-              fontSize="14px"
-              sx={{ color: "#546DE5" }}
-            >
-              Date: {date}
-              <br />
-              {location && (
-                <>
-                  Location: {location}
-                  <br />
-                </>
-              )}
-              Cost:{" "}
-              {cost === 0 ? (
-                "Free"
-              ) : cost ? (
-                cost > 0 ? (
-                  <>${cost}</>
-                ) : (
-                  "Stipend Offered, Check Description"
-                )
-              ) : (
-                "Check Description"
-              )}
-              <br />
-              {appDeadline && (
-                <span style={{ fontWeight: "bold" }}>
-                  Application Deadline:{" "}
-                  {appDeadline.toLocaleDateString("en-us", {
-                    weekday: "long",
-                    year: "numeric",
-                    month: "short",
-                    day: "numeric",
-                    timeZone: "UTC", // TODO: Temporary fix
-                  })}
-                </span>
-              )}
-            </Typography>
-          </div>
-          <Divider />
-          <div style={{ margin: "6px 0px 10px", fontSize: "14px" }}>
-            {description.length > responsive(window.innerWidth).cutoffchar ? (
-              <>
-                {expanded
-                  ? description
-                  : smartSnippet(
-                      description,
-                      responsive(window.innerWidth).cutoffchar
-                    )}
-                <br />
-                <button
-                  style={{
-                    color: "#707070",
-                    padding: "0px",
-                    textAlign: "left",
-                    border: "0",
-                    backgroundColor: "transparent",
-                    cursor: "pointer",
-                    marginTop: "3px",
-                  }}
-                  onClick={() => setExpanded(!expanded)}
-                >
-                  <Typography
-                    sx={{
-                      "&:hover": { textDecoration: "underline" },
-                      fontSize: "14px",
-                    }}
-                  >
-                    {expanded ? "Hide More" : "Read More"}
-                  </Typography>
-                </button>
-              </>
+    // Testing: just create a div with the title and description
+    <a href={`/opportunity/${id}`}>
+      <Card className={"w-full p-4 my-3 rounded-sm shadow-lg"}>
+        <Typography
+          variant={"h5"}
+          sx={{ fontWeight: "bold", fontSize: "1.3rem" }}
+        >
+          {title}
+        </Typography>
+        <Typography
+          variant={"p"}
+          sx={{ fontSize: "0.9rem" }}
+          className={"text-blue-500 block"}
+        >
+          {date}
+        </Typography>
+        <Typography
+          variant={"p"}
+          sx={{ fontSize: "0.9rem" }}
+          className={"text-blue-500 block"}
+        >
+          Location: {location}
+        </Typography>
+        <Typography
+          variant={"p"}
+          sx={{ fontSize: "0.9rem" }}
+          className={"text-blue-500 block"}
+        >
+          Cost:{" "}
+          {cost === 0 ? (
+            "Free"
+          ) : cost ? (
+            cost > 0 ? (
+              <>${cost}</>
             ) : (
-              <>{description}</>
-            )}
-            {link && (
-              <div style={{ margin: "10px 0px 10px" }}>
-                <>
-                  <Link href={link} target="_blank" rel="noreferrer" key={link}>
-                    {link}
-                  </Link>
-                  <br />
-                </>
-              </div>
-            )}
-          </div>
-          {tags.length !== 0 && (
-            <>
-              <Divider />
-              <Box sx={{paddingTop: "8px"}}>
-                {tags.map((tag) => (
-                    <span
-                      style={{
-                        backgroundColor: "#546DE5",
-                        color: "#FFFFFF",
-                        margin: "6px",
-                        padding: "0px 8px 2px",
-                        borderRadius: "10px",
-                      }}
-                      key={tag.name}
-                    >
-                      {tag.name}
-                    </span>
-                ))}
-              </Box>
-            </>
+              "Stipend Offered, Check Description"
+            )
+          ) : (
+            "Check Description"
           )}
-          {isAdmin && (
+        </Typography>
+        <Typography
+          variant={"p"}
+          sx={{ fontSize: "0.9rem", fontWeight: "bold" }}
+          className={"text-blue-500 block"}
+        >
+          Deadline: {appDeadline ? toDateStringCustom(appDeadline) : "None"}
+        </Typography>
+        <Divider sx={{ my: 1 }} />
+        <div
+          className={"flex flex-row justify-between"}
+          sx={{ fontSize: "0.9rem" }}
+        >
+          {description.length > responsive(window.innerWidth).cutoffchar ? (
             <>
-              <Divider sx={{ marginTop: "8px" }} />
-                <Box sx={{paddingTop: "16px"}}>
-                <DomLink to="/admin"
-                  state={{id, title, date, description, appDeadline, cost, location, link }}
-                >
-                  <Button sx={{ marginRight: "16px"}} variant="contained">
-                    Edit
-                  </Button>
-                </DomLink>
-                <Button
-                  variant="contained"
-                  onClick={() => {
-                    setDelete(true);
+              {smartSnippet(
+                description,
+                responsive(window.innerWidth).cutoffchar
+              )}
+              <br />
+            </>
+          ) : (
+            <>{description}</>
+          )}
+          {link && (
+            // Apply button
+            <Button
+              variant={"outlined"}
+              color={"primary"}
+              sx={{ my: 1 }}
+              onClick={() => {
+                window.open(link, "_blank");
+              }}
+            >
+              Apply
+            </Button>
+          )}
+        </div>
+        {tags.length !== 0 && (
+          <>
+            <Divider />
+            <Box sx={{ paddingTop: "8px" }}>
+              {tags.map((tag) => (
+                <span
+                  style={{
+                    backgroundColor: "#546DE5",
+                    color: "#FFFFFF",
+                    margin: "6px",
+                    padding: "0px 8px 2px",
+                    borderRadius: "10px",
                   }}
+                  key={tag.name}
                 >
-                Delete
+                  {tag.name}
+                </span>
+              ))}
+            </Box>
+          </>
+        )}
+        {isAdmin && (
+          <>
+            <Divider sx={{ marginTop: "8px" }} />
+            <Box sx={{ paddingTop: "16px" }}>
+              <DomLink
+                to="/admin"
+                state={{
+                  id,
+                  title,
+                  date,
+                  description,
+                  appDeadline,
+                  cost,
+                  location,
+                  link,
+                }}
+              >
+                <Button sx={{ marginRight: "16px" }} variant="contained">
+                  Edit
                 </Button>
-              </Box>
-            </>
-          )}
-        </CardContent>
-        
+              </DomLink>
+              <Button
+                variant="contained"
+                onClick={() => {
+                  setDelete(true);
+                }}
+              >
+                Delete
+              </Button>
+            </Box>
+          </>
+        )}
       </Card>
       <Snackbar
         autoHideDuration={2000}
@@ -236,7 +238,7 @@ function OpportunityCard({
         onClose={() => setSnackbarOpen("")}
         message={snackbarOpen}
       />
-      <ConfirmationDialog 
+      <ConfirmationDialog
         title={"Delete this Opportunity?"}
         description={"We cannot recover it once deleted."}
         open={confirmDelete}
@@ -247,12 +249,12 @@ function OpportunityCard({
           await deleteOpportunity({
             variables: {
               id: parseInt(id),
-            }
+            },
           });
           onDelete();
         }}
       />
-    </div>
+    </a>
   );
 }
 

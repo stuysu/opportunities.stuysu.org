@@ -3,97 +3,78 @@ import { Helmet } from "react-helmet";
 import UserHome from "../comps/home/UserHome";
 import GoogleLoginButton from "../comps/auth/GoogleLoginButton";
 import UserContext from "../comps/context/UserContext";
-import { Box, CircularProgress, Typography } from "@mui/material";
-import opportunities from "../img/vector/clip-online-education.svg";
+import opportunities from "../img/vector/goodstudio-reaching-for-opportunities.svg";
+import { CircularProgress, Typography, Link, Grid } from "@mui/material";
 
-const layout = {
-    container: {
-        minHeight: "25vh",
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "center",
-        maxWidth: 1400,
-        margin: "2rem",
-    },
-    main: {
-        padding: "2.5rem 0.5rem",
-        flex: 1,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    footer: {
-        width: "100%",
-        height: 100,
-        borderTop: "1px solid #eaeaea",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    title: {
-        minHeight: "25vh",
-        width: "70%",
-        margin: "auto",
-    },
-
-    description: {
-        textAlign: "center",
-        lineHeight: 1.5,
-        fontSize: "1.5rem",
-    },
-
-    cardMedia: {
-        height: 200,
-    },
-
-    card: {
-        width: "100%",
-    },
-
-    imageFit: {
-        objectFit: "contain",
-        maxWidth: "100%",
-        borderRadius: 5,
-    },
-
-    alignLeft: {
-        textAlign: "left",
-    },
-
-    backButtonContainer: {
-        width: "100%",
-    },
-
-    backButtonArrow: {
-        height: 15,
-    },
+// TEMP BECAUSE MATERIAL UI IS GARBAGE
+let textBlockStyles = {
+  marginTop: "1rem",
 };
+let textCell = "px-4 py-0";
 
 const Home = () => {
-    const user = useContext(UserContext);
-    return (
-        <div>
-            <Helmet>
-                <title>Home</title>
-            </Helmet>
-            <Box sx={layout.container}>
-                <Typography sx={layout.title} variant={"h1"}>
-                    Welcome to the Stuyvesant Opportunities Bulletin!
-                </Typography>
-                <img
-                    src={opportunities}
-                    alt="Various objects, including a rocket ship, a microscope, and a notebook, pop out of a computer monitor."
-                    style={{
-                        width: "24rem",
-                        height: "18rem",
-                    }}
-                />
-            </Box>
-            {user.loading ? <CircularProgress /> : (user.signedIn ? <UserHome /> : <GoogleLoginButton />)}
-        </div>
-    );
+  const user = useContext(UserContext);
+  return (
+    <div>
+      <Helmet>
+        <title>Home</title>
+      </Helmet>
+      <div className="inline-block">
+        <Grid container className={"py-4"}>
+          <Grid item xs={12} md={6} className={textCell}>
+            <img
+              className={"max-w-[80vw] w-[400px] p-4"}
+              src={opportunities}
+              alt={"opportunities"}
+            />
+          </Grid>
+          <Grid item xs={12} md={6} className={textCell}>
+            <Typography
+              variant={"h1"}
+              className={
+                "text-center md:text-left text-2xl md:text-3xl lg:text-4xl font-bold inline-block"
+              }
+              style={textBlockStyles}
+            >
+              Welcome to the Stuyvesant Opportunities Bulletin!
+            </Typography>
+            <Typography
+              variant={"p"}
+              className={"text-center md:text-left inline-block"}
+              style={textBlockStyles}
+            >
+              The largest compendium of opportunities for Stuyvesant students to
+              learn, grow, and explore.
+            </Typography>
+            <Typography
+              variant={"p"}
+              className={"text-center md:text-left inline-block"}
+              style={textBlockStyles}
+            >
+              If you're not a Stuyvesant student, staff, or faculty member, you
+              will still be able to browse our website, but your features will
+              be limited.
+            </Typography>
+            <Typography
+              variant={"p"}
+              className={"text-center md:text-left inline-block"}
+              style={textBlockStyles}
+            >
+              To learn more about our website and the fabulous people who made
+              it, you can visit our <Link href={"/about"}>About</Link> page.
+            </Typography>
+          </Grid>
+        </Grid>
+        {user.loading ? (
+          <CircularProgress />
+        ) : user.signedIn ? (
+          <UserHome />
+        ) : (
+          <GoogleLoginButton />
+        )}
+      </div>
+    </div>
+  );
 };
 
 export default Home;

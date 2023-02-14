@@ -10,6 +10,9 @@ import { useContext } from "react";
 import UserContext from "../comps/context/UserContext";
 import NavDrawer from "../comps/ui/NavDrawer";
 import Box from "@mui/material/Box";
+import "../tailwind.css";
+import HTTP404 from "./404";
+import OppRouter from "./opportunity/index.js";
 
 const Pages = () => {
   const user = useContext(UserContext);
@@ -36,6 +39,8 @@ const Pages = () => {
             <Route path={"/my-opportunities"} element={<MyOpportunities />} />
             <Route path={"/archives"} element={<Archives />} />
             <Route path={"/admin"} element={<Admin />} />
+            <Route path={"/opportunity/:oppId"} element={<OppRouter />} />
+            <Route path={"*"} element={<HTTP404 />} />
           </Routes>
         </Box>
       </BrowserRouter>

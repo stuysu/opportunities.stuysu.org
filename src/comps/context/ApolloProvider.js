@@ -16,7 +16,7 @@ const link = new HttpLink({
   headers: { Authorization: authJWT ? "Bearer " + authJWT : "" },
 });
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
   cache: new InMemoryCache(),
   link,
 });

@@ -19,14 +19,13 @@ const OpportunityList = (data) => {
 
   // admin
   const [deleted, setDeleted] = React.useState([]);
-  data.opportunities.opportunities = data
-  .opportunities
-  .opportunities
-  .filter(opportunity => !deleted.includes(opportunity.id));
+  data.opportunities.opportunities = data.opportunities.opportunities.filter(
+    (opportunity) => !deleted.includes(opportunity.id)
+  );
 
   if (data?.opportunities?.opportunities.length) {
     return (
-      <>
+      <div>
         {data?.opportunities?.opportunities?.map((opportunity) => (
           <OpportunityCard
             key={opportunity.id}
@@ -43,7 +42,7 @@ const OpportunityList = (data) => {
             onDelete={() => setDeleted([...deleted, opportunity.id])}
           />
         ))}
-      </>
+      </div>
     );
   } else {
     return <h1>No opportunities found.</h1>;

@@ -39,7 +39,7 @@ const UserProvider = (props) => {
         ...data.authenticatedUser,
       }
     : { signedIn: false, loading, refetch };
-  
+
   // DEBUG
   // value.isFaculty = true;
 
