@@ -27,6 +27,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "prettier": "npx prettier --write .",
     "tailwind": "npx tailwindcss -c ./src/tailwind.config.js -i ./src/index.css -o ./src/tailwind.css --watch --minify"
   },
   "eslintConfig": {
