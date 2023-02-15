@@ -164,6 +164,11 @@ function OpportunityCard({
           ) : (
             <>{description}</>
           )}
+        </div>
+        <div
+          className={"flex flex-row justify-between"}
+          sx={{ fontSize: "0.9rem" }}
+        >
           {link && (
             // Apply button
             <Button
