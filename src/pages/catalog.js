@@ -1,4 +1,4 @@
-import React, {useContext, useEffect} from "react";
+import React, { useContext, useEffect } from "react";
 import Typography from "@mui/material/Typography";
 import { Helmet } from "react-helmet";
 import OpportunityList from "../comps/opportunities/OpportunityList";
@@ -67,7 +67,7 @@ const Catalog = () => {
   const [eligibilities, setEligibilities] = React.useState(allEligibilities);
 
   const toggleEligibility = (eligibility) => {
-    const newEligibilities = [...eligibilities]
+    const newEligibilities = [...eligibilities];
     const eligibilityIndex = eligibilities.indexOf(eligibility);
     if (eligibilityIndex === -1) {
       newEligibilities.push(eligibility);
@@ -76,14 +76,12 @@ const Catalog = () => {
     }
     setEligibilities(newEligibilities);
     console.log(newEligibilities);
-  }
+  };
 
   const { data, loading, error } = useQuery(QUERY, {
     variables: {
       categories,
-      eligibilities: eligibilities.map(
-        (e) => allEligibilities.indexOf(e) + 1
-      ),
+      eligibilities: eligibilities.map((e) => allEligibilities.indexOf(e) + 1),
     },
   });
 
@@ -114,17 +112,19 @@ const Catalog = () => {
           <Typography variant={"h1"}>Catalog</Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={3} lg={2} xl={2}>
-          {filtered.length > 0 && (<FormGroup>
-            {allEligibilities.map((eligibility) => (
-              <FormControlLabel
-                checked={eligibilities.indexOf(eligibility) > -1}
-                control={<Checkbox
-                  onChange={() => toggleEligibility(eligibility)}
-                />}
-                label={eligibility}
-              />
-            ))}
-          </FormGroup>)}
+          {filtered.length > 0 && (
+            <FormGroup>
+              {allEligibilities.map((eligibility) => (
+                <FormControlLabel
+                  checked={eligibilities.indexOf(eligibility) > -1}
+                  control={
+                    <Checkbox onChange={() => toggleEligibility(eligibility)} />
+                  }
+                  label={eligibility}
+                />
+              ))}
+            </FormGroup>
+          )}
         </Grid>
         <Grid item xs={12} sm={12} md={9} lg={10} xl={10}>
           {searchParams && searchParams.get("q") ? (

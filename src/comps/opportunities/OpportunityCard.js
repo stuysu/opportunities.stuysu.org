@@ -185,7 +185,7 @@ function OpportunityCard({
             </Button>
           )}
         </div>
-        {(
+        {
           <>
             <Divider />
             <Box sx={{ paddingTop: "8px" }}>
@@ -219,7 +219,7 @@ function OpportunityCard({
               ))}
             </Box>
           </>
-        )}
+        }
         {isAdmin && (
           <>
             <Divider sx={{ marginTop: "8px" }} />
