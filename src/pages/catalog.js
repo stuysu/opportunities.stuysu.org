@@ -47,7 +47,7 @@ const Catalog = () => {
 
   let location = useLocation();
   let categories = location.state?.category ? [location.state?.category] : []; // TODO: add in-page user interface for categories
-  let eligibilities = [ // TODO: Query instead of declaring as constant
+  let allEligibilities = [ // TODO: Query instead of declaring as constant
     "Freshman",
     "Sophomore",
     "Junior",
@@ -56,23 +56,23 @@ const Catalog = () => {
     "Underrepresented Community",
   ];
 
-  const [allEligibility, setAllEligibility] = React.useState([]); // TODO: Change variable naming
+  const [eligibilities, setEligibilities] = React.useState([]); // TODO: Change variable naming
 
   const toggleEligibility = (eligibility) => {
-    const eligibilityIndex = allEligibility.indexOf(eligibility);
+    const eligibilityIndex = eligibilities.indexOf(eligibility);
     if (eligibilityIndex === -1) {
-      allEligibility.push(eligibility);
+      eligibilities.push(eligibility);
     } else {
-      allEligibility.splice(eligibilityIndex, 1);
+      eligibilities.splice(eligibilityIndex, 1);
     }
-    setAllEligibility(allEligibility);
-    console.log(allEligibility);
+    setEligibilities(eligibilities);
+    console.log(eligibilities);
   }
 
   // const { data, loading, error } = useQuery(QUERY, {
   //   variables: {
   //     categories,
-  //     eligibilities,
+  //     allEligibilities,
   //   },
   // });
 
@@ -103,7 +103,7 @@ const Catalog = () => {
         </Grid>
         <Grid item xs={12} sm={12} md={3} lg={2} xl={2}>
           <FormGroup>
-            {eligibilities.map((eligibility) => (
+            {allEligibilities.map((eligibility) => (
               <FormControlLabel
                 control={<Checkbox
                   onChange={() => toggleEligibility(eligibility)}
