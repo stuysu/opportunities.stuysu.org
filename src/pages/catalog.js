@@ -112,19 +112,17 @@ const Catalog = () => {
           <Typography variant={"h1"}>Catalog</Typography>
         </Grid>
         <Grid item xs={12} sm={12} md={3} lg={2} xl={2}>
-          {filtered.length > 0 && (
-            <FormGroup>
-              {allEligibilities.map((eligibility) => (
-                <FormControlLabel
-                  checked={eligibilities.indexOf(eligibility) > -1}
-                  control={
-                    <Checkbox onChange={() => toggleEligibility(eligibility)} />
-                  }
-                  label={eligibility}
-                />
-              ))}
-            </FormGroup>
-          )}
+          <FormGroup>
+            {allEligibilities.map((eligibility) => (
+              <FormControlLabel
+                checked={eligibilities.indexOf(eligibility) > -1}
+                control={
+                  <Checkbox onChange={() => toggleEligibility(eligibility)} />
+                }
+                label={eligibility}
+              />
+            ))}
+          </FormGroup>
         </Grid>
         <Grid item xs={12} sm={12} md={9} lg={10} xl={10}>
           {searchParams && searchParams.get("q") ? (
