@@ -66,7 +66,8 @@ const smartSnippet = (texttocut, snippetmaxlength) => {
   cost: Int, optional
   location: String, optional
   link: [String], optional
-  tags: [String], optional
+  categories: [String], optional
+  eligibilities: [String], optional
   isAdmin: [Boolean], optional 
   onDelete: [Function], mandatory
 */
@@ -79,7 +80,8 @@ function OpportunityCard({
   cost,
   location,
   link,
-  tags,
+  categories,
+  eligibilities,
   isAdmin,
   onDelete,
 }) {
@@ -183,11 +185,11 @@ function OpportunityCard({
             </Button>
           )}
         </div>
-        {tags.length !== 0 && (
+        {
           <>
             <Divider />
             <Box sx={{ paddingTop: "8px" }}>
-              {tags.map((tag) => (
+              {categories?.map((category) => (
                 <span
                   style={{
                     backgroundColor: "#546DE5",
@@ -196,14 +198,28 @@ function OpportunityCard({
                     padding: "0px 8px 2px",
                     borderRadius: "10px",
                   }}
-                  key={tag.name}
+                  key={category.name}
                 >
-                  {tag.name}
+                  {category.name}
+                </span>
+              ))}
+              {eligibilities?.map((eligibility) => (
+                <span
+                  style={{
+                    backgroundColor: "#58943A",
+                    color: "#FFFFFF",
+                    margin: "6px",
+                    padding: "0px 8px 2px",
+                    borderRadius: "10px",
+                  }}
+                  key={eligibility.name}
+                >
+                  {eligibility.name}
                 </span>
               ))}
             </Box>
           </>
-        )}
+        }
         {isAdmin && (
           <>
             <Divider sx={{ marginTop: "8px" }} />
