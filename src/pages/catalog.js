@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, {useContext, useEffect} from "react";
 import Typography from "@mui/material/Typography";
 import { Helmet } from "react-helmet";
 import OpportunityList from "../comps/opportunities/OpportunityList";
@@ -13,6 +13,15 @@ import {
   FormGroup,
   Grid,
 } from "@mui/material";
+
+// const GET_ELIGIBILITIES = gql` // TODO: Get allEligibilities by query
+//   query {
+//     eligibilities {
+//       id
+//       name
+//     }
+//   }
+// `;
 
 const QUERY = gql`
   query Opportunities($categories: [Int], $eligibilities: [Int]) {
@@ -47,7 +56,7 @@ const Catalog = () => {
 
   let location = useLocation();
   let categories = location.state?.category ? [location.state?.category] : []; // TODO: add in-page user interface for categories
-  let allEligibilities = [ // TODO: Query instead of declaring as constant
+  const allEligibilities = [
     "Freshman",
     "Sophomore",
     "Junior",
@@ -55,42 +64,45 @@ const Catalog = () => {
     "Female Only",
     "Underrepresented Community",
   ];
-
-  const [eligibilities, setEligibilities] = React.useState([]); // TODO: Change variable naming
+  const [eligibilities, setEligibilities] = React.useState(allEligibilities);
 
   const toggleEligibility = (eligibility) => {
+    const newEligibilities = [...eligibilities]
     const eligibilityIndex = eligibilities.indexOf(eligibility);
     if (eligibilityIndex === -1) {
-      eligibilities.push(eligibility);
+      newEligibilities.push(eligibility);
     } else {
-      eligibilities.splice(eligibilityIndex, 1);
+      newEligibilities.splice(eligibilityIndex, 1);
     }
-    setEligibilities(eligibilities);
-    console.log(eligibilities);
+    setEligibilities(newEligibilities);
+    console.log(newEligibilities);
   }
 
-  // const { data, loading, error } = useQuery(QUERY, {
-  //   variables: {
-  //     categories,
-  //     allEligibilities,
-  //   },
-  // });
+  const { data, loading, error } = useQuery(QUERY, {
+    variables: {
+      categories,
+      eligibilities: eligibilities.map(
+        (e) => allEligibilities.indexOf(e) + 1
+      ),
+    },
+  });
 
-  // if (loading || user.loading) return <CircularProgress />;
-  // if (!user.signedIn) return <AuthenticationRequired />;
-  // if (error) return <p>Error :(</p>;
-  //
-  // let filtered = data["opportunities"];
-  // if (searchParams.get("q")) {
-  //   filtered = data["opportunities"].filter((opportunity) => {
-  //     for (const key of ["title", "description", "date", "location", "link"]) {
-  //       if (opportunity[key]?.match(searchParams.get("q"))) {
-  //         return opportunity;
-  //       }
-  //     }
-  //     return null;
-  //   });
-  // }
+  if (loading || user.loading) return <CircularProgress />;
+  if (!user.signedIn) return <AuthenticationRequired />;
+  if (error) return <p>Error :(</p>;
+
+  let filtered = data["opportunities"];
+  if (searchParams.get("q")) {
+    filtered = data["opportunities"].filter((opportunity) => {
+      for (const key of ["title", "description", "date", "location", "link"]) {
+        if (opportunity[key]?.match(searchParams.get("q"))) {
+          return opportunity;
+        }
+      }
+      return null;
+    });
+  }
+  console.log(filtered);
 
   return (
     <div>
@@ -105,6 +117,7 @@ const Catalog = () => {
           <FormGroup>
             {allEligibilities.map((eligibility) => (
               <FormControlLabel
+                checked={eligibilities.indexOf(eligibility) > -1}
                 control={<Checkbox
                   onChange={() => toggleEligibility(eligibility)}
                 />}
@@ -119,7 +132,7 @@ const Catalog = () => {
               Search Query: {searchParams.get("q")}
             </Typography>
           ) : null}
-          {/*<OpportunityList opportunities={{ opportunities: filtered }} />*/}
+          <OpportunityList opportunities={{ opportunities: filtered }} />
         </Grid>
       </Grid>
     </div>
