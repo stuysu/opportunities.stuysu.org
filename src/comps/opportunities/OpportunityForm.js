@@ -238,7 +238,7 @@ const OpportunityForm = (opportunity = {}) => {
                 <DatePicker
                   variant={"outlined"}
                   fullWidth
-                  label={"Deadline"}
+                  label={"Deadline (Note: All deadlines are interpreted as 23:59:59 Eastern Time of the provided date. Opportunities will be archived automatically once this time has passed give-or-take a few minutes.)"}
                   onChange={(e) => {
                     setAppDeadline(e);
                   }}
