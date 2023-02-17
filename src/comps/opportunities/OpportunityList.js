@@ -37,7 +37,8 @@ const OpportunityList = (data) => {
             cost={opportunity?.cost}
             location={opportunity?.location}
             link={opportunity?.link}
-            tags={opportunity?.eligibilities?.concat(opportunity?.categories)}
+            categories={opportunity?.categories}
+            eligibilities={opportunity?.eligibilities}
             isAdmin={user.signedIn && user.isFaculty}
             onDelete={() => setDeleted([...deleted, opportunity.id])}
           />
