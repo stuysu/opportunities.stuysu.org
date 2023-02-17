@@ -3,7 +3,9 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import React from "react";
+import { gql, useMutation } from "@apollo/client";
 import { Button, ButtonGroup, Typography } from "@mui/material";
+import UserContext from "../context/UserContext";
 
 let dataStyles = {
   display: "flex",
@@ -22,7 +24,21 @@ function toDateStringCustom(date) {
   });
 }
 
+const SAVE_OPP_MUTATION = gql`
+  mutation saveOpportunity(
+    $opportunityId: Int!, 
+    $userId: Int!
+  ) {
+    saveOpportunity(
+      opportunityId: $opportunityId, 
+      userId: $userId
+    )
+  }
+`;
+
 const OpportunityOverview = ({ opp }) => {
+  const user = React.useContext(UserContext);
+  const saveOpportunity = useMutation(SAVE_OPP_MUTATION); 
   return (
     <div>
       <Typography variant={"h1"}>{opp.title}</Typography>
@@ -118,7 +134,8 @@ const OpportunityOverview = ({ opp }) => {
             color={"primary"}
             sx={{ my: 1 }}
             onClick={() => {
-              alert("TODO: Implement My Opportunities List");
+              saveOpportunity({ variables: { userId: user.id, opportunityId: opp.id}});
+              alert(`Opportunity ${opp.title} saved successfully!`);
             }}
           >
             Save to My Opportunities
