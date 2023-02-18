@@ -8,7 +8,7 @@ import AuthenticationRequired from "../comps/auth/AuthenticationRequired";
 import OpportunityList from "../comps/opportunities/OpportunityList";
 
 const QUERY = gql`
-  query Opportunities($user: [Int]) {
+  query Opportunities($user: Int) {
     opportunities(user: $user) {
       id
       title
