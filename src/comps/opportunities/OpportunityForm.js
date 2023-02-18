@@ -12,6 +12,7 @@ import {
   Snackbar,
   TextField,
   MenuItem,
+  Typography,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
@@ -253,6 +254,13 @@ const OpportunityForm = (opportunity = {}) => {
                     />
                   )}
                 />
+                <br />
+                <Typography variant={"p"} sx={{ fontSize: "0.6rem" }}>
+                  Note: All deadlines are interpreted as 23:59:59 Eastern Time
+                  of the provided date. Opportunities will be archived
+                  automatically once this time has passed give-or-take a few
+                  minutes.
+                </Typography>
               </Grid>
               <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
                 <TextField
