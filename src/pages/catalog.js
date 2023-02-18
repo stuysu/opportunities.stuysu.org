@@ -2,18 +2,16 @@ import React, {useContext, useEffect, useState} from "react";
 import Typography from "@mui/material/Typography";
 import { Helmet } from "react-helmet";
 import OpportunityList from "../comps/opportunities/OpportunityList";
-import {gql, useLazyQuery, useQuery} from "@apollo/client";
+import {gql, useQuery} from "@apollo/client";
 import { useLocation, useSearchParams } from "react-router-dom";
 import AuthenticationRequired from "../comps/auth/AuthenticationRequired";
 import UserContext from "../comps/context/UserContext";
 import {
-  Button,
   Checkbox,
   CircularProgress,
   FormControlLabel,
   FormGroup,
   Grid, Input,
-  Slider,
 } from "@mui/material";
 
 
