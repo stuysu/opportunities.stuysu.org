@@ -38,7 +38,7 @@ const SAVE_OPP_MUTATION = gql`
 
 const OpportunityOverview = ({ opp }) => {
   const user = React.useContext(UserContext);
-  const saveOpportunity = useMutation(SAVE_OPP_MUTATION); 
+  const [saveOpportunity, {error}] = useMutation(SAVE_OPP_MUTATION);
   return (
     <div>
       <Typography variant={"h1"}>{opp.title}</Typography>
@@ -134,7 +134,9 @@ const OpportunityOverview = ({ opp }) => {
             color={"primary"}
             sx={{ my: 1 }}
             onClick={() => {
+              console.log("Saving Opportunity...")
               saveOpportunity({ variables: { userId: user.id, opportunityId: opp.id}});
+              if (error) console.error(error);
               alert(`Opportunity ${opp.title} saved successfully!`);
             }}
           >
