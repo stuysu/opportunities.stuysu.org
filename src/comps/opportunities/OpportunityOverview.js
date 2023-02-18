@@ -25,14 +25,8 @@ function toDateStringCustom(date) {
 }
 
 const SAVE_OPP_MUTATION = gql`
-  mutation saveOpportunity(
-    $opportunityId: Int!, 
-    $userId: Int!
-  ) {
-    saveOpportunity(
-      opportunityId: $opportunityId, 
-      userId: $userId
-    )
+  mutation saveOpportunity($opportunityId: Int!, $userId: Int!) {
+    saveOpportunity(opportunityId: $opportunityId, userId: $userId)
   }
 `;
 
@@ -44,7 +38,7 @@ const OpportunityOverview = ({ opp }) => {
     },
     onError(error) {
       alert(error.message);
-    }
+    },
   });
   return (
     <div>
@@ -141,8 +135,10 @@ const OpportunityOverview = ({ opp }) => {
             color={"primary"}
             sx={{ my: 1 }}
             onClick={() => {
-              console.log("Saving Opportunity...")
-              saveOpportunity({variables: {userId: user.id, opportunityId: opp.id}});
+              console.log("Saving Opportunity...");
+              saveOpportunity({
+                variables: { userId: user.id, opportunityId: opp.id },
+              });
             }}
           >
             Save to My Opportunities

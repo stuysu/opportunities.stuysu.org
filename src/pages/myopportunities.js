@@ -19,7 +19,7 @@ const QUERY = gql`
         description
       }
       eligibilities {
-        id 
+        id
         name
         description
       }
@@ -38,7 +38,7 @@ const MyOpportunities = () => {
 
   const { data, loading, error } = useQuery(QUERY, {
     variables: {
-      user: userId
+      user: userId,
     },
   });
 
