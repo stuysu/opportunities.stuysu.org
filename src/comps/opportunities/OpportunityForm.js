@@ -121,10 +121,13 @@ const OpportunityForm = (opportunity = {}) => {
    * @param {Object} opportunity - React properties, customarily referred to as "props" (described below)
    * @property {number} id - ID of the opportunity being operated on (if there's an id, opportunity is now edited instead of created)
    * @property {string} title - Title data of the opportunity being operated on
+   * @property {string} description - Description of the opportunity
    * @property {string} date - Date of the opportunity in an arbitrary string
    * @property {string} appDeadline - Deadline of the app, non-flexible string in YYYY-MM-DD format for DB/sorting
    * @property {string} cost - Cost of the opportunity in an arbitrary string
    * @property {string} link - Link of the opportunity in an arbitrary string
+   * @property {[ string ]} categories - Array of category names that the opportunity belongs to
+   * @property {[ string ]} eligibilities - Array of eligibility names that the opportunity belongs to
    */
   const [snackbarOpen, setSnackbarOpen] = React.useState("");
 
@@ -140,8 +143,14 @@ const OpportunityForm = (opportunity = {}) => {
   const [description, setDescription] = React.useState(
     opportunity.description || ""
   );
-  const [categories, setCategories] = React.useState([]);
-  const [eligibilities, setEligibilities] = React.useState([]);
+  const [categories, setCategories] = React.useState(
+    opportunity.categories || []
+  );
+  const [eligibilities, setEligibilities] = React.useState(
+    opportunity.eligibilities || []
+  );
+  console.log(opportunity.categories);
+  console.log(opportunity.eligibilities);
 
   const [deadlineError, setDeadlineError] = React.useState(false);
 
