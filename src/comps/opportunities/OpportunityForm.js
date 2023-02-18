@@ -3,6 +3,7 @@ import {
   Button,
   Checkbox,
   Chip,
+  CircularProgress,
   Grid,
   FormControl,
   InputLabel,
@@ -17,8 +18,19 @@ import {
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import React from "react";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import moment from "moment";
+
+const QUERY = gql`
+  query {
+    categories {
+      name
+    }
+    eligibilities {
+      name
+    }
+  }
+`;
 
 const CREATE_MUTATION = gql`
   mutation CreateOpportunity(
@@ -81,31 +93,6 @@ const EDIT_MUTATION = gql`
     }
   }
 `;
-
-const categories = [
-  "Events of Interest",
-  "Academic Programs",
-  "Business and Jobs",
-  "Community Service",
-  "Leadership, Government, International",
-  "Museums, Art, Design",
-  "Parks, Zoo, Nature",
-  "Engineering, Math, Computer Science",
-  "Medical, Life Sciences",
-  "Theater, Music, Writing, Videos",
-  "Contests, Competitions",
-  "Additional Links and Resources",
-  "Scholarships",
-];
-
-const eligibilities = [
-  "Freshman",
-  "Sophomore",
-  "Junior",
-  "Senior",
-  "Female Only",
-  "Underrepresented Community",
-];
 
 const DatePickerErrorMessage = (error) => {
   /**
@@ -207,6 +194,15 @@ const OpportunityForm = (opportunity = {}) => {
       setSnackbarOpen(error.message);
     },
   });
+
+  // Get array of eligibility and category names
+  const { data, loading, error } = useQuery(QUERY);
+  if (loading) return <CircularProgress />;
+  if (error) return <p>Error :(</p>;
+  const categories = data?.categories?.map((a) => a.name);
+  const eligibilities = data?.eligibilities?.map((a) => a.name);
+  console.log(categories);
+  console.log(eligibilities);
 
   return (
     <div>
