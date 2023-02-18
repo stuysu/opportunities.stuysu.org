@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, {useContext, useEffect} from "react";
 import Typography from "@mui/material/Typography";
 import { Helmet } from "react-helmet";
 import OpportunityList from "../comps/opportunities/OpportunityList";
@@ -14,14 +14,14 @@ import {
   Grid,
 } from "@mui/material";
 
-// const GET_ELIGIBILITIES = gql` // TODO: Get allEligibilities by query
-//   query {
-//     eligibilities {
-//       id
-//       name
-//     }
-//   }
-// `;
+
+const ELIGIBILITY_QUERY = gql`
+  query Eligibilities {
+    eligibilities {
+      name
+    }
+  }
+`;
 
 const QUERY = gql`
   query Opportunities($categories: [Int], $eligibilities: [Int]) {
@@ -56,39 +56,28 @@ const Catalog = () => {
 
   let location = useLocation();
   let categories = location.state?.category ? [location.state?.category] : []; // TODO: add in-page user interface for categories
-  const allEligibilities = [
-    "Freshman",
-    "Sophomore",
-    "Junior",
-    "Senior",
-    "Female Only",
-    "Underrepresented Community",
-  ];
-  const [eligibilities, setEligibilities] = React.useState(allEligibilities);
 
-  const toggleEligibility = (eligibility) => {
-    const newEligibilities = [...eligibilities];
-    const eligibilityIndex = eligibilities.indexOf(eligibility);
-    if (eligibilityIndex === -1) {
-      newEligibilities.push(eligibility);
-    } else {
-      newEligibilities.splice(eligibilityIndex, 1);
-    }
-    setEligibilities(newEligibilities);
-    console.log(newEligibilities);
-  };
-
+  // Get array of eligibility names
+  const eligibilities_response = useQuery(ELIGIBILITY_QUERY);
+  const allEligibilities = eligibilities_response?.data?.eligibilities?.map(a => a.name);
+  const [eligibilities, setEligibilities] = React.useState();
   const { data, loading, error } = useQuery(QUERY, {
     variables: {
       categories,
-      eligibilities: eligibilities.map((e) => allEligibilities.indexOf(e) + 1),
+      eligibilities: eligibilities?.map((e) => allEligibilities?.indexOf(e) + 1),
     },
+    skip: eligibilities_response.loading || !allEligibilities
   });
-
-  if (loading || user.loading) return <CircularProgress />;
+  useEffect(() => {
+      if (eligibilities === undefined) {
+        setEligibilities(allEligibilities);
+      }
+  }, [eligibilities, allEligibilities]);
+  if (loading || user.loading || eligibilities_response.loading) return <CircularProgress />;
   if (!user.signedIn) return <AuthenticationRequired />;
   if (error) return <p>Error :(</p>;
 
+  // Filter by search parameter
   let filtered = data["opportunities"];
   if (searchParams.get("q")) {
     filtered = data["opportunities"].filter((opportunity) => {
@@ -100,7 +89,22 @@ const Catalog = () => {
       return null;
     });
   }
-  console.log(filtered);
+
+  /**
+   * Toggles eligibility
+   * @param {string} eligibility - the name of the eligibility item to be toggled on/off
+   */
+  const toggleEligibility = (eligibility) => {
+    const newEligibilities = [...eligibilities];
+    const eligibilityIndex = eligibilities.indexOf(eligibility);
+    if (eligibilityIndex === -1) {
+      newEligibilities.push(eligibility);
+    } else {
+      newEligibilities.splice(eligibilityIndex, 1);
+    }
+    setEligibilities(newEligibilities);
+    console.log(newEligibilities);
+  };
 
   return (
     <div>
