@@ -140,8 +140,8 @@ const OpportunityForm = (opportunity = {}) => {
   const [description, setDescription] = React.useState(
     opportunity.description || ""
   );
-  const [allCategory, setAllCategory] = React.useState([]);
-  const [allEligibility, setAllEligibility] = React.useState([]);
+  const [categories, setCategories] = React.useState([]);
+  const [eligibilities, setEligibilities] = React.useState([]);
 
   const [deadlineError, setDeadlineError] = React.useState(false);
 
@@ -149,15 +149,15 @@ const OpportunityForm = (opportunity = {}) => {
     const {
       target: { value },
     } = event;
-    setAllCategory(value);
-    console.log(allCategory);
+    setCategories(value);
+    console.log(categories);
   };
   const handleEligibilityChange = (event) => {
     const {
       target: { value },
     } = event;
-    setAllEligibility(value);
-    console.log(allEligibility);
+    setEligibilities(value);
+    console.log(eligibilities);
   };
 
   const resetForm = () => {
@@ -170,8 +170,8 @@ const OpportunityForm = (opportunity = {}) => {
     setLocation("");
     setLink("");
     setDescription("");
-    setAllCategory([]);
-    setAllEligibility([]);
+    setCategories([]);
+    setEligibilities([]);
     // deadlineError is guaranteed to be false by here
   };
 
@@ -199,10 +199,8 @@ const OpportunityForm = (opportunity = {}) => {
   const { data, loading, error } = useQuery(QUERY);
   if (loading) return <CircularProgress />;
   if (error) return <p>Error :(</p>;
-  const categories = data?.categories?.map((a) => a.name);
-  const eligibilities = data?.eligibilities?.map((a) => a.name);
-  console.log(categories);
-  console.log(eligibilities);
+  const allCategories = data?.categories?.map((a) => a.name);
+  const allEligibilities = data?.eligibilities?.map((a) => a.name);
 
   return (
     <div>
@@ -317,7 +315,7 @@ const OpportunityForm = (opportunity = {}) => {
                 <Select
                   labelId="multiple-categories-label"
                   multiple
-                  value={allCategory}
+                  value={categories}
                   onChange={handleCategoryChange}
                   input={<OutlinedInput label={"Chip"} />}
                   renderValue={(selected) => (
@@ -328,9 +326,9 @@ const OpportunityForm = (opportunity = {}) => {
                     </Box>
                   )}
                 >
-                  {categories.map((category) => (
+                  {allCategories.map((category) => (
                     <MenuItem key={category} value={category}>
-                      <Checkbox checked={allCategory.indexOf(category) > -1} />
+                      <Checkbox checked={categories.indexOf(category) > -1} />
                       <ListItemText primary={category} />
                     </MenuItem>
                   ))}
@@ -347,7 +345,7 @@ const OpportunityForm = (opportunity = {}) => {
                 <Select
                   labelId="multiple-eligibilities-label"
                   multiple
-                  value={allEligibility}
+                  value={eligibilities}
                   onChange={handleEligibilityChange}
                   input={<OutlinedInput label={"Chip"} />}
                   renderValue={(selected) => (
@@ -358,10 +356,10 @@ const OpportunityForm = (opportunity = {}) => {
                     </Box>
                   )}
                 >
-                  {eligibilities.map((eligibility) => (
+                  {allEligibilities.map((eligibility) => (
                     <MenuItem key={eligibility} value={eligibility}>
                       <Checkbox
-                        checked={allEligibility.indexOf(eligibility) > -1}
+                        checked={eligibilities.indexOf(eligibility) > -1}
                       />
                       <ListItemText primary={eligibility} />
                     </MenuItem>
@@ -385,9 +383,9 @@ const OpportunityForm = (opportunity = {}) => {
                 id: id,
                 title,
                 description,
-                categories: allCategory.map((e) => categories.indexOf(e) + 1),
-                eligibilities: allEligibility.map(
-                  (e) => eligibilities.indexOf(e) + 1
+                categories: categories.map((e) => allCategories.indexOf(e) + 1),
+                eligibilities: eligibilities.map(
+                  (e) => allEligibilities.indexOf(e) + 1
                 ),
                 date,
                 location,
@@ -403,9 +401,9 @@ const OpportunityForm = (opportunity = {}) => {
               variables: {
                 title,
                 description,
-                categories: allCategory.map((e) => categories.indexOf(e) + 1),
-                eligibilities: allEligibility.map(
-                  (e) => eligibilities.indexOf(e) + 1
+                categories: categories.map((e) => allCategories.indexOf(e) + 1),
+                eligibilities: eligibilities.map(
+                  (e) => allEligibilities.indexOf(e) + 1
                 ),
                 date,
                 location,
