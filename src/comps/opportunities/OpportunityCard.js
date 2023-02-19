@@ -99,8 +99,10 @@ function OpportunityCard({
     },
   });
 
-  // TODO: Date type in GraphQL
   if (appDeadline) appDeadline = new Date(appDeadline);
+  const category_names = categories?.map((a) => a.name);
+  const eligibility_names = eligibilities?.map((a) => a.name);
+
   return (
     // Testing: just create a div with the title and description
     <a href={`/opportunity/${id}`}>
@@ -235,6 +237,8 @@ function OpportunityCard({
                   cost,
                   location,
                   link,
+                  categories: category_names,
+                  eligibilities: eligibility_names,
                 }}
               >
                 <Button sx={{ marginRight: "16px" }} variant="contained">
