@@ -84,7 +84,7 @@ const Catalog = () => {
   // };
 
   const handleInputChange = (event) => {
-    setMaxCost(event.target.value === '' ? '' : Number(event.target.value))
+    setMaxCost(event.target.value === '' ? 0 : Number(event.target.value))
   }
 
   // Get array of eligibility names

@@ -100,6 +100,9 @@ function OpportunityCard({
   });
 
   if (appDeadline) appDeadline = new Date(appDeadline);
+  if (id === 16) {
+    console.log(appDeadline);
+  }
   const category_names = categories?.map((a) => a.name);
   const eligibility_names = eligibilities?.map((a) => a.name);
 
@@ -118,7 +121,7 @@ function OpportunityCard({
           sx={{ fontSize: "0.9rem" }}
           className={"text-blue-500 block"}
         >
-          {date}
+          Date: {date}
         </Typography>
         <Typography
           variant={"p"}
@@ -150,7 +153,12 @@ function OpportunityCard({
           sx={{ fontSize: "0.9rem", fontWeight: "bold" }}
           className={"text-blue-500 block"}
         >
-          Deadline: {appDeadline ? toDateStringCustom(appDeadline) : "None"}
+          Deadline:{" "}
+          {appDeadline
+            ? appDeadline.getFullYear() <= 1970
+              ? "Rolling Basis"
+              : toDateStringCustom(appDeadline)
+            : "None"}
         </Typography>
         <Divider sx={{ my: 1 }} />
         <div
