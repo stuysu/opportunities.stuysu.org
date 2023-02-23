@@ -3,6 +3,7 @@ import {
   Button,
   Checkbox,
   Chip,
+  CircularProgress,
   Grid,
   FormControl,
   InputLabel,
@@ -17,8 +18,19 @@ import {
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import React from "react";
-import { gql, useMutation } from "@apollo/client";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import moment from "moment";
+
+const QUERY = gql`
+  query {
+    categories {
+      name
+    }
+    eligibilities {
+      name
+    }
+  }
+`;
 
 const CREATE_MUTATION = gql`
   mutation CreateOpportunity(
@@ -82,31 +94,6 @@ const EDIT_MUTATION = gql`
   }
 `;
 
-const categories = [
-  "Events of Interest",
-  "Academic Programs",
-  "Business and Jobs",
-  "Community Service",
-  "Leadership, Government, International",
-  "Museums, Art, Design",
-  "Parks, Zoo, Nature",
-  "Engineering, Math, Computer Science",
-  "Medical, Life Sciences",
-  "Theater, Music, Writing, Videos",
-  "Contests, Competitions",
-  "Additional Links and Resources",
-  "Scholarships",
-];
-
-const eligibilities = [
-  "Freshman",
-  "Sophomore",
-  "Junior",
-  "Senior",
-  "Female Only",
-  "Underrepresented Community",
-];
-
 const DatePickerErrorMessage = (error) => {
   /**
    * Creates the OpportunityForm used on the admin page.
@@ -134,10 +121,13 @@ const OpportunityForm = (opportunity = {}) => {
    * @param {Object} opportunity - React properties, customarily referred to as "props" (described below)
    * @property {number} id - ID of the opportunity being operated on (if there's an id, opportunity is now edited instead of created)
    * @property {string} title - Title data of the opportunity being operated on
+   * @property {string} description - Description of the opportunity
    * @property {string} date - Date of the opportunity in an arbitrary string
    * @property {string} appDeadline - Deadline of the app, non-flexible string in YYYY-MM-DD format for DB/sorting
    * @property {string} cost - Cost of the opportunity in an arbitrary string
    * @property {string} link - Link of the opportunity in an arbitrary string
+   * @property {[ string ]} categories - Array of category names that the opportunity belongs to
+   * @property {[ string ]} eligibilities - Array of eligibility names that the opportunity belongs to
    */
   const [snackbarOpen, setSnackbarOpen] = React.useState("");
 
@@ -153,8 +143,14 @@ const OpportunityForm = (opportunity = {}) => {
   const [description, setDescription] = React.useState(
     opportunity.description || ""
   );
-  const [allCategory, setAllCategory] = React.useState([]);
-  const [allEligibility, setAllEligibility] = React.useState([]);
+  const [categories, setCategories] = React.useState(
+    opportunity.categories || []
+  );
+  const [eligibilities, setEligibilities] = React.useState(
+    opportunity.eligibilities || []
+  );
+  console.log(opportunity.categories);
+  console.log(opportunity.eligibilities);
 
   const [deadlineError, setDeadlineError] = React.useState(false);
 
@@ -162,15 +158,15 @@ const OpportunityForm = (opportunity = {}) => {
     const {
       target: { value },
     } = event;
-    setAllCategory(value);
-    console.log(allCategory);
+    setCategories(value);
+    console.log(categories);
   };
   const handleEligibilityChange = (event) => {
     const {
       target: { value },
     } = event;
-    setAllEligibility(value);
-    console.log(allEligibility);
+    setEligibilities(value);
+    console.log(eligibilities);
   };
 
   const resetForm = () => {
@@ -183,8 +179,8 @@ const OpportunityForm = (opportunity = {}) => {
     setLocation("");
     setLink("");
     setDescription("");
-    setAllCategory([]);
-    setAllEligibility([]);
+    setCategories([]);
+    setEligibilities([]);
     // deadlineError is guaranteed to be false by here
   };
 
@@ -207,6 +203,13 @@ const OpportunityForm = (opportunity = {}) => {
       setSnackbarOpen(error.message);
     },
   });
+
+  // Get array of eligibility and category names
+  const { data, loading, error } = useQuery(QUERY);
+  if (loading) return <CircularProgress />;
+  if (error) return <p>Error :(</p>;
+  const allCategories = data?.categories?.map((a) => a.name);
+  const allEligibilities = data?.eligibilities?.map((a) => a.name);
 
   return (
     <div>
@@ -321,7 +324,7 @@ const OpportunityForm = (opportunity = {}) => {
                 <Select
                   labelId="multiple-categories-label"
                   multiple
-                  value={allCategory}
+                  value={categories}
                   onChange={handleCategoryChange}
                   input={<OutlinedInput label={"Chip"} />}
                   renderValue={(selected) => (
@@ -332,9 +335,9 @@ const OpportunityForm = (opportunity = {}) => {
                     </Box>
                   )}
                 >
-                  {categories.map((category) => (
+                  {allCategories.map((category) => (
                     <MenuItem key={category} value={category}>
-                      <Checkbox checked={allCategory.indexOf(category) > -1} />
+                      <Checkbox checked={categories.indexOf(category) > -1} />
                       <ListItemText primary={category} />
                     </MenuItem>
                   ))}
@@ -351,7 +354,7 @@ const OpportunityForm = (opportunity = {}) => {
                 <Select
                   labelId="multiple-eligibilities-label"
                   multiple
-                  value={allEligibility}
+                  value={eligibilities}
                   onChange={handleEligibilityChange}
                   input={<OutlinedInput label={"Chip"} />}
                   renderValue={(selected) => (
@@ -362,10 +365,10 @@ const OpportunityForm = (opportunity = {}) => {
                     </Box>
                   )}
                 >
-                  {eligibilities.map((eligibility) => (
+                  {allEligibilities.map((eligibility) => (
                     <MenuItem key={eligibility} value={eligibility}>
                       <Checkbox
-                        checked={allEligibility.indexOf(eligibility) > -1}
+                        checked={eligibilities.indexOf(eligibility) > -1}
                       />
                       <ListItemText primary={eligibility} />
                     </MenuItem>
@@ -389,9 +392,9 @@ const OpportunityForm = (opportunity = {}) => {
                 id: id,
                 title,
                 description,
-                categories: allCategory.map((e) => categories.indexOf(e) + 1),
-                eligibilities: allEligibility.map(
-                  (e) => eligibilities.indexOf(e) + 1
+                categories: categories.map((e) => allCategories.indexOf(e) + 1),
+                eligibilities: eligibilities.map(
+                  (e) => allEligibilities.indexOf(e) + 1
                 ),
                 date,
                 location,
@@ -407,9 +410,9 @@ const OpportunityForm = (opportunity = {}) => {
               variables: {
                 title,
                 description,
-                categories: allCategory.map((e) => categories.indexOf(e) + 1),
-                eligibilities: allEligibility.map(
-                  (e) => eligibilities.indexOf(e) + 1
+                categories: categories.map((e) => allCategories.indexOf(e) + 1),
+                eligibilities: eligibilities.map(
+                  (e) => allEligibilities.indexOf(e) + 1
                 ),
                 date,
                 location,
