@@ -30,11 +30,28 @@ const SAVE_OPP_MUTATION = gql`
   }
 `;
 
-const OpportunityOverview = ({ opp }) => {
+const UNSAVE_OPP_MUTATION = gql`
+  mutation unsaveOpportunity($opportunityId: Int!, $userId: Int!) {
+    unsaveOpportunity(opportunityId: $opportunityId, userId: $userId)
+  }
+`;
+
+const OpportunityOverview = ({ opp , savedStatus }) => {
   const user = React.useContext(UserContext);
+  const [oppSaved, setOppSaved] = React.useState(savedStatus);
   const [saveOpportunity] = useMutation(SAVE_OPP_MUTATION, {
     onCompleted() {
       alert("Opportunity saved successfully!");
+	  setOppSaved(true);
+    },
+    onError(error) {
+      alert(error.message);
+    },
+  });
+  const [unsaveOpportunity] = useMutation(UNSAVE_OPP_MUTATION, {
+    onCompleted() {
+      alert("Opportunity unsaved successfully!");
+	  setOppSaved(false);
     },
     onError(error) {
       alert(error.message);
@@ -130,19 +147,34 @@ const OpportunityOverview = ({ opp }) => {
               Apply
             </Button>
           )}
-          <Button
-            variant={"outlined"}
-            color={"primary"}
-            sx={{ my: 1 }}
-            onClick={() => {
-              console.log("Saving Opportunity...");
-              saveOpportunity({
-                variables: { userId: user.id, opportunityId: opp.id },
-              });
-            }}
-          >
-            Save to My Opportunities
-          </Button>
+		  {oppSaved ?
+				<Button
+				variant={"outlined"}
+				color={"primary"}
+				sx={{ my: 1 }}
+				onClick={() => {
+				  console.log("Unsaving Opportunity...");
+				  unsaveOpportunity({
+					variables: { userId: user.id, opportunityId: opp.id },
+				  });
+				}}
+			  >
+				Remove from My Saved Opportunities
+			  </Button> :
+			  <Button
+				variant={"outlined"}
+				color={"primary"}
+				sx={{ my: 1 }}
+				onClick={() => {
+				  console.log("Saving Opportunity...");
+				  saveOpportunity({
+					variables: { userId: user.id, opportunityId: opp.id },
+				  });
+				}}
+			  >
+				Save to My Opportunities
+			  </Button>
+		  }
         </ButtonGroup>
       </div>
     </div>
