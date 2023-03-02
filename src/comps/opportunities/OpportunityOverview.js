@@ -3,7 +3,9 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import AccessTimeIcon from "@mui/icons-material/AccessTime";
 import React from "react";
+import { gql, useMutation } from "@apollo/client";
 import { Button, ButtonGroup, Typography } from "@mui/material";
+import UserContext from "../context/UserContext";
 
 let dataStyles = {
   display: "flex",
@@ -22,7 +24,42 @@ function toDateStringCustom(date) {
   });
 }
 
-const OpportunityOverview = ({ opp }) => {
+const SAVE_OPP_MUTATION = gql`
+  mutation saveOpportunity($opportunityId: Int!, $userId: Int!) {
+    saveOpportunity(opportunityId: $opportunityId, userId: $userId)
+  }
+`;
+
+const UNSAVE_OPP_MUTATION = gql`
+  mutation unsaveOpportunity($opportunityId: Int!, $userId: Int!) {
+    unsaveOpportunity(opportunityId: $opportunityId, userId: $userId)
+  }
+`;
+
+const OpportunityOverview = ({ opp, savedStatus }) => {
+  const user = React.useContext(UserContext);
+  const [oppSaved, setOppSaved] = React.useState(savedStatus);
+  const [saveOpportunity] = useMutation(SAVE_OPP_MUTATION, {
+    onCompleted() {
+      alert("Opportunity saved successfully!");
+      setOppSaved(true);
+    },
+    onError(error) {
+      alert(error.message);
+    },
+  });
+  const [unsaveOpportunity] = useMutation(UNSAVE_OPP_MUTATION, {
+    onCompleted() {
+      alert("Opportunity unsaved successfully!");
+      setOppSaved(false);
+    },
+    onError(error) {
+      alert(error.message);
+    },
+  });
+  let appDeadline = opp.appDeadline;
+  if (appDeadline) appDeadline = new Date(appDeadline);
+
   return (
     <div>
       <Typography variant={"h1"}>{opp.title}</Typography>
@@ -79,15 +116,16 @@ const OpportunityOverview = ({ opp }) => {
       </Typography>
       <Typography
         variant={"p"}
-        className={"block text-blue-500"}
         sx={dataStyles}
+        className={"text-blue-500 block"}
       >
         <AccessTimeIcon />
-        <b>Deadline: </b>{" "}
-        {
-          // Ugh
-          toDateStringCustom(new Date(opp.appDeadline))
-        }
+        <b>Deadline:</b>{" "}
+        {appDeadline
+          ? appDeadline.getFullYear() <= 1970
+            ? "Rolling Basis"
+            : toDateStringCustom(appDeadline)
+          : "None"}
       </Typography>
       <Typography variant={"h4"}>Description</Typography>
       <Typography variant={"body1"}>{opp.description}</Typography>
@@ -113,16 +151,35 @@ const OpportunityOverview = ({ opp }) => {
               Apply
             </Button>
           )}
-          <Button
-            variant={"outlined"}
-            color={"primary"}
-            sx={{ my: 1 }}
-            onClick={() => {
-              alert("TODO: Implement My Opportunities List");
-            }}
-          >
-            Save to My Opportunities
-          </Button>
+          {oppSaved ? (
+            <Button
+              variant={"outlined"}
+              color={"primary"}
+              sx={{ my: 1 }}
+              onClick={() => {
+                console.log("Unsaving Opportunity...");
+                unsaveOpportunity({
+                  variables: { userId: user.id, opportunityId: opp.id },
+                });
+              }}
+            >
+              Remove from My Saved Opportunities
+            </Button>
+          ) : (
+            <Button
+              variant={"outlined"}
+              color={"primary"}
+              sx={{ my: 1 }}
+              onClick={() => {
+                console.log("Saving Opportunity...");
+                saveOpportunity({
+                  variables: { userId: user.id, opportunityId: opp.id },
+                });
+              }}
+            >
+              Save to My Opportunities
+            </Button>
+          )}
         </ButtonGroup>
       </div>
     </div>

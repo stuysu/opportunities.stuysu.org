@@ -10,7 +10,7 @@ import { client } from "../../comps/context/ApolloProvider";
 export const OppContext = React.createContext({});
 
 const QUERY = gql`
-  query Opportunity($id: Int!) {
+  query Opportunity($id: Int!, $userId: Int!) {
     opportunityById(id: $id) {
       id
       title
@@ -31,6 +31,7 @@ const QUERY = gql`
       appDeadline
       link
     }
+    isOpportunitySaved(opportunityId: $id, userId: $userId)
   }
 `;
 
@@ -42,7 +43,7 @@ const Opportunity = ({ match, history }) => {
   const url = parseInt(params.oppId);
 
   const { data, loading, error } = useQuery(QUERY, {
-    variables: { signedIn: user.signedIn, id: url },
+    variables: { signedIn: user.signedIn, id: url, userId: user.id },
     client,
   });
 
@@ -59,7 +60,10 @@ const Opportunity = ({ match, history }) => {
           <title>{opp.title}</title>
         </Helmet>
         <main>
-          <OpportunityOverview opp={opp} />
+          <OpportunityOverview
+            opp={opp}
+            savedStatus={data.isOpportunitySaved}
+          />
         </main>
       </div>
     </OppContext.Provider>
