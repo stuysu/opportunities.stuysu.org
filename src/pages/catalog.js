@@ -1,8 +1,8 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Typography from "@mui/material/Typography";
 import { Helmet } from "react-helmet";
 import OpportunityList from "../comps/opportunities/OpportunityList";
-import {gql, useQuery} from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import { useLocation, useSearchParams } from "react-router-dom";
 import AuthenticationRequired from "../comps/auth/AuthenticationRequired";
 import UserContext from "../comps/context/UserContext";
@@ -11,9 +11,9 @@ import {
   CircularProgress,
   FormControlLabel,
   FormGroup,
-  Grid, Input,
+  Grid,
+  Input,
 } from "@mui/material";
-
 
 const ELIGIBILITY_QUERY = gql`
   query Eligibilities {
@@ -25,7 +25,11 @@ const ELIGIBILITY_QUERY = gql`
 
 const QUERY = gql`
   query Opportunities($cost: Int, $categories: [Int], $eligibilities: [Int]) {
-    opportunities(cost: $cost, categories: $categories, eligibilities: $eligibilities) {
+    opportunities(
+      cost: $cost
+      categories: $categories
+      eligibilities: $eligibilities
+    ) {
       id
       title
       description
@@ -84,27 +88,32 @@ const Catalog = () => {
   // };
 
   const handleInputChange = (event) => {
-    setMaxCost(event.target.value === '' ? 0 : Number(event.target.value))
-  }
+    setMaxCost(event.target.value === "" ? 0 : Number(event.target.value));
+  };
 
   // Get array of eligibility names
   const eligibilities_response = useQuery(ELIGIBILITY_QUERY);
-  const allEligibilities = eligibilities_response?.data?.eligibilities?.map(a => a.name);
+  const allEligibilities = eligibilities_response?.data?.eligibilities?.map(
+    (a) => a.name
+  );
   const [eligibilities, setEligibilities] = React.useState();
   const { data, loading, error } = useQuery(QUERY, {
     variables: {
       cost: maxCost,
       categories: categories,
-      eligibilities: eligibilities?.map((e) => allEligibilities?.indexOf(e) + 1),
+      eligibilities: eligibilities?.map(
+        (e) => allEligibilities?.indexOf(e) + 1
+      ),
     },
     skip: eligibilities_response.loading || !allEligibilities,
   });
   useEffect(() => {
-      if (eligibilities === undefined) {
-        setEligibilities(allEligibilities);
-      }
+    if (eligibilities === undefined) {
+      setEligibilities(allEligibilities);
+    }
   }, [eligibilities, allEligibilities]);
-  if (loading || user.loading || eligibilities_response.loading) return <CircularProgress />;
+  if (loading || user.loading || eligibilities_response.loading)
+    return <CircularProgress />;
   if (!user.signedIn) return <AuthenticationRequired />;
   if (error) return <p>Error :(</p>;
 
@@ -142,9 +151,7 @@ const Catalog = () => {
               />
             ))}
           </FormGroup>
-          <Typography id="cost-slider">
-            Max Cost
-          </Typography>
+          <Typography id="cost-slider">Max Cost</Typography>
           <Grid container spacing={2} alignItems="center">
             {/*<Grid item xs={12} sm={8} md={8} lg={8} xl={8}>*/}
             {/*  <Slider*/}

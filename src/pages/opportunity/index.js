@@ -31,7 +31,7 @@ const QUERY = gql`
       appDeadline
       link
     }
-	isOpportunitySaved(opportunityId: $id, userId: $userId)
+    isOpportunitySaved(opportunityId: $id, userId: $userId)
   }
 `;
 
@@ -60,7 +60,10 @@ const Opportunity = ({ match, history }) => {
           <title>{opp.title}</title>
         </Helmet>
         <main>
-          <OpportunityOverview opp={opp} savedStatus={data.isOpportunitySaved} />
+          <OpportunityOverview
+            opp={opp}
+            savedStatus={data.isOpportunitySaved}
+          />
         </main>
       </div>
     </OppContext.Provider>

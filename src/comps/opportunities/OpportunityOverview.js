@@ -36,13 +36,13 @@ const UNSAVE_OPP_MUTATION = gql`
   }
 `;
 
-const OpportunityOverview = ({ opp , savedStatus }) => {
+const OpportunityOverview = ({ opp, savedStatus }) => {
   const user = React.useContext(UserContext);
   const [oppSaved, setOppSaved] = React.useState(savedStatus);
   const [saveOpportunity] = useMutation(SAVE_OPP_MUTATION, {
     onCompleted() {
       alert("Opportunity saved successfully!");
-	  setOppSaved(true);
+      setOppSaved(true);
     },
     onError(error) {
       alert(error.message);
@@ -51,7 +51,7 @@ const OpportunityOverview = ({ opp , savedStatus }) => {
   const [unsaveOpportunity] = useMutation(UNSAVE_OPP_MUTATION, {
     onCompleted() {
       alert("Opportunity unsaved successfully!");
-	  setOppSaved(false);
+      setOppSaved(false);
     },
     onError(error) {
       alert(error.message);
@@ -119,7 +119,7 @@ const OpportunityOverview = ({ opp , savedStatus }) => {
         sx={dataStyles}
         className={"text-blue-500 block"}
       >
-        <AccessTimeIcon/>
+        <AccessTimeIcon />
         <b>Deadline:</b>{" "}
         {appDeadline
           ? appDeadline.getFullYear() <= 1970
@@ -151,34 +151,35 @@ const OpportunityOverview = ({ opp , savedStatus }) => {
               Apply
             </Button>
           )}
-		  {oppSaved ?
-				<Button
-				variant={"outlined"}
-				color={"primary"}
-				sx={{ my: 1 }}
-				onClick={() => {
-				  console.log("Unsaving Opportunity...");
-				  unsaveOpportunity({
-					variables: { userId: user.id, opportunityId: opp.id },
-				  });
-				}}
-			  >
-				Remove from My Saved Opportunities
-			  </Button> :
-			  <Button
-				variant={"outlined"}
-				color={"primary"}
-				sx={{ my: 1 }}
-				onClick={() => {
-				  console.log("Saving Opportunity...");
-				  saveOpportunity({
-					variables: { userId: user.id, opportunityId: opp.id },
-				  });
-				}}
-			  >
-				Save to My Opportunities
-			  </Button>
-		  }
+          {oppSaved ? (
+            <Button
+              variant={"outlined"}
+              color={"primary"}
+              sx={{ my: 1 }}
+              onClick={() => {
+                console.log("Unsaving Opportunity...");
+                unsaveOpportunity({
+                  variables: { userId: user.id, opportunityId: opp.id },
+                });
+              }}
+            >
+              Remove from My Saved Opportunities
+            </Button>
+          ) : (
+            <Button
+              variant={"outlined"}
+              color={"primary"}
+              sx={{ my: 1 }}
+              onClick={() => {
+                console.log("Saving Opportunity...");
+                saveOpportunity({
+                  variables: { userId: user.id, opportunityId: opp.id },
+                });
+              }}
+            >
+              Save to My Opportunities
+            </Button>
+          )}
         </ButtonGroup>
       </div>
     </div>
