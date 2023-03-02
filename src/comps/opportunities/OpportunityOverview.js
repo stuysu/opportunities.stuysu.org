@@ -57,6 +57,9 @@ const OpportunityOverview = ({ opp , savedStatus }) => {
       alert(error.message);
     },
   });
+  let appDeadline = opp.appDeadline;
+  if (appDeadline) appDeadline = new Date(appDeadline);
+
   return (
     <div>
       <Typography variant={"h1"}>{opp.title}</Typography>
@@ -113,15 +116,16 @@ const OpportunityOverview = ({ opp , savedStatus }) => {
       </Typography>
       <Typography
         variant={"p"}
-        className={"block text-blue-500"}
         sx={dataStyles}
+        className={"text-blue-500 block"}
       >
-        <AccessTimeIcon />
-        <b>Deadline: </b>{" "}
-        {
-          // Ugh
-          toDateStringCustom(new Date(opp.appDeadline))
-        }
+        <AccessTimeIcon/>
+        <b>Deadline:</b>{" "}
+        {appDeadline
+          ? appDeadline.getFullYear() <= 1970
+            ? "Rolling Basis"
+            : toDateStringCustom(appDeadline)
+          : "None"}
       </Typography>
       <Typography variant={"h4"}>Description</Typography>
       <Typography variant={"body1"}>{opp.description}</Typography>
