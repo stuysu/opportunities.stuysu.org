@@ -10,15 +10,7 @@ import {
 import { gql, useMutation } from "@apollo/client";
 import ConfirmationDialog from "../ui/ConfirmationDialog.js";
 import { Link as DomLink } from "react-router-dom";
-
-function toDateStringCustom(date) {
-  return date.toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
+import toDateStringCustom from "../../util/toDateStringCustom.js";
 
 const DELETE_MUTATION = gql`
   mutation DeleteOpportunity($id: Int!) {
