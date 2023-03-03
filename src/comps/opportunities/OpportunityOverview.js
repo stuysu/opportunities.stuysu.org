@@ -6,6 +6,8 @@ import React from "react";
 import { gql, useMutation } from "@apollo/client";
 import { Button, ButtonGroup, Typography } from "@mui/material";
 import UserContext from "../context/UserContext";
+import toDateStringCustom from "../../util/toDateStringCustom.js";
+
 
 let dataStyles = {
   display: "flex",
@@ -14,15 +16,6 @@ let dataStyles = {
   gap: "0.5rem",
   my: "0.5rem",
 };
-
-function toDateStringCustom(date) {
-  return date.toLocaleDateString("en-US", {
-    weekday: "long",
-    year: "numeric",
-    month: "long",
-    day: "numeric",
-  });
-}
 
 const SAVE_OPP_MUTATION = gql`
   mutation saveOpportunity($opportunityId: Int!, $userId: Int!) {
