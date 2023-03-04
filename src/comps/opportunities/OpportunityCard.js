@@ -102,14 +102,18 @@ function OpportunityCard({
   const navigate = useNavigate();
 
   const redirectOnClick = () => {
-	  if(!onSubButton){
-		navigate(`/opportunity/${id}`);
-	  }
+    if (!onSubButton) {
+      navigate(`/opportunity/${id}`);
+    }
   };
 
   return (
     <div>
-      <Card className={"w-full p-4 my-3 rounded-sm shadow-lg"} onClick={redirectOnClick} sx={{cursor: "pointer"}}>
+      <Card
+        className={"w-full p-4 my-3 rounded-sm shadow-lg"}
+        onClick={redirectOnClick}
+        sx={{ cursor: "pointer" }}
+      >
         <Typography
           variant={"h5"}
           sx={{ fontWeight: "bold", fontSize: "1.3rem" }}
@@ -190,8 +194,8 @@ function OpportunityCard({
               onClick={() => {
                 window.open(link, "_blank");
               }}
-			  onMouseEnter={() => setOnSubButton(true)}
-			  onMouseLeave={() => setOnSubButton(false)}
+              onMouseEnter={() => setOnSubButton(true)}
+              onMouseLeave={() => setOnSubButton(false)}
             >
               Apply
             </Button>
@@ -251,16 +255,19 @@ function OpportunityCard({
                   eligibilities: eligibility_names,
                 }}
               >
-                <Button sx={{ marginRight: "16px" }} variant="contained"
-				onMouseEnter={() => setOnSubButton(true)}
-				onMouseLeave={() => setOnSubButton(false)}>
+                <Button
+                  sx={{ marginRight: "16px" }}
+                  variant="contained"
+                  onMouseEnter={() => setOnSubButton(true)}
+                  onMouseLeave={() => setOnSubButton(false)}
+                >
                   Edit
                 </Button>
               </DomLink>
               <Button
                 variant="contained"
-				onMouseEnter={() => setOnSubButton(true)}
-			    onMouseLeave={() => setOnSubButton(false)}
+                onMouseEnter={() => setOnSubButton(true)}
+                onMouseLeave={() => setOnSubButton(false)}
                 onClick={() => {
                   setDelete(true);
                 }}
