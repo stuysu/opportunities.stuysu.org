@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { gql, useMutation } from "@apollo/client";
 import ConfirmationDialog from "../ui/ConfirmationDialog.js";
-import { Link as DomLink } from "react-router-dom";
+import { Link as DomLink, useNavigate } from "react-router-dom";
 import toDateStringCustom from "../../util/toDateStringCustom.js";
 
 const DELETE_MUTATION = gql`
@@ -79,6 +79,7 @@ function OpportunityCard({
 }) {
   const [snackbarOpen, setSnackbarOpen] = React.useState("");
   const [confirmDelete, setDelete] = React.useState(false);
+  const [onSubButton, setOnSubButton] = React.useState(false);
 
   const [deleteOpportunity] = useMutation(DELETE_MUTATION, {
     onCompleted(data) {
@@ -98,10 +99,17 @@ function OpportunityCard({
   const category_names = categories?.map((a) => a.name);
   const eligibility_names = eligibilities?.map((a) => a.name);
 
+  const navigate = useNavigate();
+
+  const redirectOnClick = () => {
+	  if(!onSubButton){
+		navigate(`/opportunity/${id}`);
+	  }
+  };
+
   return (
-    // Testing: just create a div with the title and description
-    <a href={`/opportunity/${id}`}>
-      <Card className={"w-full p-4 my-3 rounded-sm shadow-lg"}>
+    <div>
+      <Card className={"w-full p-4 my-3 rounded-sm shadow-lg"} onClick={redirectOnClick} sx={{cursor: "pointer"}}>
         <Typography
           variant={"h5"}
           sx={{ fontWeight: "bold", fontSize: "1.3rem" }}
@@ -182,6 +190,8 @@ function OpportunityCard({
               onClick={() => {
                 window.open(link, "_blank");
               }}
+			  onMouseEnter={() => setOnSubButton(true)}
+			  onMouseLeave={() => setOnSubButton(false)}
             >
               Apply
             </Button>
@@ -241,12 +251,16 @@ function OpportunityCard({
                   eligibilities: eligibility_names,
                 }}
               >
-                <Button sx={{ marginRight: "16px" }} variant="contained">
+                <Button sx={{ marginRight: "16px" }} variant="contained"
+				onMouseEnter={() => setOnSubButton(true)}
+				onMouseLeave={() => setOnSubButton(false)}>
                   Edit
                 </Button>
               </DomLink>
               <Button
                 variant="contained"
+				onMouseEnter={() => setOnSubButton(true)}
+			    onMouseLeave={() => setOnSubButton(false)}
                 onClick={() => {
                   setDelete(true);
                 }}
@@ -279,7 +293,7 @@ function OpportunityCard({
           onDelete();
         }}
       />
-    </a>
+    </div>
   );
 }
 
