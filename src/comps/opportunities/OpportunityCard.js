@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { gql, useMutation } from "@apollo/client";
 import ConfirmationDialog from "../ui/ConfirmationDialog.js";
-import { Link as DomLink } from "react-router-dom";
+import { Link as DomLink, useNavigate } from "react-router-dom";
 import toDateStringCustom from "../../util/toDateStringCustom.js";
 
 const DELETE_MUTATION = gql`
@@ -42,7 +42,10 @@ const responsive = (width) => {
   }
 };
 
-const smartSnippet = (texttocut, snippetmaxlength) => {
+const smartSnippet = (texttocut, snippetmaxlength, expanded) => {
+  if (expanded) {
+    return texttocut;
+  }
   let possiblecutoff = texttocut.indexOf(" ", snippetmaxlength - 15);
   return possiblecutoff === -1 || possiblecutoff > snippetmaxlength
     ? texttocut.substring(0, snippetmaxlength) + "..."
@@ -79,6 +82,8 @@ function OpportunityCard({
 }) {
   const [snackbarOpen, setSnackbarOpen] = React.useState("");
   const [confirmDelete, setDelete] = React.useState(false);
+  const [onSubButton, setOnSubButton] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(false);
 
   const [deleteOpportunity] = useMutation(DELETE_MUTATION, {
     onCompleted(data) {
@@ -98,10 +103,21 @@ function OpportunityCard({
   const category_names = categories?.map((a) => a.name);
   const eligibility_names = eligibilities?.map((a) => a.name);
 
+  const navigate = useNavigate();
+
+  const redirectOnClick = () => {
+    if (!onSubButton) {
+      navigate(`/opportunity/${id}`);
+    }
+  };
+
   return (
-    // Testing: just create a div with the title and description
-    <a href={`/opportunity/${id}`}>
-      <Card className={"w-full p-4 my-3 rounded-sm shadow-lg"}>
+    <div>
+      <Card
+        className={"w-full p-4 my-3 rounded-sm shadow-lg"}
+        onClick={redirectOnClick}
+        sx={{ cursor: "pointer" }}
+      >
         <Typography
           variant={"h5"}
           sx={{ fontWeight: "bold", fontSize: "1.3rem" }}
@@ -161,7 +177,8 @@ function OpportunityCard({
             <>
               {smartSnippet(
                 description,
-                responsive(window.innerWidth).cutoffchar
+                responsive(window.innerWidth).cutoffchar,
+                expanded
               )}
               <br />
             </>
@@ -169,6 +186,31 @@ function OpportunityCard({
             <>{description}</>
           )}
         </div>
+        {description.length > responsive(window.innerWidth).cutoffchar && (
+          <button
+            style={{
+              color: "#707070",
+              padding: "0px",
+              textAlign: "left",
+              border: "0",
+              backgroundColor: "transparent",
+              cursor: "pointer",
+              marginTop: "3px",
+            }}
+            onClick={() => setExpanded(!expanded)}
+            onMouseEnter={() => setOnSubButton(true)}
+            onMouseLeave={() => setOnSubButton(false)}
+          >
+            <Typography
+              sx={{
+                "&:hover": { textDecoration: "underline" },
+                fontSize: "14px",
+              }}
+            >
+              {expanded ? "Hide More" : "Read More"}
+            </Typography>
+          </button>
+        )}
         <div
           className={"flex flex-row justify-between"}
           sx={{ fontSize: "0.9rem" }}
@@ -182,6 +224,8 @@ function OpportunityCard({
               onClick={() => {
                 window.open(link, "_blank");
               }}
+              onMouseEnter={() => setOnSubButton(true)}
+              onMouseLeave={() => setOnSubButton(false)}
             >
               Apply
             </Button>
@@ -192,32 +236,41 @@ function OpportunityCard({
             <Divider />
             <Box sx={{ paddingTop: "8px" }}>
               {categories?.map((category) => (
-                <span
-                  style={{
-                    backgroundColor: "#546DE5",
-                    color: "#FFFFFF",
-                    margin: "6px",
-                    padding: "0px 8px 2px",
-                    borderRadius: "10px",
-                  }}
-                  key={category.name}
-                >
-                  {category.name}
-                </span>
+                <>
+                  <span
+                    style={{
+                      backgroundColor: "#546DE5",
+                      color: "#FFFFFF",
+                      margin: "6px",
+                      padding: "0px 8px 2px",
+                      borderRadius: "10px",
+                    }}
+                    key={category.name}
+                  >
+                    {category.name.replace(" ", "\u00a0")}
+                  </span>
+                  {/* zero width space moment */}
+                  &#x200B;
+                </>
               ))}
+              &#x200B;
               {eligibilities?.map((eligibility) => (
-                <span
-                  style={{
-                    backgroundColor: "#58943A",
-                    color: "#FFFFFF",
-                    margin: "6px",
-                    padding: "0px 8px 2px",
-                    borderRadius: "10px",
-                  }}
-                  key={eligibility.name}
-                >
-                  {eligibility.name}
-                </span>
+                <>
+                  <span
+                    style={{
+                      backgroundColor: "#58943A",
+                      color: "#FFFFFF",
+                      margin: "6px",
+                      padding: "0px 8px 2px",
+                      borderRadius: "10px",
+                    }}
+                    key={eligibility.name}
+                  >
+                    {eligibility.name.replace(" ", "\u00a0")}
+                  </span>
+                  {/* zero width space moment */}
+                  &#x200B;
+                </>
               ))}
             </Box>
           </>
@@ -241,12 +294,19 @@ function OpportunityCard({
                   eligibilities: eligibility_names,
                 }}
               >
-                <Button sx={{ marginRight: "16px" }} variant="contained">
+                <Button
+                  sx={{ marginRight: "16px" }}
+                  variant="contained"
+                  onMouseEnter={() => setOnSubButton(true)}
+                  onMouseLeave={() => setOnSubButton(false)}
+                >
                   Edit
                 </Button>
               </DomLink>
               <Button
                 variant="contained"
+                onMouseEnter={() => setOnSubButton(true)}
+                onMouseLeave={() => setOnSubButton(false)}
                 onClick={() => {
                   setDelete(true);
                 }}
@@ -279,7 +339,7 @@ function OpportunityCard({
           onDelete();
         }}
       />
-    </a>
+    </div>
   );
 }
 

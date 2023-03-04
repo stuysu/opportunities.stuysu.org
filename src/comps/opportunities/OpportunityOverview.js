@@ -8,7 +8,6 @@ import { Button, ButtonGroup, Typography } from "@mui/material";
 import UserContext from "../context/UserContext";
 import toDateStringCustom from "../../util/toDateStringCustom.js";
 
-
 let dataStyles = {
   display: "flex",
   flexDirection: "row",
