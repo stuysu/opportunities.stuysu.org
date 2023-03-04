@@ -42,7 +42,10 @@ const responsive = (width) => {
   }
 };
 
-const smartSnippet = (texttocut, snippetmaxlength) => {
+const smartSnippet = (texttocut, snippetmaxlength, expanded) => {
+  if (expanded) {
+    return texttocut;
+  }
   let possiblecutoff = texttocut.indexOf(" ", snippetmaxlength - 15);
   return possiblecutoff === -1 || possiblecutoff > snippetmaxlength
     ? texttocut.substring(0, snippetmaxlength) + "..."
@@ -80,6 +83,7 @@ function OpportunityCard({
   const [snackbarOpen, setSnackbarOpen] = React.useState("");
   const [confirmDelete, setDelete] = React.useState(false);
   const [onSubButton, setOnSubButton] = React.useState(false);
+  const [expanded, setExpanded] = React.useState(false);
 
   const [deleteOpportunity] = useMutation(DELETE_MUTATION, {
     onCompleted(data) {
@@ -173,7 +177,8 @@ function OpportunityCard({
             <>
               {smartSnippet(
                 description,
-                responsive(window.innerWidth).cutoffchar
+                responsive(window.innerWidth).cutoffchar,
+                expanded
               )}
               <br />
             </>
@@ -181,6 +186,31 @@ function OpportunityCard({
             <>{description}</>
           )}
         </div>
+        {description.length > responsive(window.innerWidth).cutoffchar && (
+          <button
+            style={{
+              color: "#707070",
+              padding: "0px",
+              textAlign: "left",
+              border: "0",
+              backgroundColor: "transparent",
+              cursor: "pointer",
+              marginTop: "3px",
+            }}
+            onClick={() => setExpanded(!expanded)}
+            onMouseEnter={() => setOnSubButton(true)}
+            onMouseLeave={() => setOnSubButton(false)}
+          >
+            <Typography
+              sx={{
+                "&:hover": { textDecoration: "underline" },
+                fontSize: "14px",
+              }}
+            >
+              {expanded ? "Hide More" : "Read More"}
+            </Typography>
+          </button>
+        )}
         <div
           className={"flex flex-row justify-between"}
           sx={{ fontSize: "0.9rem" }}
@@ -206,41 +236,41 @@ function OpportunityCard({
             <Divider />
             <Box sx={{ paddingTop: "8px" }}>
               {categories?.map((category) => (
-				<>
-					<span
-					  style={{
-						backgroundColor: "#546DE5",
-						color: "#FFFFFF",
-						margin: "6px",
-						padding: "0px 8px 2px",
-						borderRadius: "10px",
-					  }}
-					  key={category.name}
-					>
-					  {category.name.replace(" ", "\u00a0")}
-					</span>
-					{/* zero width space moment */}
-					&#x200B;
-				</>
+                <>
+                  <span
+                    style={{
+                      backgroundColor: "#546DE5",
+                      color: "#FFFFFF",
+                      margin: "6px",
+                      padding: "0px 8px 2px",
+                      borderRadius: "10px",
+                    }}
+                    key={category.name}
+                  >
+                    {category.name.replace(" ", "\u00a0")}
+                  </span>
+                  {/* zero width space moment */}
+                  &#x200B;
+                </>
               ))}
-			  &#x200B;
+              &#x200B;
               {eligibilities?.map((eligibility) => (
-				<>
-					<span
-					  style={{
-						backgroundColor: "#58943A",
-						color: "#FFFFFF",
-						margin: "6px",
-						padding: "0px 8px 2px",
-						borderRadius: "10px",
-					  }}
-					  key={eligibility.name}
-					>
-					  {eligibility.name.replace(" ", "\u00a0")}
-					</span>
-					{/* zero width space moment */}
-					&#x200B;
-				</>
+                <>
+                  <span
+                    style={{
+                      backgroundColor: "#58943A",
+                      color: "#FFFFFF",
+                      margin: "6px",
+                      padding: "0px 8px 2px",
+                      borderRadius: "10px",
+                    }}
+                    key={eligibility.name}
+                  >
+                    {eligibility.name.replace(" ", "\u00a0")}
+                  </span>
+                  {/* zero width space moment */}
+                  &#x200B;
+                </>
               ))}
             </Box>
           </>
