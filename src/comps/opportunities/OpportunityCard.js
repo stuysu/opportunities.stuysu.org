@@ -206,32 +206,41 @@ function OpportunityCard({
             <Divider />
             <Box sx={{ paddingTop: "8px" }}>
               {categories?.map((category) => (
-                <span
-                  style={{
-                    backgroundColor: "#546DE5",
-                    color: "#FFFFFF",
-                    margin: "6px",
-                    padding: "0px 8px 2px",
-                    borderRadius: "10px",
-                  }}
-                  key={category.name}
-                >
-                  {category.name}
-                </span>
+				<>
+					<span
+					  style={{
+						backgroundColor: "#546DE5",
+						color: "#FFFFFF",
+						margin: "6px",
+						padding: "0px 8px 2px",
+						borderRadius: "10px",
+					  }}
+					  key={category.name}
+					>
+					  {category.name.replace(" ", "\u00a0")}
+					</span>
+					{/* zero width space moment */}
+					&#x200B;
+				</>
               ))}
+			  &#x200B;
               {eligibilities?.map((eligibility) => (
-                <span
-                  style={{
-                    backgroundColor: "#58943A",
-                    color: "#FFFFFF",
-                    margin: "6px",
-                    padding: "0px 8px 2px",
-                    borderRadius: "10px",
-                  }}
-                  key={eligibility.name}
-                >
-                  {eligibility.name}
-                </span>
+				<>
+					<span
+					  style={{
+						backgroundColor: "#58943A",
+						color: "#FFFFFF",
+						margin: "6px",
+						padding: "0px 8px 2px",
+						borderRadius: "10px",
+					  }}
+					  key={eligibility.name}
+					>
+					  {eligibility.name.replace(" ", "\u00a0")}
+					</span>
+					{/* zero width space moment */}
+					&#x200B;
+				</>
               ))}
             </Box>
           </>
