@@ -14,6 +14,7 @@ import {
   TextField,
   MenuItem,
   Typography,
+  FormControlLabel,
 } from "@mui/material";
 import { DatePicker, LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
@@ -43,6 +44,7 @@ const CREATE_MUTATION = gql`
     $cost: Int
     $appDeadline: Date
     $link: String
+    $archived: Boolean
   ) {
     createOpportunity(
       title: $title
@@ -54,6 +56,7 @@ const CREATE_MUTATION = gql`
       cost: $cost
       appDeadline: $appDeadline
       link: $link
+      archived: $archived
     ) {
       id
       title
@@ -74,6 +77,7 @@ const EDIT_MUTATION = gql`
     $cost: Int
     $appDeadline: Date
     $link: String
+    $archived: Boolean
   ) {
     editOpportunity(
       id: $id
@@ -86,6 +90,7 @@ const EDIT_MUTATION = gql`
       cost: $cost
       appDeadline: $appDeadline
       link: $link
+      archived: $archived
     ) {
       id
       title
@@ -125,6 +130,7 @@ const OpportunityForm = (opportunity = {}) => {
    * @property {string} date - Date of the opportunity in an arbitrary string
    * @property {string} appDeadline - Deadline of the app, non-flexible string in YYYY-MM-DD format for DB/sorting
    * @property {string} cost - Cost of the opportunity in an arbitrary string
+   * @property {boolean} archived - Wheter the opportunity is archived
    * @property {string} link - Link of the opportunity in an arbitrary string
    * @property {[ string ]} categories - Array of category names that the opportunity belongs to
    * @property {[ string ]} eligibilities - Array of eligibility names that the opportunity belongs to
@@ -138,6 +144,9 @@ const OpportunityForm = (opportunity = {}) => {
     (opportunity.appDeadline && moment(opportunity.appDeadline)) || null
   );
   const [cost, setCost] = React.useState(opportunity.cost || "");
+
+  const [archived, setArchived] = React.useState(opportunity.archived || false);
+
   const [location, setLocation] = React.useState(opportunity.location || "");
   const [link, setLink] = React.useState(opportunity.link || "");
   const [description, setDescription] = React.useState(
@@ -168,7 +177,6 @@ const OpportunityForm = (opportunity = {}) => {
     setEligibilities(value);
     console.log(eligibilities);
   };
-
   const resetForm = () => {
     // reset form state
     setId(undefined);
@@ -342,6 +350,14 @@ const OpportunityForm = (opportunity = {}) => {
                     </MenuItem>
                   ))}
                 </Select>
+              </FormControl>
+            </Grid>
+            <Grid style={{ height: "100%" }}>
+              <FormControl fullwidth sx={{ m: 1 }}>
+                <FormControlLabel
+                  control={<Checkbox checked={archived} onChange={(e) => setArchived(e.target.checked)} />}
+                  label="Archived"
+                />
               </FormControl>
             </Grid>
           </Grid>
