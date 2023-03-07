@@ -135,7 +135,7 @@ const OpportunityForm = (opportunity = {}) => {
   const [title, setTitle] = React.useState(opportunity.title || "");
   const [date, setDate] = React.useState(opportunity.date || "");
   const [appDeadline, setAppDeadline] = React.useState(
-    (opportunity.appDeadline && moment(opportunity.appDeadline)) || null
+    (opportunity.appDeadline && moment.utc(opportunity.appDeadline)) || null
   );
   const [cost, setCost] = React.useState(opportunity.cost || "");
   const [location, setLocation] = React.useState(opportunity.location || "");
