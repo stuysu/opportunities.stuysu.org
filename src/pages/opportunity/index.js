@@ -45,6 +45,7 @@ const Opportunity = ({ match, history }) => {
   const { data, loading, error } = useQuery(QUERY, {
     variables: { signedIn: user.signedIn, id: url, userId: user.id },
     client,
+    fetchPolicy: "network-only",
   });
 
   if (!user.signedIn) return <AuthenticationRequired />;
