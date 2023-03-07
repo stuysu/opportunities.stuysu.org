@@ -1,21 +1,7 @@
 import React from "react";
 import { Helmet } from "react-helmet";
-import { Typography, Link, List, ListItem } from "@mui/material";
+import { Typography, Link } from "@mui/material";
 
-/*
- *     Yuhao "Ben" Pan, SU IT Co-Director '22-'23, SU IT '21-'22
-    Chun Yeung "Frank" Wong, SU IT Co-Director '22-'23, SU IT '21-'22
-    William Vongphanith, SU IT Assistant Director '22-'23
-    David Chen, SU IT '21-'23
-    Gus Watkins, SU IT '21-'23
-    John Chandler III, SU IT '22-'23
-    Anthony Chen, SU IT '22-'23
-    Rahul Deb, SU IT '22-'23
-    Yuchen Pan, SU IT '22-'23
-    Naowal Rahman, SU IT '22-'23
-    Randy Sim, SU IT '22-'23
-    Vienna Tse, SU IT '22-'23
-  */
 let contributors = [
 	{
 		name: "Yuhao \"Ben\" Pan",
