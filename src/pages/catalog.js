@@ -6,6 +6,7 @@ import { gql, useQuery } from "@apollo/client";
 import { useLocation, useSearchParams } from "react-router-dom";
 import AuthenticationRequired from "../comps/auth/AuthenticationRequired";
 import UserContext from "../comps/context/UserContext";
+
 import {
   Checkbox,
   CircularProgress,
@@ -13,6 +14,7 @@ import {
   FormGroup,
   Grid,
   Input,
+  Chip
 } from "@mui/material";
 
 const ELIGIBILITY_QUERY = gql`
@@ -135,19 +137,35 @@ const Catalog = () => {
       <Helmet>
         <title>Catalog</title>
       </Helmet>
-      <Grid container spacing={2}>
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+      <Grid container spacing={2} className="relative">
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12} className="sticky">
           <Typography variant={"h1"}>Catalog</Typography>
         </Grid>
-        <Grid item xs={12} sm={12} md={3} lg={2} xl={2}>
-          <FormGroup>
+        <Grid item xs={12} sm={12} md={4} lg={3} xl={3}
+	   // contains all the filters, make sure this stays visible on scroll
+	  sx={{ position: "sticky", top: 0, height: "100vh", overflowY: "auto" }}
+	  >
+	  <b>Filters</b>
+          <FormGroup
+	    sx={{ display: "flex", flexDirection: "row", alignItems: "flex-start" }}
+	  >
             {allEligibilities.map((eligibility) => (
+	      /*
               <FormControlLabel
                 checked={eligibilities.indexOf(eligibility) > -1}
                 control={
                   <Checkbox onChange={() => toggleEligibility(eligibility)} />
                 }
                 label={eligibility}
+              />
+	      */
+	      // Render a chip instead of a checkbox, the chip can be toggled on/off
+	      <Chip
+		variant="outlined"
+		label={eligibility}
+		onClick={() => toggleEligibility(eligibility)}
+		color={eligibilities.indexOf(eligibility) > -1 ? "primary" : "default"}
+		sx={{width: "fit-content", margin: "0.2rem"}}
               />
             ))}
           </FormGroup>
@@ -182,7 +200,7 @@ const Catalog = () => {
             {/*</Button>*/}
           </Grid>
         </Grid>
-        <Grid item xs={12} sm={12} md={9} lg={10} xl={10}>
+        <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
           {searchParams && searchParams.get("q") ? (
             <Typography variant={"h2"}>
               Search Query: {searchParams.get("q")}
