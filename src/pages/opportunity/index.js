@@ -2,11 +2,10 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import OpportunityOverview from "../../comps/opportunities/OpportunityOverview";
 import { gql, useQuery } from "@apollo/client";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import AuthenticationRequired from "../../comps/auth/AuthenticationRequired";
 import UserContext from "../../comps/context/UserContext";
 import { client } from "../../comps/context/ApolloProvider";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 export const OppContext = React.createContext({});
 
@@ -48,8 +47,6 @@ const Opportunity = ({ match, history }) => {
     client,
   });
 
-  const navigate = useNavigate();
-
   if (!user.signedIn) return <AuthenticationRequired />;
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error :(</p>;
@@ -63,11 +60,6 @@ const Opportunity = ({ match, history }) => {
           <title>{opp.title}</title>
         </Helmet>
         <main>
-	  <ArrowBackIcon
-	    onClick={() => navigate("/catalog")}
-	    className={"opacity-50 hover:opacity-80"}
-	    style={{ fontSize: 40, cursor: "pointer", transition: "all 300ms" }}
-         />
           <OpportunityOverview
             opp={opp}
             savedStatus={data.isOpportunitySaved}
