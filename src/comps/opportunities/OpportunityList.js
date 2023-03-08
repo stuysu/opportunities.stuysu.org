@@ -22,6 +22,8 @@ const OpportunityList = (data) => {
   data.opportunities.opportunities = data.opportunities.opportunities.filter(
     (opportunity) => !deleted.includes(opportunity.id)
   );
+  console.log("DISPLAYING", data?.opportunities?.opportunities.length);
+  console.log(data?.opportunities?.opportunities.sort((a, b) => a.id > b.id))
 
   if (data?.opportunities?.opportunities.length) {
     return (
