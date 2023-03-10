@@ -6,6 +6,7 @@ import {gql, useQuery} from "@apollo/client";
 import { useSearchParams} from "react-router-dom";
 import AuthenticationRequired from "../comps/auth/AuthenticationRequired";
 import UserContext from "../comps/context/UserContext";
+import ThemeProvider from "../comps/context/ThemeProvider";
 
 import {
 	CircularProgress,
@@ -15,7 +16,8 @@ import {
 	Chip,
 	AppBar,
 	Toolbar,
-	Button
+	Button,
+	Box
 } from "@mui/material";
 
 const ELIGIBILITY_QUERY = gql`
@@ -182,6 +184,7 @@ const Catalog = () => {
 	}
 
 	let isMobile = () => {
+		if (!windowDimension) return false;
 		return windowDimension < 900;
 	}
 
@@ -235,8 +238,8 @@ const Catalog = () => {
 							))}
 						</FormGroup>
 						<b className={"block w-full mb-2"}>Other</b>
-						<Typography id="cost-slider">Max Cost</Typography>
-						<Grid container spacing={2} alignItems="center">
+						<Typography id="cost-slider" >Max Cost</Typography>
+						<Grid container spacing={2} alignItems="center" justifyContent="center">
 							{/*<Grid item xs={12} sm={8} md={8} lg={8} xl={8}>*/}
 							{/*  <Slider*/}
 							{/*    value={maxCost}*/}
@@ -271,7 +274,6 @@ const Catalog = () => {
 
 		const renderFilterDrop = () => {
 			return (
-			<AppBar position="static">
   				<Toolbar variant="dense">
 				  <Button
 					variant={"outlined"}
@@ -284,17 +286,20 @@ const Catalog = () => {
 					FILTERS
 				</Button>
   				</Toolbar>
-			</AppBar>
 			);
 		}	
 
 		return (
 			<Grid item xs={12} sm={12} md={4} lg={3} xl={3}
 						// contains all the filters, make sure this stays visible on scroll
-								sx={{position: "sticky", top: 0, height: "100vh", overflowY: "auto" }}
+								sx={{position: "sticky", top: 0, height: "auto", overflowY: "auto", zIndex: 100 }}
 					>
-				{isMobile() && renderFilterDrop()}
-				{((isMobile() && filterEnabled) || !isMobile()) && renderFilter()}
+					{ /* make sure to use theme for this? */}
+				<Box sx={{ padding: "20px" }} bgcolor="black">
+					{isMobile() && renderFilterDrop()}
+				
+					{((isMobile() && filterEnabled) || !isMobile()) && renderFilter()}
+				</Box>
 			</Grid>
 		);		
 	}
