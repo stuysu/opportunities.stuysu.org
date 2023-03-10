@@ -12,7 +12,10 @@ import {
 	FormGroup,
 	Grid,
 	Input,
-	Chip
+	Chip,
+	AppBar,
+	Toolbar,
+	Button
 } from "@mui/material";
 
 const ELIGIBILITY_QUERY = gql`
@@ -61,6 +64,10 @@ const QUERY = gql`
 `;
 
 const Catalog = () => {
+	const [windowDimension, setWindowDimension] = useState(null);
+	// only for mobile
+	const [filterEnabled, setFilterEnabled] = useState(false);
+
 	const user = useContext(UserContext);
 	const [maxCost, setMaxCost] = useState(10000);
 
@@ -146,6 +153,15 @@ const Catalog = () => {
 			setCategories(allCategories);
 		}
 	}, [categories, allCategories]);
+	/* MOBILE */
+	useEffect(() => {
+		function handleResize() {
+			setWindowDimension(window.innerWidth);
+		}
+	  
+		window.addEventListener("resize", handleResize);
+		return () => window.removeEventListener("resize", handleResize);
+	});
 
 	if (loading || user.loading || eligibilities_response.loading)
 		return <CircularProgress/>;
@@ -165,6 +181,124 @@ const Catalog = () => {
 		});
 	}
 
+	let isMobile = () => {
+		return windowDimension < 900;
+	}
+
+	let renderFilters = () => {
+		const renderFilter = () => {
+			return (
+				<React.Fragment>
+				<Typography variant={"h4"}>Filters</Typography>
+				<FormGroup
+							sx={{display: "flex", flexDirection: "row", alignItems: "flex-start" }}
+						>
+							<b className={"block w-full mb-2"}>Categories</b>
+							{allCategories.map((category) => (
+								/*
+											<FormControlLabel
+												checked={eligibilities.indexOf(eligibility) > -1}
+												control={
+													<Checkbox onChange={() => toggleEligibility(eligibility)} />
+												}
+												label={eligibility}
+											/>
+								*/
+								// Render a chip instead of a checkbox, the chip can be toggled on/off
+								<Chip
+									variant="outlined"
+									label={category}
+									onClick={() => toggleCategory(category)}
+									color={categories.indexOf(category) > -1 ? "primary" : "default"}
+									sx={{width: "fit-content", margin: "0.2rem"}}
+								/>
+							))}
+						  <b className={"block w-full mb-2"}>Eligibilities</b>
+							{allEligibilities.map((eligibility) => (
+								/*
+											<FormControlLabel
+												checked={eligibilities.indexOf(eligibility) > -1}
+												control={
+													<Checkbox onChange={() => toggleEligibility(eligibility)} />
+												}
+												label={eligibility}
+											/>
+								*/
+								// Render a chip instead of a checkbox, the chip can be toggled on/off
+								<Chip
+									variant="outlined"
+									label={eligibility}
+									onClick={() => toggleEligibility(eligibility)}
+									color={eligibilities.indexOf(eligibility) > -1 ? "primary" : "default"}
+									sx={{width: "fit-content", margin: "0.2rem"}}
+								/>
+							))}
+						</FormGroup>
+						<b className={"block w-full mb-2"}>Other</b>
+						<Typography id="cost-slider">Max Cost</Typography>
+						<Grid container spacing={2} alignItems="center">
+							{/*<Grid item xs={12} sm={8} md={8} lg={8} xl={8}>*/}
+							{/*  <Slider*/}
+							{/*    value={maxCost}*/}
+							{/*    min={0}*/}
+							{/*    max={10000}*/}
+							{/*    step={1000}*/}
+							{/*    valueLabelDisplay="auto"*/}
+							{/*    onChange={handleSliderChange}*/}
+							{/*    onChangeCommitted={handleSliderChangeCommitted}*/}
+							{/*  />*/}
+							{/*</Grid>*/}
+							<Grid item xs={12} sm={4} md={4} lg={4} xl={4}>
+								<Input
+									autoFocus
+									value={maxCost}
+									size="small"
+									onChange={handleInputChange}
+								/>
+							</Grid>
+							{/*<Button*/}
+							{/*  variant="contained"*/}
+							{/*  onClick={() => {*/}
+							{/*    query();*/}
+							{/*  }}*/}
+							{/*>*/}
+							{/*  Submit*/}
+							{/*</Button>*/}
+						</Grid>
+				</React.Fragment>
+			);
+		}
+
+		const renderFilterDrop = () => {
+			return (
+			<AppBar position="static">
+  				<Toolbar variant="dense">
+				  <Button
+					variant={"outlined"}
+					color={"primary"}
+					sx={{ my: 1 }}
+					onClick={() => {
+						setFilterEnabled(!filterEnabled);
+					}}
+					>
+					FILTERS
+				</Button>
+  				</Toolbar>
+			</AppBar>
+			);
+		}	
+
+		return (
+			<Grid item xs={12} sm={12} md={4} lg={3} xl={3}
+						// contains all the filters, make sure this stays visible on scroll
+								sx={{position: "sticky", top: 0, height: "100vh", overflowY: "auto" }}
+					>
+				{isMobile() && renderFilterDrop()}
+				{((isMobile() && filterEnabled) || !isMobile()) && renderFilter()}
+			</Grid>
+		);		
+	}
+
 	return (
 		<div>
 			<Helmet>
@@ -174,87 +308,7 @@ const Catalog = () => {
 				<Grid item xs={12} sm={12} md={12} lg={12} xl={12} className="sticky">
 					<Typography variant={"h1"}>Catalog</Typography>
 				</Grid>
-				<Grid item xs={12} sm={12} md={4} lg={3} xl={3}
-					// contains all the filters, make sure this stays visible on scroll
-							sx={{position: "sticky", top: 0, height: "100vh", overflowY: "auto"}}
-				>
-					<Typography variant={"h4"}>Filters</Typography>
-					<FormGroup
-						sx={{display: "flex", flexDirection: "row", alignItems: "flex-start"}}
-					>
-						<b className={"block w-full mb-2"}>Categories</b>
-						{allCategories.map((category) => (
-							/*
-										<FormControlLabel
-											checked={eligibilities.indexOf(eligibility) > -1}
-											control={
-												<Checkbox onChange={() => toggleEligibility(eligibility)} />
-											}
-											label={eligibility}
-										/>
-							*/
-							// Render a chip instead of a checkbox, the chip can be toggled on/off
-							<Chip
-								variant="outlined"
-								label={category}
-								onClick={() => toggleCategory(category)}
-								color={categories.indexOf(category) > -1 ? "primary" : "default"}
-								sx={{width: "fit-content", margin: "0.2rem"}}
-							/>
-						))}
-					  <b className={"block w-full mb-2"}>Eligibilities</b>
-						{allEligibilities.map((eligibility) => (
-							/*
-										<FormControlLabel
-											checked={eligibilities.indexOf(eligibility) > -1}
-											control={
-												<Checkbox onChange={() => toggleEligibility(eligibility)} />
-											}
-											label={eligibility}
-										/>
-							*/
-							// Render a chip instead of a checkbox, the chip can be toggled on/off
-							<Chip
-								variant="outlined"
-								label={eligibility}
-								onClick={() => toggleEligibility(eligibility)}
-								color={eligibilities.indexOf(eligibility) > -1 ? "primary" : "default"}
-								sx={{width: "fit-content", margin: "0.2rem"}}
-							/>
-						))}
-					</FormGroup>
-					<b className={"block w-full mb-2"}>Other</b>
-					<Typography id="cost-slider">Max Cost</Typography>
-					<Grid container spacing={2} alignItems="center">
-						{/*<Grid item xs={12} sm={8} md={8} lg={8} xl={8}>*/}
-						{/*  <Slider*/}
-						{/*    value={maxCost}*/}
-						{/*    min={0}*/}
-						{/*    max={10000}*/}
-						{/*    step={1000}*/}
-						{/*    valueLabelDisplay="auto"*/}
-						{/*    onChange={handleSliderChange}*/}
-						{/*    onChangeCommitted={handleSliderChangeCommitted}*/}
-						{/*  />*/}
-						{/*</Grid>*/}
-						<Grid item xs={12} sm={4} md={4} lg={4} xl={4}>
-							<Input
-								autoFocus
-								value={maxCost}
-								size="small"
-								onChange={handleInputChange}
-							/>
-						</Grid>
-						{/*<Button*/}
-						{/*  variant="contained"*/}
-						{/*  onClick={() => {*/}
-						{/*    query();*/}
-						{/*  }}*/}
-						{/*>*/}
-						{/*  Submit*/}
-						{/*</Button>*/}
-					</Grid>
-				</Grid>
+				{renderFilters()}
 				<Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
 					{searchParams && searchParams.get("q") ? (
 						<Typography variant={"h2"}>
