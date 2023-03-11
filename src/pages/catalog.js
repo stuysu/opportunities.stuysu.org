@@ -135,6 +135,9 @@ const Catalog = () => {
     : [];
   const [categories, setCategories] = React.useState(initialCategories);
 
+  const selectedGrades = eligibilities?.filter(eligibility => !eligibility.match(" "));
+  const selectedGroups = eligibilities?.filter(eligibility => eligibility.match(" "));
+
   const { data, loading, error } = useQuery(QUERY, {
     variables: {
       cost: maxCost,
@@ -148,7 +151,7 @@ const Catalog = () => {
 
   useEffect(() => {
     if (eligibilities === undefined) {
-      setEligibilities(allEligibilities);
+      setEligibilities([]); // default to nothing, shows everything
     }
   }, [eligibilities, allEligibilities]);
   useEffect(() => {
@@ -173,8 +176,9 @@ const Catalog = () => {
 
   // Filter by search parameter
   let filtered = data["opportunities"];
+  console.log("INITIAL", filtered);
   if (searchParams.get("q")) {
-    filtered = data["opportunities"].filter((opportunity) => {
+    filtered = filtered.filter((opportunity) => {
       for (const key of ["title", "description", "date", "location", "link"]) {
         if (opportunity[key]?.match(searchParams.get("q"))) {
           return opportunity;
@@ -183,6 +187,26 @@ const Catalog = () => {
       return null;
     });
   }
+
+  	// Filter by eligibility - grades required
+	filtered = filtered.map((opportunity) => {
+		return {
+			...opportunity,
+			groupEligibilities: opportunity.eligibilities.filter(
+				eligibility => selectedGroups.includes(eligibility.name)
+			),
+			gradeEligibilities: opportunity.eligibilities.filter(
+				eligibility => selectedGrades.includes(eligibility.name)
+			) || selectedGrades,  // for empty grade lists, imply all grades we want are valid
+		}
+	})
+	filtered = filtered.filter((opportunity) => {
+		// so long as we have an eligibility for each category we have selections in, we're golden
+		// we dont care to restrict if we dont have an explicit grade selection - this way people can discover more
+		return (!selectedGrades.length || opportunity.gradeEligibilities.length) &&
+			(!selectedGroups.length || opportunity.groupEligibilities.length)
+	});
+	console.log(filtered);
 
   let isMobile = () => {
     if (!windowDimension) return false;
