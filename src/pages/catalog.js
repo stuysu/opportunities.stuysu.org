@@ -9,6 +9,7 @@ import UserContext from "../comps/context/UserContext";
 
 import {
   CircularProgress,
+  Card,
   FormGroup,
   Grid,
   Input,
@@ -222,7 +223,9 @@ const Catalog = () => {
                 sx={{ width: "fit-content", margin: "0.2rem" }}
               />
             ))}
-            <b className={"block w-full mb-2"}>Eligibilities</b>
+            <Box sx={{ paddingTop: "6px", width: "100%", flexBasis: "100%" }}>
+              <b className={"block w-full mb-2"}>Eligibilities</b>
+            </Box>
             {allEligibilities.map((eligibility) => (
               /*
 											<FormControlLabel
@@ -247,7 +250,9 @@ const Catalog = () => {
               />
             ))}
           </FormGroup>
-          <b className={"block w-full mb-2"}>Other</b>
+          <Box sx={{ paddingTop: "6px", width: "100%", flexBasis: "100%" }}>
+            <b className={"block w-full mb-2"}>Other</b>
+          </Box>
           <Typography id="cost-slider">Max Cost</Typography>
           <Grid
             container
@@ -322,11 +327,11 @@ const Catalog = () => {
         }}
       >
         {/* make sure to use theme for this? */}
-        <Box sx={{ padding: "20px" }}>
+        <Card sx={{ padding: "20px" }}>
           {isMobile() && renderFilterDrop()}
 
           {((isMobile() && filterEnabled) || !isMobile()) && renderFilter()}
-        </Box>
+        </Card>
       </Grid>
     );
   };
