@@ -7,7 +7,17 @@ import { useSearchParams, useLocation } from "react-router-dom";
 import AuthenticationRequired from "../comps/auth/AuthenticationRequired";
 import UserContext from "../comps/context/UserContext";
 
-import { CircularProgress, FormGroup, Grid, Input, Chip } from "@mui/material";
+import {
+  CircularProgress,
+  Card,
+  FormGroup,
+  Grid,
+  Input,
+  Chip,
+  Toolbar,
+  Button,
+  Box,
+} from "@mui/material";
 
 const ELIGIBILITY_QUERY = gql`
   query Eligibilities {
@@ -55,6 +65,10 @@ const QUERY = gql`
 `;
 
 const Catalog = () => {
+  const [windowDimension, setWindowDimension] = useState(null);
+  // only for mobile
+  const [filterEnabled, setFilterEnabled] = useState(false);
+
   const user = useContext(UserContext);
   const [maxCost, setMaxCost] = useState(10000);
 
@@ -142,6 +156,15 @@ const Catalog = () => {
       setCategories(allCategories);
     }
   }, [categories, allCategories]);
+  /* MOBILE */
+  useEffect(() => {
+    function handleResize() {
+      setWindowDimension(window.innerWidth);
+    }
+
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  });
 
   if (loading || user.loading || eligibilities_response.loading)
     return <CircularProgress />;
@@ -161,30 +184,15 @@ const Catalog = () => {
     });
   }
 
-  return (
-    <div>
-      <Helmet>
-        <title>Catalog</title>
-      </Helmet>
-      <Grid container spacing={2} className="relative">
-        <Grid item xs={12} sm={12} md={12} lg={12} xl={12} className="sticky">
-          <Typography variant={"h1"}>Catalog</Typography>
-        </Grid>
-        <Grid
-          item
-          xs={12}
-          sm={12}
-          md={4}
-          lg={3}
-          xl={3}
-          // contains all the filters, make sure this stays visible on scroll
-          sx={{
-            position: "sticky",
-            top: 0,
-            height: "100vh",
-            overflowY: "auto",
-          }}
-        >
+  let isMobile = () => {
+    if (!windowDimension) return false;
+    return windowDimension < 900;
+  };
+
+  let renderFilters = () => {
+    const renderFilter = () => {
+      return (
+        <React.Fragment>
           <Typography variant={"h4"}>Filters</Typography>
           <FormGroup
             sx={{
@@ -196,14 +204,14 @@ const Catalog = () => {
             <b className={"block w-full mb-2"}>Categories</b>
             {allCategories.map((category) => (
               /*
-										<FormControlLabel
-											checked={eligibilities.indexOf(eligibility) > -1}
-											control={
-												<Checkbox onChange={() => toggleEligibility(eligibility)} />
-											}
-											label={eligibility}
-										/>
-							*/
+											<FormControlLabel
+												checked={eligibilities.indexOf(eligibility) > -1}
+												control={
+													<Checkbox onChange={() => toggleEligibility(eligibility)} />
+												}
+												label={eligibility}
+											/>
+								*/
               // Render a chip instead of a checkbox, the chip can be toggled on/off
               <Chip
                 variant="outlined"
@@ -215,17 +223,19 @@ const Catalog = () => {
                 sx={{ width: "fit-content", margin: "0.2rem" }}
               />
             ))}
-            <b className={"block w-full mb-2"}>Eligibilities</b>
+            <Box sx={{ paddingTop: "6px", width: "100%", flexBasis: "100%" }}>
+              <b className={"block w-full mb-2"}>Eligibilities</b>
+            </Box>
             {allEligibilities.map((eligibility) => (
               /*
-										<FormControlLabel
-											checked={eligibilities.indexOf(eligibility) > -1}
-											control={
-												<Checkbox onChange={() => toggleEligibility(eligibility)} />
-											}
-											label={eligibility}
-										/>
-							*/
+											<FormControlLabel
+												checked={eligibilities.indexOf(eligibility) > -1}
+												control={
+													<Checkbox onChange={() => toggleEligibility(eligibility)} />
+												}
+												label={eligibility}
+											/>
+								*/
               // Render a chip instead of a checkbox, the chip can be toggled on/off
               <Chip
                 variant="outlined"
@@ -240,9 +250,16 @@ const Catalog = () => {
               />
             ))}
           </FormGroup>
-          <b className={"block w-full mb-2"}>Other</b>
+          <Box sx={{ paddingTop: "6px", width: "100%", flexBasis: "100%" }}>
+            <b className={"block w-full mb-2"}>Other</b>
+          </Box>
           <Typography id="cost-slider">Max Cost</Typography>
-          <Grid container spacing={2} alignItems="center">
+          <Grid
+            container
+            spacing={2}
+            alignItems="center"
+            justifyContent="center"
+          >
             {/*<Grid item xs={12} sm={8} md={8} lg={8} xl={8}>*/}
             {/*  <Slider*/}
             {/*    value={maxCost}*/}
@@ -271,7 +288,64 @@ const Catalog = () => {
             {/*  Submit*/}
             {/*</Button>*/}
           </Grid>
+        </React.Fragment>
+      );
+    };
+
+    const renderFilterDrop = () => {
+      return (
+        <Toolbar variant="dense">
+          <Button
+            variant={"outlined"}
+            color={"primary"}
+            sx={{ my: 1 }}
+            onClick={() => {
+              setFilterEnabled(!filterEnabled);
+            }}
+          >
+            FILTERS
+          </Button>
+        </Toolbar>
+      );
+    };
+
+    return (
+      <Grid
+        item
+        xs={12}
+        sm={12}
+        md={4}
+        lg={3}
+        xl={3}
+        // contains all the filters, make sure this stays visible on scroll
+        sx={{
+          position: "sticky",
+          top: 0,
+          height: "auto",
+          overflowY: "auto",
+          zIndex: 100,
+        }}
+      >
+        {/* make sure to use theme for this? */}
+        <Card sx={{ padding: "5px" }}>
+          {isMobile() && renderFilterDrop()}
+
+          {((isMobile() && filterEnabled) || !isMobile()) && renderFilter()}
+        </Card>
+      </Grid>
+    );
+  };
+
+  return (
+    <div>
+      <Helmet>
+        <title>Catalog</title>
+      </Helmet>
+      <Grid container spacing={2} className="relative">
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12} className="sticky">
+          <Typography variant={"h1"}>Catalog</Typography>
         </Grid>
+        {renderFilters()}
         <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>
           {searchParams && searchParams.get("q") ? (
             <Typography variant={"h2"}>

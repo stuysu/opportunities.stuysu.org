@@ -2,11 +2,11 @@ import React from "react";
 import { Helmet } from "react-helmet";
 import OpportunityOverview from "../../comps/opportunities/OpportunityOverview";
 import { gql, useQuery } from "@apollo/client";
-import {useNavigate, useParams} from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import AuthenticationRequired from "../../comps/auth/AuthenticationRequired";
 import UserContext from "../../comps/context/UserContext";
 import { client } from "../../comps/context/ApolloProvider";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
 export const OppContext = React.createContext({});
 

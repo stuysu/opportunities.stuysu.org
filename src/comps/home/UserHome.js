@@ -62,7 +62,12 @@ const UserHome = () => {
         flexWrap="wrap"
       >
         {tags.map((tag) => (
-          <Box key={tag.id} component="span" paddingBottom="1%" className="px-2">
+          <Box
+            key={tag.id}
+            component="span"
+            paddingBottom="1%"
+            className="px-2"
+          >
             <Category
               id={tag.id}
               icon={<tag.icon fontSize="small" />}
