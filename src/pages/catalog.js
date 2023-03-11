@@ -327,7 +327,7 @@ const Catalog = () => {
         }}
       >
         {/* make sure to use theme for this? */}
-        <Card sx={{ padding: "20px" }}>
+        <Card sx={{ padding: "5px" }}>
           {isMobile() && renderFilterDrop()}
 
           {((isMobile() && filterEnabled) || !isMobile()) && renderFilter()}
