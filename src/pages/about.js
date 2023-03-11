@@ -3,54 +3,54 @@ import { Helmet } from "react-helmet";
 import { Typography, Link } from "@mui/material";
 
 let contributors = [
-	{
-		name: "Yuhao \"Ben\" Pan",
-		role: "SU IT Co-Director '22-'23, SU IT '21-'22",
-	},
-	{
-		name: "Chun Yeung \"Frank\" Wong",
-		role: "SU IT Co-Director '22-'23, SU IT '21-'22",
-	},
-	{
-		name: "William Vongphanith",
-		role: "SU IT Assistant Director '22-'23",
-	},
-	{
-		name: "David Chen",
-		role: "SU IT '21-'23",
-	},
-	{
-		name: "Gus Watkins",
-		role: "SU IT '21-'23",
-	},
-	{
-		name: "John Chandler III",
-		role: "SU IT '22-'23",
-	},
-	{
-		name: "Anthony Chen",
-		role: "SU IT '22-'23",
-	},
-	{
-		name: "Rahul Deb",
-		role: "SU IT '22-'23",
-	},
-	{
-		name: "Yuchen Pan",
-		role: "SU IT '22-'23",
-	},
-	{
-		name: "Naowal Rahman",
-		role: "SU IT '22-'23",
-	},
-	{
-		name: "Randy Sim",
-		role: "SU IT '22-'23",
-	},
-	{
-		name: "Vienna Tse",
-		role: "SU IT '22-'23",
-	},
+  {
+    name: 'Yuhao "Ben" Pan',
+    role: "SU IT Co-Director '22-'23, SU IT '21-'22",
+  },
+  {
+    name: 'Chun Yeung "Frank" Wong',
+    role: "SU IT Co-Director '22-'23, SU IT '21-'22",
+  },
+  {
+    name: "William Vongphanith",
+    role: "SU IT Assistant Director '22-'23",
+  },
+  {
+    name: "David Chen",
+    role: "SU IT '21-'23",
+  },
+  {
+    name: "Gus Watkins",
+    role: "SU IT '21-'23",
+  },
+  {
+    name: "John Chandler III",
+    role: "SU IT '22-'23",
+  },
+  {
+    name: "Anthony Chen",
+    role: "SU IT '22-'23",
+  },
+  {
+    name: "Rahul Deb",
+    role: "SU IT '22-'23",
+  },
+  {
+    name: "Yuchen Pan",
+    role: "SU IT '22-'23",
+  },
+  {
+    name: "Naowal Rahman",
+    role: "SU IT '22-'23",
+  },
+  {
+    name: "Randy Sim",
+    role: "SU IT '22-'23",
+  },
+  {
+    name: "Vienna Tse",
+    role: "SU IT '22-'23",
+  },
 ];
 
 const About = () => {
@@ -126,22 +126,19 @@ const About = () => {
           paragraph
           className={"text-center text-xl md:text-2xl lg:text-3xl block my-3"}
         >
-	  Stuyvesant Opportunities Bulletin would not be possible without the many contributors who've helped make it what it is today. Here are the people who've contributed to the project:
-	  <
-	    table
-	    className="table-auto w-full"
-	  >
-	    {contributors.map((contributor) => (
-	      <tr>
-		<td 
-		    className="text-left font-bold"
-		>{contributor.name}</td>
-		<td
-		    className="text-right"
-		><i>{contributor.role}</i></td>
-	      </tr>
-	    ))}
-	  </table>
+          Stuyvesant Opportunities Bulletin would not be possible without the
+          many contributors who've helped make it what it is today. Here are the
+          people who've contributed to the project:
+          <table className="table-auto w-full">
+            {contributors.map((contributor) => (
+              <tr>
+                <td className="text-left font-bold">{contributor.name}</td>
+                <td className="text-right">
+                  <i>{contributor.role}</i>
+                </td>
+              </tr>
+            ))}
+          </table>
         </Typography>
       </main>
     </div>

@@ -62,7 +62,7 @@ const OpportunityOverview = ({ opp, savedStatus }) => {
         color={"primary"}
         sx={{ my: 1 }}
         onClick={() => {
-          navigate('/catalog');
+          navigate("/catalog");
         }}
       >
         BACK TO CATALOG
