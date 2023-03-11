@@ -295,7 +295,7 @@ const Catalog = () => {
 								sx={{position: "sticky", top: 0, height: "auto", overflowY: "auto", zIndex: 100 }}
 					>
 					{ /* make sure to use theme for this? */}
-				<Box sx={{ padding: "20px" }} bgcolor="palette.background.default">
+				<Box sx={{ padding: "20px" }} bgcolor="background.default">
 					{isMobile() && renderFilterDrop()}
 				
 					{((isMobile() && filterEnabled) || !isMobile()) && renderFilter()}
