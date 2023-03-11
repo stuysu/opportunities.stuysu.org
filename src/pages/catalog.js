@@ -182,7 +182,9 @@ const Catalog = () => {
 	}
 
 	let isMobile = () => {
-		if (!windowDimension) return false;
+		if (!windowDimension) {
+			setWindowDimension(window.innerWidth);
+		}
 		return windowDimension < 900;
 	}
 
@@ -293,7 +295,7 @@ const Catalog = () => {
 								sx={{position: "sticky", top: 0, height: "auto", overflowY: "auto", zIndex: 100 }}
 					>
 					{ /* make sure to use theme for this? */}
-				<Box sx={{ padding: "20px" }} bgcolor="#121212">
+				<Box sx={{ padding: "20px" }} bgcolor="palette.background.default">
 					{isMobile() && renderFilterDrop()}
 				
 					{((isMobile() && filterEnabled) || !isMobile()) && renderFilter()}
