@@ -89,7 +89,7 @@ const Catalog = () => {
       newEligibilities.splice(eligibilityIndex, 1);
     }
     setEligibilitiesWrapper(newEligibilities);
-    console.log(newEligibilities);
+    //console.log(newEligibilities);
   };
 
   const toggleCategory = (category) => {
@@ -101,7 +101,7 @@ const Catalog = () => {
       newCategories.splice(categoryIndex, 1);
     }
     setCategoriesWrapper(newCategories);
-    console.log(newCategories);
+    //console.log(newCategories);
   };
 
   // TODO: Fix Slider and re-rendering issues
@@ -128,12 +128,12 @@ const Catalog = () => {
   const allCategories = categories_response?.data?.categories?.map(
     (a) => a.name
   );
-  const [eligibilities, setEligibilities] = React.useState(window.sessionStorage.getItem('eligibilities') ? JSON.parse(window.sessionStorage.getItem('eligibilities')) : allEligibilities);
+  const [eligibilities, setEligibilities] = React.useState(window.sessionStorage.getItem('eligibilities') === undefined ? JSON.parse(window.sessionStorage.getItem('eligibilities')) : allEligibilities);
 
   let initialCategories = location.state?.category
     ? [location.state?.category]
     : [];
-  const [categories, setCategories] = React.useState(window.sessionStorage.getItem('categories') ? JSON.parse(window.sessionStorage.getItem('categories')) : initialCategories);
+  const [categories, setCategories] = React.useState(window.sessionStorage.getItem('categories') === undefined ? JSON.parse(window.sessionStorage.getItem('categories')) : initialCategories);
 
   const setCategoriesWrapper = (categories) => {
 	  window.sessionStorage.setItem('categories', JSON.stringify(categories));
@@ -192,7 +192,7 @@ const Catalog = () => {
 
   // Filter by search parameter
   let filtered = data["opportunities"];
-  console.log("INITIAL", filtered);
+  //console.log("INITIAL", filtered);
   if (searchParams.get("q")) {
     filtered = filtered.filter((opportunity) => {
       for (const key of ["title", "description", "date", "location", "link"]) {
@@ -219,14 +219,14 @@ const Catalog = () => {
 			) || selectedGrades,  // for empty grade lists, imply all grades we want are valid
 		}
 	})
-	console.log(filtered)
+	//console.log(filtered)
 	filtered = filtered.filter((opportunity) => {
 		// so long as we have an eligibility for each category we have selections in, we're golden
 		// we dont care to restrict if we dont have an explicit grade selection - this way people can discover more
 		return (!selectedGrades.length || opportunity.gradeEligibilities.length) &&
 			(!opportunity.allGroupEligibilities.length || opportunity.groupEligibilities.length)
 	});
-	console.log(filtered);
+	//console.log(filtered);
 
   let isMobile = () => {
     if (!windowDimension) return false;
