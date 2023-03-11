@@ -6,7 +6,6 @@ import {gql, useQuery} from "@apollo/client";
 import { useSearchParams} from "react-router-dom";
 import AuthenticationRequired from "../comps/auth/AuthenticationRequired";
 import UserContext from "../comps/context/UserContext";
-import ThemeProvider from "../comps/context/ThemeProvider";
 
 import {
 	CircularProgress,
@@ -14,7 +13,6 @@ import {
 	Grid,
 	Input,
 	Chip,
-	AppBar,
 	Toolbar,
 	Button,
 	Box
@@ -274,7 +272,7 @@ const Catalog = () => {
 
 		const renderFilterDrop = () => {
 			return (
-  				<Toolbar variant="dense">
+  				<Toolbar>
 				  <Button
 					variant={"outlined"}
 					color={"primary"}
@@ -290,12 +288,12 @@ const Catalog = () => {
 		}	
 
 		return (
-			<Grid item xs={12} sm={12} md={4} lg={3} xl={3}
+			<Grid xs={12} sm={12} md={4} lg={3} xl={3}
 						// contains all the filters, make sure this stays visible on scroll
 								sx={{position: "sticky", top: 0, height: "auto", overflowY: "auto", zIndex: 100 }}
 					>
 					{ /* make sure to use theme for this? */}
-				<Box sx={{ padding: "20px" }} bgcolor="black">
+				<Box sx={{ padding: "20px" }} bgcolor="#121212">
 					{isMobile() && renderFilterDrop()}
 				
 					{((isMobile() && filterEnabled) || !isMobile()) && renderFilter()}
