@@ -128,37 +128,54 @@ const Catalog = () => {
   const allCategories = categories_response?.data?.categories?.map(
     (a) => a.name
   );
-  const [eligibilities, setEligibilities] = React.useState(window.sessionStorage.getItem('eligibilities') === undefined ? JSON.parse(window.sessionStorage.getItem('eligibilities')) : allEligibilities);
+  const [eligibilities, setEligibilities] = React.useState(
+    window.sessionStorage.getItem("eligibilities") === undefined
+      ? JSON.parse(window.sessionStorage.getItem("eligibilities"))
+      : allEligibilities
+  );
 
   let initialCategories = location.state?.category
     ? [location.state?.category]
     : [];
-  const [categories, setCategories] = React.useState(window.sessionStorage.getItem('categories') === undefined ? JSON.parse(window.sessionStorage.getItem('categories')) : initialCategories);
+  const [categories, setCategories] = React.useState(
+    window.sessionStorage.getItem("categories") === undefined
+      ? JSON.parse(window.sessionStorage.getItem("categories"))
+      : initialCategories
+  );
 
   const setCategoriesWrapper = (categories) => {
-	  window.sessionStorage.setItem('categories', JSON.stringify(categories));
-	  setCategories(categories);
+    window.sessionStorage.setItem("categories", JSON.stringify(categories));
+    setCategories(categories);
   };
 
   const setEligibilitiesWrapper = (eligibilities) => {
-	  window.sessionStorage.setItem('eligibilities', JSON.stringify(eligibilities));
-	  setEligibilities(eligibilities);
+    window.sessionStorage.setItem(
+      "eligibilities",
+      JSON.stringify(eligibilities)
+    );
+    setEligibilities(eligibilities);
   };
 
-/*
-	 * cursed way of distinguishing group and grade eligibilities - grades are 1 word, groups are multi-word, so we scan for a space
-	 * because graphQL/sequelize will only return the eligibilities we queried for, we can ignore all other eligibilities
-	*/
+  /*
+   * cursed way of distinguishing group and grade eligibilities - grades are 1 word, groups are multi-word, so we scan for a space
+   * because graphQL/sequelize will only return the eligibilities we queried for, we can ignore all other eligibilities
+   */
 
-  const selectedGrades = eligibilities?.filter(eligibility => !eligibility.match(" "));
-  const allGroups = allEligibilities?.filter(eligibility => eligibility.match(" "));
-  const selectedGroups = eligibilities?.filter(eligibility => eligibility.match(" "));
+  const selectedGrades = eligibilities?.filter(
+    (eligibility) => !eligibility.match(" ")
+  );
+  const allGroups = allEligibilities?.filter((eligibility) =>
+    eligibility.match(" ")
+  );
+  const selectedGroups = eligibilities?.filter((eligibility) =>
+    eligibility.match(" ")
+  );
 
   const { data, loading, error } = useQuery(QUERY, {
     variables: {
       cost: maxCost,
       categories: categories?.map((e) => allCategories?.indexOf(e) + 1),
-      eligibilities: eligibilities?.map(
+      eligibilities: allEligibilities?.map(
         (e) => allEligibilities?.indexOf(e) + 1
       ),
     },
@@ -204,29 +221,33 @@ const Catalog = () => {
     });
   }
 
-  	// Filter by eligibility - grades required
-	filtered = filtered.map((opportunity) => {
-		return {
-			...opportunity,
-			groupEligibilities: opportunity.eligibilities.filter(
-				eligibility => selectedGroups.includes(eligibility.name)
-			),
-			allGroupEligibilities: opportunity.eligibilities.filter(
-				eligibility => allGroups.includes(eligibility.name)
-			),
-			gradeEligibilities: opportunity.eligibilities.filter(
-				eligibility => selectedGrades.includes(eligibility.name)
-			) || selectedGrades,  // for empty grade lists, imply all grades we want are valid
-		}
-	})
-	//console.log(filtered)
-	filtered = filtered.filter((opportunity) => {
-		// so long as we have an eligibility for each category we have selections in, we're golden
-		// we dont care to restrict if we dont have an explicit grade selection - this way people can discover more
-		return (!selectedGrades.length || opportunity.gradeEligibilities.length) &&
-			(!opportunity.allGroupEligibilities.length || opportunity.groupEligibilities.length)
-	});
-	//console.log(filtered);
+  // Filter by eligibility - grades required
+  filtered = filtered.map((opportunity) => {
+    return {
+      ...opportunity,
+      groupEligibilities: opportunity.eligibilities.filter((eligibility) =>
+        selectedGroups.includes(eligibility.name)
+      ),
+      allGroupEligibilities: opportunity.eligibilities.filter((eligibility) =>
+        allGroups.includes(eligibility.name)
+      ),
+      gradeEligibilities:
+        opportunity.eligibilities.filter((eligibility) =>
+          selectedGrades.includes(eligibility.name)
+        ) || selectedGrades, // for empty grade lists, imply all grades we want are valid
+    };
+  });
+  //console.log(filtered)
+  filtered = filtered.filter((opportunity) => {
+    // so long as we have an eligibility for each category we have selections in, we're golden
+    // we dont care to restrict if we dont have an explicit grade selection - this way people can discover more
+    return (
+      (!selectedGrades.length || opportunity.gradeEligibilities.length) &&
+      (!opportunity.allGroupEligibilities.length ||
+        opportunity.groupEligibilities.length)
+    );
+  });
+  //console.log(filtered);
 
   let isMobile = () => {
     if (!windowDimension) return false;
