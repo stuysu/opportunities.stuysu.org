@@ -6,7 +6,6 @@ import { gql, useQuery } from "@apollo/client";
 import { useSearchParams, useLocation } from "react-router-dom";
 import AuthenticationRequired from "../comps/auth/AuthenticationRequired";
 import UserContext from "../comps/context/UserContext";
-import ThemeProvider from "../comps/context/ThemeProvider";
 
 import {
   CircularProgress,
@@ -14,7 +13,6 @@ import {
   Grid,
   Input,
   Chip,
-  AppBar,
   Toolbar,
   Button,
   Box,
