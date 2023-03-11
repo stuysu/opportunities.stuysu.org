@@ -88,7 +88,7 @@ const Catalog = () => {
     } else {
       newEligibilities.splice(eligibilityIndex, 1);
     }
-    setEligibilities(newEligibilities);
+    setEligibilitiesWrapper(newEligibilities);
     console.log(newEligibilities);
   };
 
@@ -100,7 +100,7 @@ const Catalog = () => {
     } else {
       newCategories.splice(categoryIndex, 1);
     }
-    setCategories(newCategories);
+    setCategoriesWrapper(newCategories);
     console.log(newCategories);
   };
 
@@ -128,12 +128,22 @@ const Catalog = () => {
   const allCategories = categories_response?.data?.categories?.map(
     (a) => a.name
   );
-  const [eligibilities, setEligibilities] = React.useState();
+  const [eligibilities, setEligibilities] = React.useState(window.sessionStorage.getItem('eligibilities') ? JSON.parse(window.sessionStorage.getItem('eligibilities')) : allEligibilities);
 
   let initialCategories = location.state?.category
     ? [location.state?.category]
     : [];
-  const [categories, setCategories] = React.useState(initialCategories);
+  const [categories, setCategories] = React.useState(window.sessionStorage.getItem('categories') ? JSON.parse(window.sessionStorage.getItem('categories')) : initialCategories);
+
+  const setCategoriesWrapper = (categories) => {
+	  window.sessionStorage.setItem('categories', JSON.stringify(categories));
+	  setCategories(categories);
+  };
+
+  const setEligibilitiesWrapper = (eligibilities) => {
+	  window.sessionStorage.setItem('eligibilities', JSON.stringify(eligibilities));
+	  setEligibilities(eligibilities);
+  };
 
 /*
 	 * cursed way of distinguishing group and grade eligibilities - grades are 1 word, groups are multi-word, so we scan for a space
@@ -157,12 +167,12 @@ const Catalog = () => {
 
   useEffect(() => {
     if (eligibilities === undefined) {
-      setEligibilities(allEligibilities);
+      setEligibilitiesWrapper(allEligibilities);
     }
   }, [eligibilities, allEligibilities]);
   useEffect(() => {
     if (categories === undefined || !categories.length) {
-      setCategories(allCategories);
+      setCategoriesWrapper(allCategories);
     }
   }, [categories, allCategories]);
   /* MOBILE */
