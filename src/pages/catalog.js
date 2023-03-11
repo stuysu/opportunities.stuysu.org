@@ -322,7 +322,7 @@ const Catalog = () => {
         }}
       >
         {/* make sure to use theme for this? */}
-        <Box sx={{ padding: "20px" }} bgcolor="black">
+        <Box sx={{ padding: "20px" }}>
           {isMobile() && renderFilterDrop()}
 
           {((isMobile() && filterEnabled) || !isMobile()) && renderFilter()}
