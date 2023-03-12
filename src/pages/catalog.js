@@ -147,9 +147,25 @@ const Catalog = () => {
     : [];
   const initialEligibilities = allGrades;
 
-  const [categories, setCategories] = React.useState(searchParams.get("q") ? allCategories : (
-    window.sessionStorage.getItem("categories") !== undefined && window.sessionStorage.getItem("categories") !== null && !initialCategories.length
-      ? JSON.parse(window.sessionStorage.getItem("categories"))
+  const getCachedCategories = () => {
+	  try {
+		  return JSON.parse(window.sessionStorage.getItem("categories"));
+	  } catch (e){
+		  return allCategories;
+	  }
+  }
+
+  const getCachedEligibilities = () => {
+	  try {
+		  return JSON.parse(window.sessionStorage.getItem("eligibilities"));
+	  } catch (e){
+		  return allGrades;
+	  }
+  }
+
+  const [categories, setCategories] = React.useState(searchParams.get("q") ? allCategories : (!initialCategories.length ? initialCategories :
+    window.sessionStorage.getItem("categories") !== undefined && window.sessionStorage.getItem("categories") !== null
+      ? getCachedCategories()
       : initialCategories
 	 )
   );
@@ -166,10 +182,21 @@ const Catalog = () => {
 
   const [eligibilities, setEligibilities] = React.useState(searchParams.get("q") ? allGrades : (
     window.sessionStorage.getItem("eligibilities") !== undefined && window.sessionStorage.getItem("eligibilities") !== null
-      ? JSON.parse(window.sessionStorage.getItem("eligibilities"))
+      ? getCachedEligibilities()
       : initialEligibilities
 	)
   );
+
+  //console.log("Categories:");
+  //console.log(categories);
+  //console.log("Eligibilities:");
+  //console.log(eligibilities);
+  //console.log("Init eligibilities:");
+  //console.log(initialEligibilities);
+  //console.log("All grades:");
+  //console.log(allGrades);
+  //console.log("All eligibilities:");
+  //console.log(allEligibilities);
 
   const selectedGrades = eligibilities?.filter(
     (eligibility) => !eligibility.match(" ")
