@@ -147,10 +147,11 @@ const Catalog = () => {
     : [];
   const initialEligibilities = allGrades;
 
-  const [categories, setCategories] = React.useState(searchParams.get("q") ? allCategories :
-    window.sessionStorage.getItem("categories") !== undefined && !initialCategories.length
+  const [categories, setCategories] = React.useState(searchParams.get("q") ? allCategories : (
+    window.sessionStorage.getItem("categories") !== undefined && window.sessionStorage.getItem("categories") !== null && !initialCategories.length
       ? JSON.parse(window.sessionStorage.getItem("categories"))
       : initialCategories
+	 )
   );
 
   //console.log("Categories:");
@@ -163,10 +164,11 @@ const Catalog = () => {
     setCategories(categories);
   };
 
-  const [eligibilities, setEligibilities] = React.useState(searchParams.get("q") ? allGrades :
-    window.sessionStorage.getItem("eligibilities") !== undefined
+  const [eligibilities, setEligibilities] = React.useState(searchParams.get("q") ? allGrades : (
+    window.sessionStorage.getItem("eligibilities") !== undefined && window.sessionStorage.getItem("eligibilities") !== null
       ? JSON.parse(window.sessionStorage.getItem("eligibilities"))
       : initialEligibilities
+	)
   );
 
   const selectedGrades = eligibilities?.filter(
