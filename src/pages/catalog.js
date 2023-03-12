@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import { Helmet } from "react-helmet";
 import OpportunityList from "../comps/opportunities/OpportunityList";
 import { gql, useQuery } from "@apollo/client";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import AuthenticationRequired from "../comps/auth/AuthenticationRequired";
 import UserContext from "../comps/context/UserContext";
 
@@ -67,6 +67,8 @@ const Catalog = () => {
   const [windowDimension, setWindowDimension] = useState(null);
   // only for mobile
   const [filterEnabled, setFilterEnabled] = useState(false);
+
+  let location = useLocation();
 
   const user = useContext(UserContext);
   const [maxCost, setMaxCost] = useState(10000);
@@ -140,8 +142,8 @@ const Catalog = () => {
     eligibility.match(" ")
   );
 
-  const initialCategories = window.location.state?.category
-    ? [window.location.state?.category]
+  const initialCategories = location.state?.category
+    ? [location.state?.category]
     : [];
   const initialEligibilities = allGrades;
 
