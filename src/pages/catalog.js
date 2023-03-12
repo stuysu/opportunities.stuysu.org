@@ -128,15 +128,25 @@ const Catalog = () => {
   const allCategories = categories_response?.data?.categories?.map(
     (a) => a.name
   );
-  const [eligibilities, setEligibilities] = React.useState(
-    window.sessionStorage.getItem("eligibilities") === undefined
-      ? JSON.parse(window.sessionStorage.getItem("eligibilities"))
-      : allEligibilities
+
+  /*
+   * cursed way of distinguishing group and grade eligibilities - grades are 1 word, groups are multi-word, so we scan for a space
+   * because graphQL/sequelize will only return the eligibilities we queried for, we can ignore all other eligibilities
+   */
+
+  const allGrades = allEligibilities?.filter(
+    (eligibility) => !eligibility.match(" ")
   );
 
-  let initialCategories = location.state?.category
+  const allGroups = allEligibilities?.filter((eligibility) =>
+    eligibility.match(" ")
+  );
+
+  const initialCategories = location.state?.category
     ? [location.state?.category]
     : [];
+  const initialEligibilities = allGrades;
+
   const [categories, setCategories] = React.useState(
     window.sessionStorage.getItem("categories") === undefined
       ? JSON.parse(window.sessionStorage.getItem("categories"))
@@ -148,6 +158,20 @@ const Catalog = () => {
     setCategories(categories);
   };
 
+  const [eligibilities, setEligibilities] = React.useState(
+    window.sessionStorage.getItem("eligibilities") === undefined
+      ? JSON.parse(window.sessionStorage.getItem("eligibilities"))
+      : initialEligibilities
+  );
+
+  const selectedGrades = eligibilities?.filter(
+    (eligibility) => !eligibility.match(" ")
+  );
+
+  const selectedGroups = eligibilities?.filter((eligibility) =>
+    eligibility.match(" ")
+  );
+
   const setEligibilitiesWrapper = (eligibilities) => {
     window.sessionStorage.setItem(
       "eligibilities",
@@ -155,21 +179,6 @@ const Catalog = () => {
     );
     setEligibilities(eligibilities);
   };
-
-  /*
-   * cursed way of distinguishing group and grade eligibilities - grades are 1 word, groups are multi-word, so we scan for a space
-   * because graphQL/sequelize will only return the eligibilities we queried for, we can ignore all other eligibilities
-   */
-
-  const selectedGrades = eligibilities?.filter(
-    (eligibility) => !eligibility.match(" ")
-  );
-  const allGroups = allEligibilities?.filter((eligibility) =>
-    eligibility.match(" ")
-  );
-  const selectedGroups = eligibilities?.filter((eligibility) =>
-    eligibility.match(" ")
-  );
 
   const { data, loading, error } = useQuery(QUERY, {
     variables: {
@@ -239,12 +248,11 @@ const Catalog = () => {
   });
   //console.log(filtered)
   filtered = filtered.filter((opportunity) => {
-    // so long as we have an eligibility for each category we have selections in, we're golden
-    // we dont care to restrict if we dont have an explicit grade selection - this way people can discover more
+    // If no grade or group is selected, then we include all opportunities regardless or grade / group
+    // Otherwise, restrict to only opportunities with user-selected grade / group
     return (
       (!selectedGrades.length || opportunity.gradeEligibilities.length) &&
-      (!opportunity.allGroupEligibilities.length ||
-        opportunity.groupEligibilities.length)
+      (!selectedGroups.length || opportunity.groupEligibilities.length)
     );
   });
   //console.log(filtered);
