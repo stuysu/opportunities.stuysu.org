@@ -148,26 +148,30 @@ const Catalog = () => {
   const initialEligibilities = allGrades;
 
   const getCachedCategories = () => {
-	  try {
-		  return JSON.parse(window.sessionStorage.getItem("categories"));
-	  } catch (e){
-		  return allCategories;
-	  }
-  }
+    try {
+      return JSON.parse(window.sessionStorage.getItem("categories"));
+    } catch (e) {
+      return allCategories;
+    }
+  };
 
   const getCachedEligibilities = () => {
-	  try {
-		  return JSON.parse(window.sessionStorage.getItem("eligibilities"));
-	  } catch (e){
-		  return allGrades;
-	  }
-  }
+    try {
+      return JSON.parse(window.sessionStorage.getItem("eligibilities"));
+    } catch (e) {
+      return allGrades;
+    }
+  };
 
-  const [categories, setCategories] = React.useState(searchParams.get("q") ? allCategories : (!initialCategories.length ? initialCategories :
-    window.sessionStorage.getItem("categories") !== undefined && window.sessionStorage.getItem("categories") !== null
+  const [categories, setCategories] = React.useState(
+    searchParams.get("q")
+      ? allCategories
+      : !initialCategories.length
+      ? initialCategories
+      : window.sessionStorage.getItem("categories") !== undefined &&
+        window.sessionStorage.getItem("categories") !== null
       ? getCachedCategories()
       : initialCategories
-	 )
   );
 
   //console.log("Categories:");
@@ -180,11 +184,13 @@ const Catalog = () => {
     setCategories(categories);
   };
 
-  const [eligibilities, setEligibilities] = React.useState(searchParams.get("q") ? allGrades : (
-    window.sessionStorage.getItem("eligibilities") !== undefined && window.sessionStorage.getItem("eligibilities") !== null
+  const [eligibilities, setEligibilities] = React.useState(
+    searchParams.get("q")
+      ? allGrades
+      : window.sessionStorage.getItem("eligibilities") !== undefined &&
+        window.sessionStorage.getItem("eligibilities") !== null
       ? getCachedEligibilities()
       : initialEligibilities
-	)
   );
 
   //console.log("Categories:");
@@ -229,15 +235,18 @@ const Catalog = () => {
     if (eligibilities === undefined || eligibilities === null) {
       setEligibilitiesWrapper(allGrades);
     } else {
-	  window.sessionStorage.setItem("eligibilities", JSON.stringify(eligibilities));
-	}
+      window.sessionStorage.setItem(
+        "eligibilities",
+        JSON.stringify(eligibilities)
+      );
+    }
   }, [eligibilities, allGrades]);
   useEffect(() => {
     if (categories === undefined || !categories.length || categories === null) {
       setCategoriesWrapper(allCategories);
     } else {
-	  window.sessionStorage.setItem("categories", JSON.stringify(categories));
-	}
+      window.sessionStorage.setItem("categories", JSON.stringify(categories));
+    }
   }, [categories, allCategories]);
   /* MOBILE */
   useEffect(() => {
@@ -303,8 +312,8 @@ const Catalog = () => {
   };
 
   const resetFiltersToDefault = () => {
-	  setEligibilitiesWrapper(allGrades);
-	  setCategoriesWrapper(allCategories);
+    setEligibilitiesWrapper(allGrades);
+    setCategoriesWrapper(allCategories);
   };
 
   let renderFilters = () => {
@@ -312,7 +321,12 @@ const Catalog = () => {
       return (
         <React.Fragment>
           <Typography variant={"h4"}>Filters</Typography>
-		  <Chip label="Reset All Filters to Default" onClick={() => resetFiltersToDefault()} color="primary" sx={{width: "fit-content", margin: "0.2rem 0.2rem 0.5rem"}}/>
+          <Chip
+            label="Reset All Filters to Default"
+            onClick={() => resetFiltersToDefault()}
+            color="primary"
+            sx={{ width: "fit-content", margin: "0.2rem 0.2rem 0.5rem" }}
+          />
           <FormGroup
             sx={{
               display: "flex",
