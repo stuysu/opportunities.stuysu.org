@@ -140,8 +140,8 @@ const Catalog = () => {
     eligibility.match(" ")
   );
 
-  const initialCategories = location.state?.category
-    ? [location.state?.category]
+  const initialCategories = window.location.state?.category
+    ? [window.location.state?.category]
     : [];
   const initialEligibilities = allGrades;
 
