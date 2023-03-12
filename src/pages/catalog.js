@@ -323,6 +323,21 @@ const Catalog = () => {
               />
             ))}
           </FormGroup>
+          <Typography
+            variant="body2"
+            sx={{ fontSize: "8px", paddingTop: "5px", paddingBottom: "5px" }}
+          >
+            Note: If you do not add a filter criteria for grades, or group-based
+            eligibilities respectively, it will give you all opportunities that
+            match your other criteria. <br />
+            In addition, if you filter for group-based eligibilities (eg. female
+            / non-binary), it will only show opportunities that select
+            specifically for people with those eligibilities (eg. being female
+            or non-binary). Therefore, if you want to see all opportunities you
+            are eligible to apply to, you need to run a second search without
+            the criteria, which will show opportunities that everyone can apply
+            to.
+          </Typography>
           <Box sx={{ paddingTop: "6px", width: "100%", flexBasis: "100%" }}>
             <b className={"block w-full mb-2"}>Other</b>
           </Box>
