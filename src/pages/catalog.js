@@ -193,7 +193,7 @@ const Catalog = () => {
 
   useEffect(() => {
     if (eligibilities === undefined) {
-      setEligibilitiesWrapper(allEligibilities);
+      setEligibilitiesWrapper(allGrades);
     }
   }, [eligibilities, allEligibilities]);
   useEffect(() => {
