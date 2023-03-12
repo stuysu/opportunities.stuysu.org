@@ -3,7 +3,7 @@ import Typography from "@mui/material/Typography";
 import { Helmet } from "react-helmet";
 import OpportunityList from "../comps/opportunities/OpportunityList";
 import { gql, useQuery } from "@apollo/client";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useLocation } from "react-router-dom";
 import AuthenticationRequired from "../comps/auth/AuthenticationRequired";
 import UserContext from "../comps/context/UserContext";
 
@@ -68,6 +68,8 @@ const Catalog = () => {
   // only for mobile
   const [filterEnabled, setFilterEnabled] = useState(false);
 
+  let location = useLocation();
+
   const user = useContext(UserContext);
   const [maxCost, setMaxCost] = useState(10000);
 
@@ -86,8 +88,8 @@ const Catalog = () => {
     } else {
       newEligibilities.splice(eligibilityIndex, 1);
     }
-    setEligibilities(newEligibilities);
-    console.log(newEligibilities);
+    setEligibilitiesWrapper(newEligibilities);
+    //console.log(newEligibilities);
   };
 
   const toggleCategory = (category) => {
@@ -98,8 +100,8 @@ const Catalog = () => {
     } else {
       newCategories.splice(categoryIndex, 1);
     }
-    setCategories(newCategories);
-    console.log(newCategories);
+    setCategoriesWrapper(newCategories);
+    //console.log(newCategories);
   };
 
   // TODO: Fix Slider and re-rendering issues
@@ -126,14 +128,63 @@ const Catalog = () => {
   const allCategories = categories_response?.data?.categories?.map(
     (a) => a.name
   );
-  const [eligibilities, setEligibilities] = React.useState();
-  const [categories, setCategories] = React.useState();
+
+  /*
+   * cursed way of distinguishing group and grade eligibilities - grades are 1 word, groups are multi-word, so we scan for a space
+   * because graphQL/sequelize will only return the eligibilities we queried for, we can ignore all other eligibilities
+   */
+
+  const allGrades = allEligibilities?.filter(
+    (eligibility) => !eligibility.match(" ")
+  );
+
+  const allGroups = allEligibilities?.filter((eligibility) =>
+    eligibility.match(" ")
+  );
+
+  const initialCategories = location.state?.category
+    ? [location.state?.category]
+    : [];
+  const initialEligibilities = allGrades;
+
+  const [categories, setCategories] = React.useState(
+    window.sessionStorage.getItem("categories") === undefined
+      ? JSON.parse(window.sessionStorage.getItem("categories"))
+      : initialCategories
+  );
+
+  const setCategoriesWrapper = (categories) => {
+    window.sessionStorage.setItem("categories", JSON.stringify(categories));
+    setCategories(categories);
+  };
+
+  const [eligibilities, setEligibilities] = React.useState(
+    window.sessionStorage.getItem("eligibilities") === undefined
+      ? JSON.parse(window.sessionStorage.getItem("eligibilities"))
+      : initialEligibilities
+  );
+
+  const selectedGrades = eligibilities?.filter(
+    (eligibility) => !eligibility.match(" ")
+  );
+
+  const selectedGroups = eligibilities?.filter((eligibility) =>
+    eligibility.match(" ")
+  );
+
+  const setEligibilitiesWrapper = (eligibilities) => {
+    window.sessionStorage.setItem(
+      "eligibilities",
+      JSON.stringify(eligibilities)
+    );
+    setEligibilities(eligibilities);
+  };
 
   const { data, loading, error } = useQuery(QUERY, {
     variables: {
       cost: maxCost,
       categories: categories?.map((e) => allCategories?.indexOf(e) + 1),
-      eligibilities: eligibilities?.map(
+      eligibilities: allEligibilities?.map(
         (e) => allEligibilities?.indexOf(e) + 1
       ),
     },
@@ -142,12 +193,12 @@ const Catalog = () => {
 
   useEffect(() => {
     if (eligibilities === undefined) {
-      setEligibilities(allEligibilities);
+      setEligibilitiesWrapper(allEligibilities);
     }
   }, [eligibilities, allEligibilities]);
   useEffect(() => {
-    if (categories === undefined) {
-      setCategories(allCategories);
+    if (categories === undefined || !categories.length) {
+      setCategoriesWrapper(allCategories);
     }
   }, [categories, allCategories]);
   /* MOBILE */
@@ -167,8 +218,9 @@ const Catalog = () => {
 
   // Filter by search parameter
   let filtered = data["opportunities"];
+  //console.log("INITIAL", filtered);
   if (searchParams.get("q")) {
-    filtered = data["opportunities"].filter((opportunity) => {
+    filtered = filtered.filter((opportunity) => {
       for (const key of ["title", "description", "date", "location", "link"]) {
         if (opportunity[key]?.match(searchParams.get("q"))) {
           return opportunity;
@@ -177,6 +229,33 @@ const Catalog = () => {
       return null;
     });
   }
+
+  // Filter by eligibility - grades required
+  filtered = filtered.map((opportunity) => {
+    return {
+      ...opportunity,
+      groupEligibilities: opportunity.eligibilities.filter((eligibility) =>
+        selectedGroups.includes(eligibility.name)
+      ),
+      allGroupEligibilities: opportunity.eligibilities.filter((eligibility) =>
+        allGroups.includes(eligibility.name)
+      ),
+      gradeEligibilities:
+        opportunity.eligibilities.filter((eligibility) =>
+          selectedGrades.includes(eligibility.name)
+        ) || selectedGrades, // for empty grade lists, imply all grades we want are valid
+    };
+  });
+  //console.log(filtered)
+  filtered = filtered.filter((opportunity) => {
+    // If no grade or group is selected, then we include all opportunities regardless or grade / group
+    // Otherwise, restrict to only opportunities with user-selected grade / group
+    return (
+      (!selectedGrades.length || opportunity.gradeEligibilities.length) &&
+      (!selectedGroups.length || opportunity.groupEligibilities.length)
+    );
+  });
+  //console.log(filtered);
 
   let isMobile = () => {
     if (!windowDimension) {
@@ -244,7 +323,24 @@ const Catalog = () => {
               />
             ))}
           </FormGroup>
-          <b className={"block w-full mb-2"}>Other</b>
+          <Typography
+            variant="body2"
+            sx={{ fontSize: "8px", paddingTop: "5px", paddingBottom: "5px" }}
+          >
+            Note: If you do not add a filter criteria for grades, or group-based
+            eligibilities respectively, it will give you all opportunities that
+            match your other criteria. <br />
+            In addition, if you filter for group-based eligibilities (eg. female
+            / non-binary), it will only show opportunities that select
+            specifically for people with those eligibilities (eg. being female
+            or non-binary). Therefore, if you want to see all opportunities you
+            are eligible to apply to, you need to run a second search without
+            the criteria, which will show opportunities that everyone can apply
+            to.
+          </Typography>
+          <Box sx={{ paddingTop: "6px", width: "100%", flexBasis: "100%" }}>
+            <b className={"block w-full mb-2"}>Other</b>
+          </Box>
           <Typography id="cost-slider">Max Cost</Typography>
           <Grid
             container
