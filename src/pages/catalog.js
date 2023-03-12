@@ -3,13 +3,12 @@ import Typography from "@mui/material/Typography";
 import { Helmet } from "react-helmet";
 import OpportunityList from "../comps/opportunities/OpportunityList";
 import { gql, useQuery } from "@apollo/client";
-import { useSearchParams, useLocation } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import AuthenticationRequired from "../comps/auth/AuthenticationRequired";
 import UserContext from "../comps/context/UserContext";
 
 import {
   CircularProgress,
-  Card,
   FormGroup,
   Grid,
   Input,
@@ -74,7 +73,6 @@ const Catalog = () => {
 
   // uses ? parameters as search params, targeting `q` as the search engine query key
   let [searchParams] = useSearchParams(); // TODO: filter data server-side in the GraphQL query
-  let location = useLocation();
 
   /**
    * Toggles eligibility
@@ -258,7 +256,9 @@ const Catalog = () => {
   //console.log(filtered);
 
   let isMobile = () => {
-    if (!windowDimension) return false;
+    if (!windowDimension) {
+      setWindowDimension(window.innerWidth);
+    }
     return windowDimension < 900;
   };
 
@@ -296,9 +296,7 @@ const Catalog = () => {
                 sx={{ width: "fit-content", margin: "0.2rem" }}
               />
             ))}
-            <Box sx={{ paddingTop: "6px", width: "100%", flexBasis: "100%" }}>
-              <b className={"block w-full mb-2"}>Eligibilities</b>
-            </Box>
+            <b className={"block w-full mb-2"}>Eligibilities</b>
             {allEligibilities.map((eligibility) => (
               /*
 											<FormControlLabel
@@ -382,7 +380,7 @@ const Catalog = () => {
 
     const renderFilterDrop = () => {
       return (
-        <Toolbar variant="dense">
+        <Toolbar>
           <Button
             variant={"outlined"}
             color={"primary"}
@@ -399,7 +397,6 @@ const Catalog = () => {
 
     return (
       <Grid
-        item
         xs={12}
         sm={12}
         md={4}
@@ -415,11 +412,11 @@ const Catalog = () => {
         }}
       >
         {/* make sure to use theme for this? */}
-        <Card sx={{ padding: "5px" }}>
+        <Box sx={{ padding: "20px" }} bgcolor="background.default">
           {isMobile() && renderFilterDrop()}
 
           {((isMobile() && filterEnabled) || !isMobile()) && renderFilter()}
-        </Card>
+        </Box>
       </Grid>
     );
   };
