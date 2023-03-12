@@ -147,23 +147,23 @@ const Catalog = () => {
     : [];
   const initialEligibilities = allGrades;
 
-  const [categories, setCategories] = React.useState(
+  const [categories, setCategories] = React.useState(searchParams.get("q") ? allCategories :
     window.sessionStorage.getItem("categories") !== undefined && !initialCategories.length
       ? JSON.parse(window.sessionStorage.getItem("categories"))
       : initialCategories
   );
 
-  console.log("Categories:");
-  console.log(categories);
-  console.log("Initial cateogires:");
-  console.log(initialCategories);
+  //console.log("Categories:");
+  //console.log(categories);
+  //console.log("Initial cateogires:");
+  //console.log(initialCategories);
 
   const setCategoriesWrapper = (categories) => {
     window.sessionStorage.setItem("categories", JSON.stringify(categories));
     setCategories(categories);
   };
 
-  const [eligibilities, setEligibilities] = React.useState(
+  const [eligibilities, setEligibilities] = React.useState(searchParams.get("q") ? allGrades :
     window.sessionStorage.getItem("eligibilities") !== undefined
       ? JSON.parse(window.sessionStorage.getItem("eligibilities"))
       : initialEligibilities
