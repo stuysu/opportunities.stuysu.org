@@ -166,7 +166,7 @@ const Catalog = () => {
   const [categories, setCategories] = React.useState(
     searchParams.get("q")
       ? allCategories
-      : !initialCategories.length
+      : initialCategories.length
       ? initialCategories
       : window.sessionStorage.getItem("categories") !== undefined &&
         window.sessionStorage.getItem("categories") !== null
