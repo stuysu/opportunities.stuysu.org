@@ -148,10 +148,15 @@ const Catalog = () => {
   const initialEligibilities = allGrades;
 
   const [categories, setCategories] = React.useState(
-    window.sessionStorage.getItem("categories") === undefined
+    window.sessionStorage.getItem("categories") !== undefined && !initialCategories.length
       ? JSON.parse(window.sessionStorage.getItem("categories"))
       : initialCategories
   );
+
+  console.log("Categories:");
+  console.log(categories);
+  console.log("Initial cateogires:");
+  console.log(initialCategories);
 
   const setCategoriesWrapper = (categories) => {
     window.sessionStorage.setItem("categories", JSON.stringify(categories));
@@ -159,7 +164,7 @@ const Catalog = () => {
   };
 
   const [eligibilities, setEligibilities] = React.useState(
-    window.sessionStorage.getItem("eligibilities") === undefined
+    window.sessionStorage.getItem("eligibilities") !== undefined
       ? JSON.parse(window.sessionStorage.getItem("eligibilities"))
       : initialEligibilities
   );
@@ -194,12 +199,16 @@ const Catalog = () => {
   useEffect(() => {
     if (eligibilities === undefined) {
       setEligibilitiesWrapper(allGrades);
-    }
+    } else {
+	  window.sessionStorage.setItem("eligibilities", JSON.stringify(eligibilities));
+	}
   }, [eligibilities, allGrades]);
   useEffect(() => {
     if (categories === undefined || !categories.length) {
       setCategoriesWrapper(allCategories);
-    }
+    } else {
+	  window.sessionStorage.setItem("categories", JSON.stringify(categories));
+	}
   }, [categories, allCategories]);
   /* MOBILE */
   useEffect(() => {
