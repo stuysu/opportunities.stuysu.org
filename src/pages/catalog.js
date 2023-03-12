@@ -273,11 +273,17 @@ const Catalog = () => {
     return windowDimension < 900;
   };
 
+  const resetFiltersToDefault = () => {
+	  setEligibilitiesWrapper(allGrades);
+	  setCategoriesWrapper(allCategories);
+  };
+
   let renderFilters = () => {
     const renderFilter = () => {
       return (
         <React.Fragment>
           <Typography variant={"h4"}>Filters</Typography>
+		  <Chip label="Reset All Filters to Default" onClick={() => resetFiltersToDefault()} color="primary" sx={{width: "fit-content", margin: "0.2rem 0.2rem 0.5rem"}}/>
           <FormGroup
             sx={{
               display: "flex",
