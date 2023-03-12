@@ -197,14 +197,14 @@ const Catalog = () => {
   });
 
   useEffect(() => {
-    if (eligibilities === undefined) {
+    if (eligibilities === undefined || eligibilities === null) {
       setEligibilitiesWrapper(allGrades);
     } else {
 	  window.sessionStorage.setItem("eligibilities", JSON.stringify(eligibilities));
 	}
   }, [eligibilities, allGrades]);
   useEffect(() => {
-    if (categories === undefined || !categories.length) {
+    if (categories === undefined || !categories.length || categories === null) {
       setCategoriesWrapper(allCategories);
     } else {
 	  window.sessionStorage.setItem("categories", JSON.stringify(categories));
