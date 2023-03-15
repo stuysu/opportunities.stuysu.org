@@ -18,6 +18,8 @@ import {
   Box,
 } from "@mui/material";
 
+import SearchBar from "../comps/home/SearchBar";
+
 const ELIGIBILITY_QUERY = gql`
   query Eligibilities {
     eligibilities {
@@ -193,17 +195,6 @@ const Catalog = () => {
       : initialEligibilities
   );
 
-  //console.log("Categories:");
-  //console.log(categories);
-  //console.log("Eligibilities:");
-  //console.log(eligibilities);
-  //console.log("Init eligibilities:");
-  //console.log(initialEligibilities);
-  //console.log("All grades:");
-  //console.log(allGrades);
-  //console.log("All eligibilities:");
-  //console.log(allEligibilities);
-
   const selectedGrades = eligibilities?.filter(
     (eligibility) => !eligibility.match(" ")
   );
@@ -336,16 +327,6 @@ const Catalog = () => {
           >
             <b className={"block w-full mb-2"}>Categories</b>
             {allCategories.map((category) => (
-              /*
-											<FormControlLabel
-												checked={eligibilities.indexOf(eligibility) > -1}
-												control={
-													<Checkbox onChange={() => toggleEligibility(eligibility)} />
-												}
-												label={eligibility}
-											/>
-								*/
-              // Render a chip instead of a checkbox, the chip can be toggled on/off
               <Chip
                 variant="outlined"
                 label={category}
@@ -358,16 +339,6 @@ const Catalog = () => {
             ))}
             <b className={"block w-full mb-2"}>Eligibilities</b>
             {allEligibilities.map((eligibility) => (
-              /*
-											<FormControlLabel
-												checked={eligibilities.indexOf(eligibility) > -1}
-												control={
-													<Checkbox onChange={() => toggleEligibility(eligibility)} />
-												}
-												label={eligibility}
-											/>
-								*/
-              // Render a chip instead of a checkbox, the chip can be toggled on/off
               <Chip
                 variant="outlined"
                 label={eligibility}
@@ -489,6 +460,9 @@ const Catalog = () => {
       <Grid container spacing={2} className="relative">
         <Grid item xs={12} sm={12} md={12} lg={12} xl={12} className="sticky">
           <Typography variant={"h1"}>Catalog</Typography>
+        </Grid>
+        <Grid item xs={12} sm={12} md={12} lg={12} xl={12}>
+          <SearchBar />
         </Grid>
         {renderFilters()}
         <Grid item xs={12} sm={12} md={8} lg={9} xl={9}>

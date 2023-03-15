@@ -65,7 +65,7 @@ const Opportunity = ({ match, history }) => {
         </Helmet>
         <main>
           <ArrowBackIcon
-            onClick={() => navigate("/catalog")}
+            onClick={() => navigate(-1)}
             className={"opacity-50 hover:opacity-80"}
             style={{ fontSize: 40, cursor: "pointer", transition: "all 300ms" }}
           />
