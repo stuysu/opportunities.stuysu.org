@@ -7,6 +7,7 @@ import { gql, useMutation } from "@apollo/client";
 import { Button, ButtonGroup, Typography } from "@mui/material";
 import UserContext from "../context/UserContext";
 import toDateStringCustom from "../../util/toDateStringCustom.js";
+import { useNavigate } from "react-router-dom";
 
 let dataStyles = {
   display: "flex",
@@ -33,8 +34,8 @@ const OpportunityOverview = ({ opp, savedStatus }) => {
   const [oppSaved, setOppSaved] = React.useState(savedStatus);
   const [saveOpportunity] = useMutation(SAVE_OPP_MUTATION, {
     onCompleted() {
-      alert("Opportunity saved successfully!");
       setOppSaved(true);
+      alert("Opportunity saved successfully!");
     },
     onError(error) {
       alert(error.message);
@@ -42,8 +43,8 @@ const OpportunityOverview = ({ opp, savedStatus }) => {
   });
   const [unsaveOpportunity] = useMutation(UNSAVE_OPP_MUTATION, {
     onCompleted() {
-      alert("Opportunity unsaved successfully!");
       setOppSaved(false);
+      alert("Opportunity unsaved successfully!");
     },
     onError(error) {
       alert(error.message);
@@ -52,8 +53,20 @@ const OpportunityOverview = ({ opp, savedStatus }) => {
   let appDeadline = opp.appDeadline;
   if (appDeadline) appDeadline = new Date(appDeadline);
 
+  const navigate = useNavigate();
+
   return (
     <div>
+      <Button
+        variant={"outlined"}
+        color={"primary"}
+        sx={{ my: 1 }}
+        onClick={() => {
+          navigate("/catalog");
+        }}
+      >
+        BACK TO CATALOG
+      </Button>
       <Typography variant={"h1"}>{opp.title}</Typography>
       <div className={"mb-4"}>
         {/* TODO: Fix bug where opp.categories is always null in GraphQL query */}

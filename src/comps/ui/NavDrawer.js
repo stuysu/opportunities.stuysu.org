@@ -1,6 +1,6 @@
 import React from "react";
 
-import ArchiveRoundedIcon from "@mui/icons-material/ArchiveRounded";
+// import ArchiveRoundedIcon from "@mui/icons-material/ArchiveRounded";
 import ArticleRoundedIcon from "@mui/icons-material/ArticleRounded";
 import AssignmentIndRoundedIcon from "@mui/icons-material/AssignmentIndRounded";
 import HomeRoundedIcon from "@mui/icons-material/HomeRounded";
@@ -55,12 +55,12 @@ const NavDrawer = ({ user }) => {
             icon={<AssignmentIndRoundedIcon />}
             updateOpen={updateOpen}
           />
-          <NavBarLink
-            label="Archives"
-            link="/archives"
-            icon={<ArchiveRoundedIcon />}
-            updateOpen={updateOpen}
-          />
+          {/*<NavBarLink*/}
+          {/*  label="Archives"*/}
+          {/*  link="/archives"*/}
+          {/*  icon={<ArchiveRoundedIcon />}*/}
+          {/*  updateOpen={updateOpen}*/}
+          {/*/>*/}
           {user?.isFaculty && (
             <NavBarLink
               label="Admin"

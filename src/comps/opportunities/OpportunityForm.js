@@ -141,7 +141,7 @@ const OpportunityForm = (opportunity = {}) => {
   const [title, setTitle] = React.useState(opportunity.title || "");
   const [date, setDate] = React.useState(opportunity.date || "");
   const [appDeadline, setAppDeadline] = React.useState(
-    (opportunity.appDeadline && moment(opportunity.appDeadline)) || null
+    (opportunity.appDeadline && moment.utc(opportunity.appDeadline)) || null
   );
   const [cost, setCost] = React.useState(opportunity.cost || "");
 
@@ -270,7 +270,8 @@ const OpportunityForm = (opportunity = {}) => {
                   Note: All deadlines are interpreted as 23:59:59 Eastern Time
                   of the provided date. Opportunities will be archived
                   automatically once this time has passed give-or-take a few
-                  minutes.
+                  minutes. The date 1970-01-01 is used to indicate opportunities
+                  with a rolling basis deadline.
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6} md={6} lg={6} xl={6}>
