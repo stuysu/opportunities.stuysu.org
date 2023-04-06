@@ -144,6 +144,19 @@ const Catalog = () => {
     eligibility.match(" ")
   );
 
+  const allowedModes = ["all", "active", "archived"];
+  // modes: `all`, `active`, `archived`
+  const [mode, setMode] = useState(window.sessionStorage.getItem("opportunityModes") in allowedModes ? window.sessionStorage.getItem("categories") : "all"); 
+
+  if(!window.sessionStorage.getItem("opportunityModes") in allowedModes){
+	  window.sessionStorage.setItem("opportunityModes", "all");
+  }
+
+  const setModeWrapper(newmode) = () => {
+	  window.sessionStorage.setItem("opportunityModes", newmode);
+	  setMode(newmode);
+  }
+
   const initialCategories = location.state?.category
     ? [location.state?.category]
     : [];
@@ -312,6 +325,14 @@ const Catalog = () => {
       return (
         <React.Fragment>
           <Typography variant={"h4"}>Filters</Typography>
+		  <div>
+			<Chip
+				label="Showing All Opportunities"
+				onClick={() => setMode("all")}
+				color={mode === "all" ? "primary" : "default"}
+				sx={{ width: "fit-content", margin: "0.2rem" }}
+			/>
+		  </div>
           <Chip
             label="Reset All Filters to Default"
             onClick={() => resetFiltersToDefault()}
