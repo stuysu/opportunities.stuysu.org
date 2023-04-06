@@ -7,8 +7,26 @@ import {
   useMediaQuery,
 } from "@mui/material";
 
+const ThemeContext = React.createContext({
+  toggleColorMode: () => {},
+  colorMode: false
+});
+
 const ThemeProvider = (props) => {
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)");
+  // dark mode detection/toggles/context may become obsolete in a new version of MUI with the <CssVarsProvider> component
+  // using a home-made solution for now since it's still marked experimental
+  const browserPreference = useMediaQuery("(prefers-color-scheme: dark)");
+  const [storedPreference, setStoredPreference] = React.useState(window.localStorage.getItem("mode"));
+  const prefersDarkMode = storedPreference !== null ? storedPreference === "dark" : browserPreference;
+  const toggle = React.useMemo(
+      () => () =>
+          setStoredPreference(() => {
+            const output = prefersDarkMode ? "light" : "dark";
+            window.localStorage.setItem("mode", output); // persist in localStorage
+            return output;
+          }),
+      [prefersDarkMode]
+  );
 
   const theme = React.useMemo(
     () =>
@@ -82,12 +100,15 @@ const ThemeProvider = (props) => {
     [prefersDarkMode]
   );
 
+  const value = { toggleColorMode: toggle, colorMode: prefersDarkMode };
   return (
-    <Provider theme={theme}>
-      <CssBaseline />
-      {props.children}
-    </Provider>
+    <ThemeContext.Provider value={value}>
+      <Provider theme={theme}>
+        <CssBaseline />
+        {props.children}
+      </Provider>
+    </ThemeContext.Provider>
   );
 };
 
-export default ThemeProvider;
+export { ThemeProvider, ThemeContext };
