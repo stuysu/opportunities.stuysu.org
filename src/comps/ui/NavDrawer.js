@@ -9,11 +9,14 @@ import MenuRoundedIcon from "@mui/icons-material/MenuRounded";
 import LogoutRoundedIcon from "@mui/icons-material/LogoutRounded";
 import AdminPanelSettingsIcon from "@mui/icons-material/AdminPanelSettings";
 
-import { Drawer, IconButton, List } from "@mui/material";
+import { Drawer, IconButton, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from "@mui/material";
 import NavBarLink from "./NavBarLink.js";
+import { Brightness4, Brightness7 } from "@mui/icons-material";
+import { ThemeContext } from "../context/ThemeProvider";
 
 const NavDrawer = ({ user }) => {
   const [open, updateOpen] = React.useState(false);
+  const theme = React.useContext(ThemeContext);
   return (
     <nav>
       <IconButton
@@ -82,6 +85,16 @@ const NavDrawer = ({ user }) => {
               />
             </>
           )}
+          <ListItem disablePadding={true}>
+            <ListItemButton
+              onClick={theme.toggleColorMode}
+            >
+              <ListItemIcon>
+                  { theme.colorMode === "light" ? <Brightness4 /> : <Brightness7 /> }
+              </ListItemIcon>
+              <ListItemText primary={`Toggle dark mode`} />
+            </ListItemButton>
+          </ListItem>
         </List>
       </Drawer>
     </nav>
