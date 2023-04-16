@@ -148,13 +148,13 @@ const Catalog = () => {
   // modes: `all`, `active`, `archived`
   const [mode, setMode] = useState(window.sessionStorage.getItem("opportunityModes") in allowedModes ? window.sessionStorage.getItem("categories") : "all"); 
 
-  if(!window.sessionStorage.getItem("opportunityModes") in allowedModes){
-	  window.sessionStorage.setItem("opportunityModes", "all");
+  if(!(window.sessionStorage.getItem("opportunityModes") in allowedModes)){
+	  window.sessionStorage.setItem("opportunityModes", mode);
   }
 
-  const setModeWrapper(newmode) = () => {
-	  window.sessionStorage.setItem("opportunityModes", newmode);
+  const setModeWrapper = (newmode) => {
 	  setMode(newmode);
+	  window.sessionStorage.setItem("opportunityModes", newmode);
   }
 
   const initialCategories = location.state?.category
@@ -326,9 +326,21 @@ const Catalog = () => {
         <React.Fragment>
           <Typography variant={"h4"}>Filters</Typography>
 		  <div>
+		    <Chip
+				label={mode === "active" ? "Showing ONLY Active Opportunities" : "Show ONLY Active Opportunities"}
+				onClick={() => setModeWrapper("active")}
+				color={mode === "active" ? "primary" : "default"}
+				sx={{ width: "fit-content", margin: "0.2rem" }}
+			/>
+		    <Chip
+				label={mode === "archived" ? "Showing ONLY Archived Opportunities" : "Show ONLY Archived Opportunities"}
+				onClick={() => setModeWrapper("archived")}
+				color={mode === "archived" ? "primary" : "default"}
+				sx={{ width: "fit-content", margin: "0.2rem" }}
+			/>
 			<Chip
-				label="Showing All Opportunities"
-				onClick={() => setMode("all")}
+				label={mode === "all" ? "Showing All Opportunities" : "Show All Opportunities"}
+				onClick={() => setModeWrapper("all")}
 				color={mode === "all" ? "primary" : "default"}
 				sx={{ width: "fit-content", margin: "0.2rem" }}
 			/>
