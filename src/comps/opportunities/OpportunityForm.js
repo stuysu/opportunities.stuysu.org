@@ -145,7 +145,7 @@ const OpportunityForm = (opportunity = {}) => {
   );
   const [cost, setCost] = React.useState(opportunity.cost || "");
 
-  console.log(opportunity);
+  //console.log(opportunity);
 
   const [archived, setArchived] = React.useState(opportunity.archived || false);
 
@@ -427,6 +427,7 @@ const OpportunityForm = (opportunity = {}) => {
                   (appDeadline && appDeadline.format("YYYY-MM-DD")) ||
                   "1970-01-01",
                 link,
+                archived,
               },
             });
           } else {
@@ -445,6 +446,7 @@ const OpportunityForm = (opportunity = {}) => {
                   (appDeadline && appDeadline.format("YYYY-MM-DD")) ||
                   "1970-01-01",
                 link,
+                archived,
               },
             });
           }
