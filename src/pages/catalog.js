@@ -37,11 +37,12 @@ const CATEGORY_QUERY = gql`
 `;
 
 const QUERY = gql`
-  query Opportunities($cost: Int, $categories: [Int], $eligibilities: [Int]) {
+  query Opportunities($cost: Int, $categories: [Int], $eligibilities: [Int], $archived: Boolean) {
     opportunities(
       cost: $cost
       categories: $categories
       eligibilities: $eligibilities
+	  archived: $archived
     ) {
       id
       title
@@ -231,6 +232,7 @@ const Catalog = () => {
       eligibilities: allEligibilities?.map(
         (e) => allEligibilities?.indexOf(e) + 1
       ),
+	  archived: mode === "archived" ? true : mode === "active" ? false : undefined,
     },
     skip: eligibilities_response.loading || !allEligibilities,
   });
