@@ -145,6 +145,8 @@ const OpportunityForm = (opportunity = {}) => {
   );
   const [cost, setCost] = React.useState(opportunity.cost || "");
 
+  console.log(opportunity);
+
   const [archived, setArchived] = React.useState(opportunity.archived || false);
 
   const [location, setLocation] = React.useState(opportunity.location || "");
@@ -356,7 +358,12 @@ const OpportunityForm = (opportunity = {}) => {
             <Grid style={{ height: "100%" }}>
               <FormControl fullwidth sx={{ m: 1 }}>
                 <FormControlLabel
-                  control={<Checkbox checked={archived} onChange={(e) => setArchived(e.target.checked)} />}
+                  control={
+                    <Checkbox
+                      checked={archived}
+                      onChange={(e) => setArchived(e.target.checked)}
+                    />
+                  }
                   label="Archived"
                 />
               </FormControl>

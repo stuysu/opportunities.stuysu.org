@@ -65,7 +65,7 @@ const smartSnippet = (texttocut, snippetmaxlength, expanded) => {
   eligibilities: [String], optional
   isAdmin: [Boolean], optional 
   onDelete: [Function], mandatory
-  isArchived: [Boolean], optional
+  archived: [Boolean], optional
 */
 function OpportunityCard({
   id,
@@ -292,6 +292,7 @@ function OpportunityCard({
                   cost,
                   location,
                   link,
+                  archived,
                   categories: category_names,
                   eligibilities: eligibility_names,
                 }}
