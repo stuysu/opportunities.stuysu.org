@@ -37,11 +37,17 @@ const CATEGORY_QUERY = gql`
 `;
 
 const QUERY = gql`
-  query Opportunities($cost: Int, $categories: [Int], $eligibilities: [Int]) {
+  query Opportunities(
+    $cost: Int
+    $categories: [Int]
+    $eligibilities: [Int]
+    $archived: Boolean
+  ) {
     opportunities(
       cost: $cost
       categories: $categories
       eligibilities: $eligibilities
+      archived: $archived
     ) {
       id
       title
@@ -145,6 +151,23 @@ const Catalog = () => {
     eligibility.match(" ")
   );
 
+  const allowedModes = ["all", "active", "archived"];
+  // modes: `all`, `active`, `archived`
+  const [mode, setMode] = useState(
+    window.sessionStorage.getItem("opportunityModes") in allowedModes
+      ? window.sessionStorage.getItem("categories")
+      : "all"
+  );
+
+  if (!(window.sessionStorage.getItem("opportunityModes") in allowedModes)) {
+    window.sessionStorage.setItem("opportunityModes", mode);
+  }
+
+  const setModeWrapper = (newmode) => {
+    setMode(newmode);
+    window.sessionStorage.setItem("opportunityModes", newmode);
+  };
+
   const initialCategories = location.state?.category
     ? [location.state?.category]
     : [];
@@ -219,6 +242,8 @@ const Catalog = () => {
       eligibilities: allEligibilities?.map(
         (e) => allEligibilities?.indexOf(e) + 1
       ),
+      archived:
+        mode === "archived" ? true : mode === "active" ? false : undefined,
     },
     skip: eligibilities_response.loading || !allEligibilities,
   });
@@ -315,6 +340,38 @@ const Catalog = () => {
       return (
         <React.Fragment>
           <Typography variant={"h4"}>Filters</Typography>
+          <div>
+            <Chip
+              label={
+                mode === "active"
+                  ? "Showing ONLY Active Opportunities"
+                  : "Show ONLY Active Opportunities"
+              }
+              onClick={() => setModeWrapper("active")}
+              color={mode === "active" ? "primary" : "default"}
+              sx={{ width: "fit-content", margin: "0.2rem" }}
+            />
+            <Chip
+              label={
+                mode === "archived"
+                  ? "Showing ONLY Archived Opportunities"
+                  : "Show ONLY Archived Opportunities"
+              }
+              onClick={() => setModeWrapper("archived")}
+              color={mode === "archived" ? "primary" : "default"}
+              sx={{ width: "fit-content", margin: "0.2rem" }}
+            />
+            <Chip
+              label={
+                mode === "all"
+                  ? "Showing All Opportunities"
+                  : "Show All Opportunities"
+              }
+              onClick={() => setModeWrapper("all")}
+              color={mode === "all" ? "primary" : "default"}
+              sx={{ width: "fit-content", margin: "0.2rem" }}
+            />
+          </div>
           <Chip
             label="Reset All Filters to Default"
             onClick={() => resetFiltersToDefault()}
