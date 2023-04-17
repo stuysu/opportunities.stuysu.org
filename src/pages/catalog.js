@@ -61,6 +61,7 @@ const QUERY = gql`
       cost
       appDeadline
       link
+      archived
     }
   }
 `;
@@ -221,6 +222,8 @@ const Catalog = () => {
     },
     skip: eligibilities_response.loading || !allEligibilities,
   });
+
+  //console.log(data);
 
   useEffect(() => {
     if (eligibilities === undefined || eligibilities === null) {

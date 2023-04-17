@@ -65,6 +65,7 @@ const smartSnippet = (texttocut, snippetmaxlength, expanded) => {
   eligibilities: [String], optional
   isAdmin: [Boolean], optional 
   onDelete: [Function], mandatory
+  archived: [Boolean], optional
 */
 function OpportunityCard({
   id,
@@ -79,6 +80,7 @@ function OpportunityCard({
   eligibilities,
   isAdmin,
   onDelete,
+  archived,
 }) {
   const [snackbarOpen, setSnackbarOpen] = React.useState("");
   const [confirmDelete, setDelete] = React.useState(false);
@@ -290,6 +292,7 @@ function OpportunityCard({
                   cost,
                   location,
                   link,
+                  archived,
                   categories: category_names,
                   eligibilities: eligibility_names,
                 }}

@@ -42,6 +42,7 @@ const OpportunityList = (data) => {
             categories={opportunity?.categories}
             eligibilities={opportunity?.eligibilities}
             isAdmin={user.signedIn && user.isFaculty}
+            archived={opportunity?.archived}
             onDelete={() => setDeleted([...deleted, opportunity.id])}
           />
         ))}
