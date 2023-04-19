@@ -81,6 +81,7 @@ const Catalog = () => {
 
   const user = useContext(UserContext);
   const [maxCost, setMaxCost] = useState(10000);
+  const [costInput, setCostInput] = useState(10000);
 
   // uses ? parameters as search params, targeting `q` as the search engine query key
   let [searchParams] = useSearchParams(); // TODO: filter data server-side in the GraphQL query
@@ -123,13 +124,17 @@ const Catalog = () => {
   // };
 
   const handleInputChange = (event) => {
+    setCostInput(event.target.value === "" ? 0 : Number(event.target.value));
+  };
+
+  const handleInputBlur = (event) => {
     setMaxCost(event.target.value === "" ? 0 : Number(event.target.value));
   };
 
   const handleKeyDownPress = (event) => {
     if (event.keyCode === 13) {
       // enter
-      handleInputChange(event);
+      handleInputBlur(event);
     }
   };
 
@@ -458,9 +463,10 @@ const Catalog = () => {
             <Grid item xs={12} sm={4} md={4} lg={4} xl={4}>
               <Input
                 autoFocus
-                value={maxCost}
+                value={costInput}
                 size="small"
-                onBlur={handleInputChange}
+				onChange={handleInputChange}
+                onBlur={handleInputBlur}
                 onKeyDown={handleKeyDownPress}
               />
             </Grid>
