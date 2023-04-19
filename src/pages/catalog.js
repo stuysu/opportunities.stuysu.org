@@ -126,6 +126,13 @@ const Catalog = () => {
     setMaxCost(event.target.value === "" ? 0 : Number(event.target.value));
   };
 
+  const handleKeyDownPress = (event) => {
+    if (event.keyCode === 13) {
+      // enter
+      handleInputChange(event);
+    }
+  };
+
   // Get array of eligibility names
   const eligibilities_response = useQuery(ELIGIBILITY_QUERY);
   const categories_response = useQuery(CATEGORY_QUERY);
@@ -453,7 +460,8 @@ const Catalog = () => {
                 autoFocus
                 value={maxCost}
                 size="small"
-                onChange={handleInputChange}
+                onBlur={handleInputChange}
+                onKeyDown={handleKeyDownPress}
               />
             </Grid>
             {/*<Button*/}
