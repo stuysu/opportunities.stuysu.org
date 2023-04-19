@@ -465,7 +465,7 @@ const Catalog = () => {
                 autoFocus
                 value={costInput}
                 size="small"
-				onChange={handleInputChange}
+                onChange={handleInputChange}
                 onBlur={handleInputBlur}
                 onKeyDown={handleKeyDownPress}
               />
