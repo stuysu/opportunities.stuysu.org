@@ -18,7 +18,7 @@ const SearchBar = () => {
       autoFocus={true}
       onChange={(event) => setSearch(event.target.value)}
       onKeyDown={(event) => {
-        if (event.code === "Enter") navigate(`/catalog?q=${search}`);
+        if (event.key === "Enter") navigate(`/catalog?q=${search}`);
       }}
       InputProps={{
         endAdornment: (
