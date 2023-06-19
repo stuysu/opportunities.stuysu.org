@@ -60,15 +60,20 @@ const Home = () => {
               className={"text-center md:text-left inline-block"}
               style={textBlockStyles}
             >
-              If you're an organization or business looking to advertise opportunities for Stuyvesant students,
-              fill out this <Link href={"https://forms.gle/FnXCKhnEmKHepwqU7"}>submission form</Link>.
+              If you're an organization or business looking to advertise
+              opportunities for Stuyvesant students, fill out this{" "}
+              <Link href={"https://forms.gle/FnXCKhnEmKHepwqU7"}>
+                submission form
+              </Link>
+              .
             </Typography>
             <Typography
               variant={"p"}
               className={"text-center md:text-left inline-block"}
               style={textBlockStyles}
             >
-              Contact the <Link href={"mailto:it@stuysu.org"}>IT team</Link> if you have any questions, concerns, or suggestions.
+              Contact the <Link href={"mailto:it@stuysu.org"}>IT team</Link> if
+              you have any questions, concerns, or suggestions.
             </Typography>
           </Grid>
         </Grid>
