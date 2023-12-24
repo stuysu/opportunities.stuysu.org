@@ -4,8 +4,7 @@ import { gql, useMutation } from "@apollo/client";
 
 import { GOOGLE_LOGIN_CLIENT_ID } from "../../constants";
 
-import { CircularProgress } from "@mui/material";
-
+import { CircularProgress, Typography } from "@mui/material";
 //import UserContext from "../context/UserContext";
 
 const LOGIN_WITH_GOOGLE = gql`
@@ -17,7 +16,7 @@ const LOGIN_WITH_GOOGLE = gql`
 const GoogleLoginButton = () => {
   //const user = useContext(UserContext);
   const ref = useRef(null);
-  const [loginWithGoogle, { loading }] = useMutation(LOGIN_WITH_GOOGLE);
+  const [loginWithGoogle, { loading, error }] = useMutation(LOGIN_WITH_GOOGLE);
   const [loadedGoogleScript, setLoadedGoogleScript] = useState("loading");
   const [initializedGoogleScript, setInitializedGoogleScript] = useState(false);
   const attemptLogin = React.useCallback(
@@ -68,11 +67,28 @@ const GoogleLoginButton = () => {
     }
   });
   return (
-    <div style={{ display: "flex", justifyContent: "center" }}>
+    <div
+      style={{
+        display: "flex",
+        width: "100%",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       {loading || !initializedGoogleScript ? (
         <CircularProgress />
       ) : (
-        <div ref={ref} />
+        <>
+          <div ref={ref} />
+          {error ? (
+            <Typography color="primary" paragraph>
+              {error.message}
+            </Typography>
+          ) : (
+            <></>
+          )}
+        </>
       )}
     </div>
   );
