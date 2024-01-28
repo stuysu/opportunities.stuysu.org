@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import Typography from "@mui/material/Typography";
 import { Helmet } from "react-helmet";
 import OpportunityList from "../comps/opportunities/OpportunityList";
-import { gql, useQuery, NetworkStatus } from "@apollo/client";
+import { gql, useQuery } from "@apollo/client";
 import { useSearchParams, useLocation } from "react-router-dom";
 import AuthenticationRequired from "../comps/auth/AuthenticationRequired";
 import UserContext from "../comps/context/UserContext";
@@ -243,7 +243,7 @@ const Catalog = () => {
     setEligibilities(eligibilities);
   };
 
-  const { data, loading, error, refetch, networkStatus } = useQuery(QUERY, {
+  const { data, loading, error, refetch } = useQuery(QUERY, {
     variables: {
       cost: maxCost,
       categories: categories?.map((e) => allCategories?.indexOf(e) + 1),
