@@ -214,6 +214,7 @@ const Catalog = () => {
 
   const setCategoriesWrapper = (categories) => {
     window.sessionStorage.setItem("categories", JSON.stringify(categories));
+    setOpportunities([]);
     setCategories(categories);
   };
 
