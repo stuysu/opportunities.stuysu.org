@@ -12,6 +12,8 @@ import {
   FormGroup,
   Grid,
   Input,
+  FormControlLabel,
+  Checkbox,
   Chip,
   Toolbar,
   Button,
@@ -136,11 +138,12 @@ const Catalog = () => {
   const eligibilities_response = useQuery(ELIGIBILITY_QUERY);
   const categories_response = useQuery(CATEGORY_QUERY);
 
+  const dummy = [];
   const allEligibilities =
-    eligibilities_response?.data?.eligibilities?.map((a) => a.name) || [];
+    eligibilities_response?.data?.eligibilities?.map((a) => a.name) || dummy;
 
   const allCategories =
-    categories_response?.data?.categories?.map((a) => a.name) || [];
+    categories_response?.data?.categories?.map((a) => a.name) || dummy;
 
   /*
    * cursed way of distinguishing group and grade eligibilities - grades are 1 word, groups are multi-word, so we scan for a space
@@ -332,8 +335,9 @@ const Catalog = () => {
   let filtered = opportunities;
   if (searchParams.get("q")) {
     filtered = filtered.filter((opportunity) => {
+      const pattern = new RegExp(searchParams.get("q"), "uig");
       for (const key of ["title", "description", "date", "location", "link"]) {
-        if (opportunity[key]?.match(searchParams.get("q"))) {
+        if (opportunity[key]?.match(pattern)) {
           return opportunity;
         }
       }
@@ -430,34 +434,32 @@ const Catalog = () => {
           >
             <b className={"block w-full mb-2"}>Categories</b>
             {allCategories.map((category) => (
-              <Chip
-                variant="outlined"
+              <FormControlLabel
                 label={category}
-                onClick={() => toggleCategory(category)}
-                color={
-                  categories.indexOf(category) > -1 ? "primary" : "default"
+                control={
+                  <Checkbox
+                    onClick={() => toggleCategory(category)}
+                    checked={categories.indexOf(category) > -1}
+                  />
                 }
-                sx={{ width: "fit-content", margin: "0.2rem" }}
               />
             ))}
             <b className={"block w-full mb-2"}>Eligibilities</b>
             {allEligibilities.map((eligibility) => (
-              <Chip
-                variant="outlined"
+              <FormControlLabel
                 label={eligibility}
-                onClick={() => toggleEligibility(eligibility)}
-                color={
-                  eligibilities.indexOf(eligibility) > -1
-                    ? "primary"
-                    : "default"
+                control={
+                  <Checkbox
+                    onClick={() => toggleEligibility(eligibility)}
+                    checked={eligibilities.indexOf(eligibility) > -1}
+                  />
                 }
-                sx={{ width: "fit-content", margin: "0.2rem" }}
               />
             ))}
           </FormGroup>
           <Typography
             variant="body2"
-            sx={{ fontSize: "8px", paddingTop: "5px", paddingBottom: "5px" }}
+            sx={{ fontSize: "10px", paddingTop: "5px", paddingBottom: "5px" }}
           >
             Note: If you do not add a filter criteria for grades, or group-based
             eligibilities respectively, it will give you all opportunities that
