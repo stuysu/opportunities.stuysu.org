@@ -1,8 +1,8 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Typography from "@mui/material/Typography";
 import { Helmet } from "react-helmet";
 import OpportunityList from "../comps/opportunities/OpportunityList";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery, NetworkStatus } from "@apollo/client";
 import { useSearchParams, useLocation } from "react-router-dom";
 import AuthenticationRequired from "../comps/auth/AuthenticationRequired";
 import UserContext from "../comps/context/UserContext";
@@ -42,12 +42,16 @@ const QUERY = gql`
     $categories: [Int]
     $eligibilities: [Int]
     $archived: Boolean
+    $offset: Int
+    $limit: Int
   ) {
     opportunities(
       cost: $cost
       categories: $categories
       eligibilities: $eligibilities
       archived: $archived
+      offset: $offset
+      limit: $limit
     ) {
       id
       title
@@ -76,6 +80,8 @@ const Catalog = () => {
   const [windowDimension, setWindowDimension] = useState(null);
   // only for mobile
   const [filterEnabled, setFilterEnabled] = useState(false);
+  const [opportunities, setOpportunities] = useState([]);
+  const [atEnd, setAtEnd] = useState(false);
 
   let location = useLocation();
 
@@ -84,6 +90,8 @@ const Catalog = () => {
 
   // uses ? parameters as search params, targeting `q` as the search engine query key
   let [searchParams] = useSearchParams(); // TODO: filter data server-side in the GraphQL query
+
+  const lastRef = useRef(null);
 
   /**
    * Toggles eligibility
@@ -98,7 +106,6 @@ const Catalog = () => {
       newEligibilities.splice(eligibilityIndex, 1);
     }
     setEligibilitiesWrapper(newEligibilities);
-    //console.log(newEligibilities);
   };
 
   const toggleCategory = (category) => {
@@ -110,7 +117,6 @@ const Catalog = () => {
       newCategories.splice(categoryIndex, 1);
     }
     setCategoriesWrapper(newCategories);
-    //console.log(newCategories);
   };
 
   // TODO: Fix Slider and re-rendering issues
@@ -130,13 +136,11 @@ const Catalog = () => {
   const eligibilities_response = useQuery(ELIGIBILITY_QUERY);
   const categories_response = useQuery(CATEGORY_QUERY);
 
-  const allEligibilities = eligibilities_response?.data?.eligibilities?.map(
-    (a) => a.name
-  );
+  const allEligibilities =
+    eligibilities_response?.data?.eligibilities?.map((a) => a.name) || [];
 
-  const allCategories = categories_response?.data?.categories?.map(
-    (a) => a.name
-  );
+  const allCategories =
+    categories_response?.data?.categories?.map((a) => a.name) || [];
 
   /*
    * cursed way of distinguishing group and grade eligibilities - grades are 1 word, groups are multi-word, so we scan for a space
@@ -235,7 +239,7 @@ const Catalog = () => {
     setEligibilities(eligibilities);
   };
 
-  const { data, loading, error } = useQuery(QUERY, {
+  const { data, loading, error, refetch, networkStatus } = useQuery(QUERY, {
     variables: {
       cost: maxCost,
       categories: categories?.map((e) => allCategories?.indexOf(e) + 1),
@@ -244,11 +248,53 @@ const Catalog = () => {
       ),
       archived:
         mode === "archived" ? true : mode === "active" ? false : undefined,
+      limit: 20,
+      offset: 0,
     },
+    notifyOnNetworkStatusChange: true,
     skip: eligibilities_response.loading || !allEligibilities,
   });
+  if (!loading && !atEnd && data?.opportunities?.length === 0) setAtEnd(true);
 
-  //console.log(data);
+  useEffect(() => {
+    if (!loading && !atEnd && lastRef && lastRef.current) {
+      const options = {
+        threshold: 0.3,
+      };
+
+      const callback = (entries) => {
+        if (entries[0].isIntersecting) {
+          refetch({
+            offset: opportunities.length,
+          });
+        }
+      };
+
+      const observer = new IntersectionObserver(callback, options);
+      observer.observe(lastRef.current);
+
+      return () => observer.disconnect();
+    }
+  });
+
+  useEffect(() => {
+    if (data?.opportunities) {
+      const length = opportunities.length;
+      const newOpportunities = Array.from(opportunities);
+      for (let opp in data.opportunities) {
+        if (
+          !opportunities.find(
+            (element) => element.id === data.opportunities[opp].id
+          )
+        ) {
+          newOpportunities.push(data.opportunities[opp]);
+        }
+      }
+      if (newOpportunities.length !== length) {
+        setOpportunities(newOpportunities);
+      }
+    }
+  }, [data, opportunities]);
 
   useEffect(() => {
     if (eligibilities === undefined || eligibilities === null) {
@@ -277,14 +323,13 @@ const Catalog = () => {
     return () => window.removeEventListener("resize", handleResize);
   });
 
-  if (loading || user.loading || eligibilities_response.loading)
+  if (user.loading || eligibilities_response.loading)
     return <CircularProgress />;
   if (!user.signedIn) return <AuthenticationRequired />;
   if (error) return <p>Error :(</p>;
 
   // Filter by search parameter
-  let filtered = data["opportunities"];
-  //console.log("INITIAL", filtered);
+  let filtered = opportunities;
   if (searchParams.get("q")) {
     filtered = filtered.filter((opportunity) => {
       for (const key of ["title", "description", "date", "location", "link"]) {
@@ -312,7 +357,6 @@ const Catalog = () => {
         ) || selectedGrades, // for empty grade lists, imply all grades we want are valid
     };
   });
-  //console.log(filtered)
   filtered = filtered.filter((opportunity) => {
     // If no grade or group is selected, then we include all opportunities regardless or grade / group
     // Otherwise, restrict to only opportunities with user-selected grade / group
@@ -321,7 +365,6 @@ const Catalog = () => {
       (!selectedGroups.length || opportunity.groupEligibilities.length)
     );
   });
-  //console.log(filtered);
 
   let isMobile = () => {
     if (!windowDimension) {
@@ -511,7 +554,6 @@ const Catalog = () => {
       </Grid>
     );
   };
-
   return (
     <div>
       <Helmet>
@@ -531,7 +573,12 @@ const Catalog = () => {
               Search Query: {searchParams.get("q")}
             </Typography>
           ) : null}
-          <OpportunityList opportunities={{ opportunities: filtered }} />
+          <OpportunityList
+            opportunities={filtered}
+            loading={loading}
+            ref={lastRef}
+          />
+          {loading ? <CircularProgress disableShrink /> : <></>}
         </Grid>
       </Grid>
     </div>

@@ -14,21 +14,19 @@ import UserContext from "../context/UserContext";
 	link: [String], optional
 	tags: [String], optional
 */
-const OpportunityList = (data) => {
+const OpportunityList = React.forwardRef((data, ref) => {
   const user = React.useContext(UserContext);
 
   // admin
   const [deleted, setDeleted] = React.useState([]);
-  data.opportunities.opportunities = data.opportunities.opportunities.filter(
+  const opportunities = data?.opportunities?.filter(
     (opportunity) => !deleted.includes(opportunity.id)
   );
-  //console.log("DISPLAYING", data?.opportunities?.opportunities.length);
-  //console.log(data?.opportunities?.opportunities.sort((a, b) => a.id > b.id));
 
-  if (data?.opportunities?.opportunities.length) {
+  if (opportunities?.length) {
     return (
       <div>
-        {data?.opportunities?.opportunities?.map((opportunity) => (
+        {opportunities?.map((opportunity) => (
           <OpportunityCard
             key={opportunity.id}
             id={opportunity.id}
@@ -46,11 +44,12 @@ const OpportunityList = (data) => {
             onDelete={() => setDeleted([...deleted, opportunity.id])}
           />
         ))}
+        <div ref={ref} />
       </div>
     );
   } else {
     return <h1>No opportunities found.</h1>;
   }
-};
+});
 
 export default OpportunityList;
